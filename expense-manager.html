@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Half Saree Function — Expense Tracker</title>
+<title>Half Saree Function — Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -466,6 +466,99 @@ select.form-control {
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .shimmer-item { height: 72px; margin-bottom: 8px; border-radius: 13px; }
+
+/* ── GUEST STYLES ── */
+.side-toggle { display: flex; gap: 8px; }
+.side-btn {
+  flex: 1; padding: 10px 6px;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  background: #FDFAF5; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  text-align: center; transition: all 0.2s; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.side-btn .side-initial {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  background: var(--border); color: var(--muted); transition: all 0.2s;
+}
+.side-btn.active-praveen { border-color: var(--praveen); background: #FFF8E8; color: var(--praveen); }
+.side-btn.active-praveen .side-initial { background: var(--praveen); color: white; }
+.side-btn.active-aswin { border-color: var(--aswin); background: var(--rose-light); color: var(--aswin); }
+.side-btn.active-aswin .side-initial { background: var(--aswin); color: white; }
+.side-btn.active-common { border-color: #4CAF50; background: #F0FFF0; color: #2E7D32; }
+.side-btn.active-common .side-initial { background: #4CAF50; color: white; }
+
+.guest-item {
+  background: var(--white); border-radius: 13px;
+  padding: 13px 12px; margin-bottom: 8px;
+  box-shadow: 0 1px 6px rgba(44,24,16,0.07);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; gap: 11px;
+}
+.guest-avatar {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; flex-shrink: 0;
+  font-family: 'Playfair Display', serif;
+}
+.guest-avatar.praveen { background: #FFF3D0; color: var(--praveen); }
+.guest-avatar.aswin { background: var(--rose-light); color: var(--aswin); }
+.guest-avatar.common { background: #E8F5E9; color: #2E7D32; }
+.guest-body { flex: 1; min-width: 0; }
+.guest-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.guest-meta { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; gap: 8px; flex-wrap: wrap; }
+.guest-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.guest-count-badge {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 700; color: var(--warm);
+  text-align: right;
+}
+.guest-count-label { font-size: 10px; color: var(--muted); text-align: right; }
+.guest-del { background: none; border: none; color: var(--border); cursor: pointer; font-size: 14px; transition: color 0.2s; }
+.guest-del:hover { color: var(--rose); }
+
+.guests-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.gstat {
+  background: var(--white); border-radius: var(--radius);
+  padding: 14px; text-align: center;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.gstat.full { grid-column: 1 / -1; }
+.gstat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 4px; }
+.gstat-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--warm); line-height: 1; }
+.gstat-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.lunch-banner {
+  background: linear-gradient(135deg, #1E4D1E, #2E7D32);
+  border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+  text-align: center;
+}
+.lunch-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+.lunch-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #A5D6A7; line-height: 1; }
+.lunch-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+.location-item { margin-bottom: 10px; }
+.location-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.location-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+.location-counts { font-size: 12px; color: var(--muted); }
+.location-bar { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.location-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; }
+
+.side-breakdown { display: flex; gap: 8px; margin-bottom: 12px; }
+.side-stat {
+  flex: 1; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid transparent;
+}
+.side-stat.praveen { background: linear-gradient(135deg, #FFF8E8, #FFF0CC); border-color: #EDD898; }
+.side-stat.aswin { background: linear-gradient(135deg, #FFF0F3, var(--rose-light)); border-color: #F0B8C8; }
+.side-stat.common { background: linear-gradient(135deg, #F0FFF0, #E8F5E9); border-color: #A5D6A7; }
+.side-stat-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+.side-stat.praveen .side-stat-name { color: var(--praveen); }
+.side-stat.aswin .side-stat-name { color: var(--aswin); }
+.side-stat.common .side-stat-name { color: #2E7D32; }
+.side-stat-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--warm); }
+.side-stat-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -499,6 +592,9 @@ select.form-control {
   </button>
   <button class="nav-btn" onclick="showPage('list')" id="nav-list">
     <span class="nav-icon">🧾</span>Expenses
+  </button>
+  <button class="nav-btn" onclick="showPage('guests')" id="nav-guests">
+    <span class="nav-icon">👨‍👩‍👧</span>Guests
   </button>
 </nav>
 
@@ -676,6 +772,77 @@ select.form-control {
   <div id="expense-list"></div>
 </div>
 
+<!-- ═══════════════════════════════════════
+     PAGE: GUESTS
+════════════════════════════════════════ -->
+<div id="page-guests" class="page">
+
+  <div class="card">
+    <div class="form-section-label">Whose side</div>
+    <div class="form-group">
+      <div class="side-toggle">
+        <button class="side-btn active-praveen" id="side-praveen" onclick="setGuestSide('Praveen')">
+          <div class="side-initial">P</div>Praveen
+        </button>
+        <button class="side-btn" id="side-aswin" onclick="setGuestSide('Aswin')">
+          <div class="side-initial">A</div>Aswin
+        </button>
+        <button class="side-btn" id="side-common" onclick="setGuestSide('Common')">
+          <div class="side-initial">🤝</div>Common
+        </button>
+      </div>
+    </div>
+
+    <div class="form-section-label">Family details</div>
+
+    <div class="form-group">
+      <label class="form-label">Family Name <span class="required">*</span></label>
+      <input class="form-control" id="g-name" type="text" placeholder="e.g. Rajan Family, Suresh Uncle…" maxlength="80">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Location <span class="required">*</span></label>
+      <input class="form-control" id="g-location" type="text" placeholder="e.g. Chennai, Coimbatore, Local…" maxlength="60">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Total in Family</label>
+        <input class="form-control" id="g-total" type="number" inputmode="numeric" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expected to Attend</label>
+        <input class="form-control" id="g-attending" type="number" inputmode="numeric" placeholder="0" min="0">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <input class="form-control" id="g-notes" type="text" placeholder="e.g. Confirmed, coming by train…" maxlength="150">
+    </div>
+
+    <button class="btn-submit" id="guest-submit-btn" onclick="submitGuest()">
+      <span>👨‍👩‍👧</span> Add Family
+    </button>
+  </div>
+
+  <div id="guest-summary-section"></div>
+
+  <div class="section-head" style="margin-top:4px">
+    All Families
+    <span class="section-head-count" id="guest-list-count"></span>
+  </div>
+
+  <div class="filter-bar" id="guest-filter-bar">
+    <div class="chip active" onclick="setGuestFilter('All', this)">All</div>
+    <div class="chip" onclick="setGuestFilter('Praveen', this)">Praveen's</div>
+    <div class="chip" onclick="setGuestFilter('Aswin', this)">Aswin's</div>
+    <div class="chip" onclick="setGuestFilter('Common', this)">🤝 Common</div>
+  </div>
+
+  <div id="guest-list"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -687,8 +854,11 @@ const DRIVE_FOLDER_KEY = 'halfsaree_drive_folder';
 
 let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || '';
 let expenses = [];
+let guests = [];
 let currentPayer = 'Praveen';
 let currentFilter = 'All';
+let currentGuestSide = 'Praveen';
+let currentGuestFilter = 'All';
 let selectedFile = null;
 
 const CAT_COLORS = {
@@ -764,6 +934,7 @@ function showPage(name) {
   document.getElementById('nav-' + name).classList.add('active');
   if (name === 'dashboard') renderDashboard();
   if (name === 'list') renderList();
+  if (name === 'guests') { renderGuestSummary(); renderGuestList(); }
 }
 
 // ═══════════════════════════════
@@ -916,16 +1087,19 @@ async function loadData() {
   if (!SCRIPT_URL) { setSyncStatus('offline', 'Not configured'); return; }
   setSyncStatus('syncing', 'Loading…');
   try {
-    const res = await fetch(SCRIPT_URL + '?action=getExpenses', { cache: 'no-store' });
-    const data = await res.json();
-    if (data.success) {
-      expenses = data.expenses || [];
-      setSyncStatus('online', 'Live · ' + formatTime(new Date()));
-      renderDashboard();
-      renderList();
-    } else {
-      setSyncStatus('offline', 'Error loading');
-    }
+    const [expRes, guestRes] = await Promise.all([
+      fetch(SCRIPT_URL + '?action=getExpenses', { cache: 'no-store' }),
+      fetch(SCRIPT_URL + '?action=getGuests', { cache: 'no-store' })
+    ]);
+    const expData = await expRes.json();
+    const guestData = await guestRes.json();
+    if (expData.success) expenses = expData.expenses || [];
+    if (guestData.success) guests = guestData.guests || [];
+    setSyncStatus('online', 'Live · ' + formatTime(new Date()));
+    renderDashboard();
+    renderList();
+    renderGuestSummary();
+    renderGuestList();
   } catch {
     setSyncStatus('offline', 'Offline');
   }
@@ -1131,6 +1305,235 @@ function showSpinner(msg) {
   document.getElementById('spinner').classList.add('show');
 }
 function hideSpinner() { document.getElementById('spinner').classList.remove('show'); }
+
+// ═══════════════════════════════
+// GUEST SIDE TOGGLE
+// ═══════════════════════════════
+function setGuestSide(side) {
+  currentGuestSide = side;
+  ['Praveen','Aswin','Common'].forEach(s => {
+    const btn = document.getElementById('side-' + s.toLowerCase());
+    btn.className = 'side-btn' + (side === s ? ' active-' + s.toLowerCase() : '');
+  });
+}
+
+// ═══════════════════════════════
+// SUBMIT GUEST
+// ═══════════════════════════════
+async function submitGuest() {
+  if (!SCRIPT_URL) { showToast('⚠️ Please configure the Script URL first'); return; }
+  const name = document.getElementById('g-name').value.trim();
+  const location = document.getElementById('g-location').value.trim();
+  if (!name) { showToast('⚠️ Please enter a family name'); return; }
+  if (!location) { showToast('⚠️ Please enter a location'); return; }
+
+  const total = parseInt(document.getElementById('g-total').value) || 0;
+  const attending = parseInt(document.getElementById('g-attending').value) || 0;
+
+  const btn = document.getElementById('guest-submit-btn');
+  btn.disabled = true;
+
+  const guest = {
+    id: Date.now().toString(),
+    familyName: name,
+    location: location,
+    totalMembers: total,
+    expectedAttending: attending,
+    side: currentGuestSide,
+    notes: document.getElementById('g-notes').value.trim(),
+    timestamp: new Date().toISOString()
+  };
+
+  showSpinner('Saving…');
+  setSyncStatus('syncing', 'Syncing…');
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'addGuest', guest })
+    });
+    guests.push(guest);
+    resetGuestForm();
+    showToast('✅ Family added & synced!');
+    setSyncStatus('online', 'Synced');
+    renderGuestSummary();
+    renderGuestList();
+    setTimeout(() => loadData(), 1500);
+  } catch {
+    showToast('❌ Sync failed. Check connection.');
+    setSyncStatus('offline', 'Sync failed');
+  }
+  hideSpinner();
+  btn.disabled = false;
+}
+
+function resetGuestForm() {
+  document.getElementById('g-name').value = '';
+  document.getElementById('g-location').value = '';
+  document.getElementById('g-total').value = '';
+  document.getElementById('g-attending').value = '';
+  document.getElementById('g-notes').value = '';
+  setGuestSide('Praveen');
+}
+
+// ═══════════════════════════════
+// GUEST FILTER
+// ═══════════════════════════════
+function setGuestFilter(val, el) {
+  currentGuestFilter = val;
+  document.querySelectorAll('#guest-filter-bar .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderGuestList();
+}
+
+// ═══════════════════════════════
+// RENDER GUEST SUMMARY
+// ═══════════════════════════════
+function renderGuestSummary() {
+  const container = document.getElementById('guest-summary-section');
+  if (!guests.length) { container.innerHTML = ''; return; }
+
+  const totalFamilies = guests.length;
+  const totalMembers = guests.reduce((s, g) => s + Number(g.totalMembers || 0), 0);
+  const totalAttending = guests.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
+
+  const pFamilies = guests.filter(g => g.side === 'Praveen');
+  const aFamilies = guests.filter(g => g.side === 'Aswin');
+  const cFamilies = guests.filter(g => g.side === 'Common');
+
+  const pAttending = pFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
+  const aAttending = aFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
+  const cAttending = cFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
+
+  // Location breakdown
+  const locs = {};
+  guests.forEach(g => {
+    const loc = g.location || 'Unknown';
+    if (!locs[loc]) locs[loc] = { families: 0, attending: 0 };
+    locs[loc].families++;
+    locs[loc].attending += Number(g.expectedAttending || 0);
+  });
+  const sortedLocs = Object.entries(locs).sort((a, b) => b[1].attending - a[1].attending);
+  const maxLocAtt = sortedLocs[0]?.[1].attending || 1;
+
+  let locHTML = sortedLocs.map(([loc, data]) => `
+    <div class="location-item">
+      <div class="location-row">
+        <div class="location-name">📍 ${escHtml(loc)}</div>
+        <div class="location-counts">${data.families} families · <strong>${data.attending} pax</strong></div>
+      </div>
+      <div class="location-bar">
+        <div class="location-fill" style="width:${(data.attending/maxLocAtt)*100}%"></div>
+      </div>
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="lunch-banner">
+      <div class="lunch-label">🍽️ Expected for Lunch</div>
+      <div class="lunch-number">${totalAttending}</div>
+      <div class="lunch-sub">people across ${totalFamilies} families</div>
+    </div>
+
+    <div class="guests-summary-grid">
+      <div class="gstat">
+        <div class="gstat-label">Total Families</div>
+        <div class="gstat-value">${totalFamilies}</div>
+      </div>
+      <div class="gstat">
+        <div class="gstat-label">Total Members</div>
+        <div class="gstat-value">${totalMembers}</div>
+        <div class="gstat-sub">in all families</div>
+      </div>
+      <div class="gstat full">
+        <div class="gstat-label">Confirmed Attending</div>
+        <div class="gstat-value">${totalAttending}</div>
+        <div class="gstat-sub">${totalMembers > 0 ? Math.round((totalAttending/totalMembers)*100) : 0}% of total members expected</div>
+      </div>
+    </div>
+
+    <div class="side-breakdown">
+      <div class="side-stat praveen">
+        <div class="side-stat-name">Praveen's</div>
+        <div class="side-stat-val">${pAttending}</div>
+        <div class="side-stat-sub">${pFamilies.length} families</div>
+      </div>
+      <div class="side-stat aswin">
+        <div class="side-stat-name">Aswin's</div>
+        <div class="side-stat-val">${aAttending}</div>
+        <div class="side-stat-sub">${aFamilies.length} families</div>
+      </div>
+      <div class="side-stat common">
+        <div class="side-stat-name">Common</div>
+        <div class="side-stat-val">${cAttending}</div>
+        <div class="side-stat-sub">${cFamilies.length} families</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">By Location</div>
+      ${locHTML || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px">No data</div>'}
+    </div>`;
+}
+
+// ═══════════════════════════════
+// RENDER GUEST LIST
+// ═══════════════════════════════
+function renderGuestList() {
+  const container = document.getElementById('guest-list');
+  let filtered = guests.filter(g => currentGuestFilter === 'All' || g.side === currentGuestFilter);
+  filtered = [...filtered].sort((a, b) => (a.location || '').localeCompare(b.location || ''));
+
+  document.getElementById('guest-list-count').textContent = filtered.length + ' families';
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">👨‍👩‍👧</div><div class="empty-text">No families added yet${currentGuestFilter !== 'All' ? ' for this filter' : ''}</div></div>`;
+    return;
+  }
+
+  const sideEmoji = { 'Praveen': 'P', 'Aswin': 'A', 'Common': '🤝' };
+  container.innerHTML = filtered.map(g => `
+    <div class="guest-item">
+      <div class="guest-avatar ${g.side.toLowerCase()}">${sideEmoji[g.side] || '?'}</div>
+      <div class="guest-body">
+        <div class="guest-name">${escHtml(g.familyName)}</div>
+        <div class="guest-meta">
+          <span>📍 ${escHtml(g.location)}</span>
+          <span class="exp-badge ${g.side === 'Praveen' ? 'badge-praveen' : g.side === 'Aswin' ? 'badge-aswin' : ''}" style="${g.side === 'Common' ? 'background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7' : ''}">${g.side}</span>
+        </div>
+        ${g.notes ? `<div class="exp-notes">${escHtml(g.notes)}</div>` : ''}
+      </div>
+      <div class="guest-right">
+        <div>
+          <div class="guest-count-badge">${g.expectedAttending || 0} <span style="font-size:11px;color:var(--muted)">/ ${g.totalMembers || 0}</span></div>
+          <div class="guest-count-label">attending / total</div>
+        </div>
+        <button class="guest-del" onclick="deleteGuest('${g.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════
+// DELETE GUEST
+// ═══════════════════════════════
+async function deleteGuest(id) {
+  if (!confirm('Remove this family?')) return;
+  if (!SCRIPT_URL) { showToast('⚠️ Not configured'); return; }
+  showSpinner('Removing…');
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'deleteGuest', id })
+    });
+    guests = guests.filter(g => g.id !== id);
+    renderGuestSummary();
+    renderGuestList();
+    showToast('🗑️ Family removed');
+  } catch {
+    showToast('❌ Failed to remove');
+  }
+  hideSpinner();
+}
 
 // Auto-refresh every 30 seconds
 setInterval(() => { if (SCRIPT_URL) loadData(); }, 30000);
