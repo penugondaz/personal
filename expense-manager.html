@@ -909,6 +909,66 @@ select.form-control {
 
 <div class="toast" id="toast"></div>
 
+<!-- ═══════════════════════════════════════
+     EDIT GUEST MODAL
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Family</div>
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+
+    <input type="hidden" id="edit-g-id">
+
+    <div class="form-group">
+      <label class="form-label">Whose side</label>
+      <div class="side-toggle">
+        <button class="side-btn active-praveen" id="edit-side-praveen" onclick="setEditSide('Praveen')">
+          <div class="side-initial">P</div>Praveen
+        </button>
+        <button class="side-btn" id="edit-side-aswin" onclick="setEditSide('Aswin')">
+          <div class="side-initial">A</div>Aswin
+        </button>
+        <button class="side-btn" id="edit-side-common" onclick="setEditSide('Common')">
+          <div class="side-initial">🤝</div>Common
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Family Name <span class="required">*</span></label>
+      <input class="form-control" id="edit-g-name" type="text" maxlength="80">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Location <span class="required">*</span></label>
+      <input class="form-control" id="edit-g-location" type="text" maxlength="60">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Total in Family</label>
+        <input class="form-control" id="edit-g-total" type="number" inputmode="numeric" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expected to Attend</label>
+        <input class="form-control" id="edit-g-attending" type="number" inputmode="numeric" min="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <input class="form-control" id="edit-g-phone" type="tel" inputmode="tel" maxlength="15">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <input class="form-control" id="edit-g-notes" type="text" maxlength="150">
+    </div>
+
+    <button class="btn-submit" onclick="saveEditGuest()">
+      <span>💾</span> Save Changes
+    </button>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════
 // CONFIG
@@ -954,6 +1014,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('exp-date').valueAsDate = new Date();
   checkSetup();
   loadData();
+  // Modal backdrop close
+  document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
 });
 
 function checkSetup() {
@@ -1464,6 +1528,11 @@ function renderGuestSummary() {
   const totalMembers = guests.reduce((s, g) => s + Number(g.totalMembers || 0), 0);
   const totalAttending = guests.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
 
+  const calledCount = guests.filter(g => g.called == true || g.called === 'true').length;
+  const notCalledCount = totalFamilies - calledCount;
+  const calledAttending = guests.filter(g => g.called == true || g.called === 'true').reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
+  const notCalledAttending = totalAttending - calledAttending;
+
   const pFamilies = guests.filter(g => g.side === 'Praveen');
   const aFamilies = guests.filter(g => g.side === 'Aswin');
   const cFamilies = guests.filter(g => g.side === 'Common');
@@ -1534,6 +1603,26 @@ function renderGuestSummary() {
         <div class="side-stat-val">${cAttending}</div>
         <div class="side-stat-sub">${cFamilies.length} families</div>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="section-head">📞 Call Status</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px">
+        <div style="flex:1;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:13px;text-align:center">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#2E7D32;margin-bottom:4px">✅ Called</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#1B5E20">${calledCount}</div>
+          <div style="font-size:11px;color:#4CAF50;margin-top:2px">${calledAttending} pax expected</div>
+        </div>
+        <div style="flex:1;background:#FFF8E8;border:1px solid #EDD898;border-radius:12px;padding:13px;text-align:center">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);margin-bottom:4px">📵 Not Called</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--warm)">${notCalledCount}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${notCalledAttending} pax expected</div>
+        </div>
+      </div>
+      <div style="background:var(--border);border-radius:6px;height:8px;overflow:hidden">
+        <div style="height:100%;background:linear-gradient(90deg,#4CAF50,#81C784);border-radius:6px;width:${totalFamilies > 0 ? Math.round((calledCount/totalFamilies)*100) : 0}%;transition:width 0.5s ease"></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:5px">${totalFamilies > 0 ? Math.round((calledCount/totalFamilies)*100) : 0}% families called</div>
     </div>
 
     <div class="card">
@@ -1624,12 +1713,12 @@ async function deleteGuest(id) {
 // TOGGLE CALLED STATUS
 // ═══════════════════════════════
 async function toggleCalled(id) {
-  const g = guests.find(x => x.id === id);
+  const g = guests.find(x => String(x.id) === String(id));
   if (!g) return;
   const newCalled = !(g.called == true || g.called === 'true');
   g.called = newCalled;
 
-  // Update button instantly (optimistic)
+  // Update button instantly (optimistic UI)
   const btn = document.querySelector(`#gitem-${id} .btn-called-toggle`);
   if (btn) {
     btn.className = 'btn-called-toggle' + (newCalled ? ' called' : '');
@@ -1655,7 +1744,7 @@ async function toggleCalled(id) {
 let editGuestSide = 'Praveen';
 
 function openEditModal(id) {
-  const g = guests.find(x => x.id === id);
+  const g = guests.find(x => String(x.id) === String(id));
   if (!g) return;
   document.getElementById('edit-g-id').value = g.id;
   document.getElementById('edit-g-name').value = g.familyName || '';
@@ -1690,7 +1779,7 @@ async function saveEditGuest() {
   if (!name) { showToast('⚠️ Family name required'); return; }
   if (!location) { showToast('⚠️ Location required'); return; }
 
-  const idx = guests.findIndex(x => x.id === id);
+  const idx = guests.findIndex(x => String(x.id) === String(id));
   if (idx === -1) return;
 
   const updated = {
@@ -1723,73 +1812,9 @@ async function saveEditGuest() {
   hideSpinner();
 }
 
-// Close modal on backdrop tap
-document.getElementById('edit-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeEditModal();
-});
-
 // Auto-refresh every 30 seconds
 setInterval(() => { if (SCRIPT_URL) loadData(); }, 30000);
 </script>
-<!-- ═══════════════════════════════════════
-     EDIT GUEST MODAL
-════════════════════════════════════════ -->
-<div class="modal-overlay" id="edit-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">✏️ Edit Family</div>
-      <button class="modal-close" onclick="closeEditModal()">×</button>
-    </div>
-
-    <input type="hidden" id="edit-g-id">
-
-    <div class="form-group">
-      <label class="form-label">Whose side</label>
-      <div class="side-toggle" id="edit-side-toggle">
-        <button class="side-btn active-praveen" id="edit-side-praveen" onclick="setEditSide('Praveen')">
-          <div class="side-initial">P</div>Praveen
-        </button>
-        <button class="side-btn" id="edit-side-aswin" onclick="setEditSide('Aswin')">
-          <div class="side-initial">A</div>Aswin
-        </button>
-        <button class="side-btn" id="edit-side-common" onclick="setEditSide('Common')">
-          <div class="side-initial">🤝</div>Common
-        </button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Family Name <span class="required">*</span></label>
-      <input class="form-control" id="edit-g-name" type="text" maxlength="80">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Location <span class="required">*</span></label>
-      <input class="form-control" id="edit-g-location" type="text" maxlength="60">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Total in Family</label>
-        <input class="form-control" id="edit-g-total" type="number" inputmode="numeric" min="0">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Expected to Attend</label>
-        <input class="form-control" id="edit-g-attending" type="number" inputmode="numeric" min="0">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Phone Number</label>
-      <input class="form-control" id="edit-g-phone" type="tel" inputmode="tel" maxlength="15">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Notes</label>
-      <input class="form-control" id="edit-g-notes" type="text" maxlength="150">
-    </div>
-
-    <button class="btn-submit" onclick="saveEditGuest()">
-      <span>💾</span> Save Changes
-    </button>
-  </div>
-</div>
 
 </body>
 </html>
