@@ -1,1 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Half Saree Function — Expense Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9922A;
+  --gold-light: #F0C96B;
+  --gold-pale: #FDF6E3;
+  --rose: #B5445A;
+  --rose-light: #F9E8EC;
+  --deep: #1E0F08;
+  --warm: #6B3D2E;
+  --cream: #FAF5EE;
+  --white: #FFFFFF;
+  --border: #EAD9BB;
+  --text: #2C1810;
+  --muted: #9B7B60;
+  --praveen: #C9922A;
+  --aswin: #B5445A;
+  --shadow: 0 2px 16px rgba(44,24,16,0.09);
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 72px;
+  max-width: 500px;
+  margin: 0 auto;
+}
 
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(160deg, #1E0F08 0%, #5C2E1A 60%, #8B4B2F 100%);
+  padding: 22px 18px 18px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 20% 50%, rgba(201,146,42,0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(181,68,90,0.10) 0%, transparent 40%);
+}
+.header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  opacity: 0.4;
+}
+.header-inner { position: relative; }
+.header-flowers { font-size: 22px; letter-spacing: 4px; margin-bottom: 6px; opacity: 0.9; }
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-light);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+.header-sub {
+  color: rgba(240,201,107,0.6);
+  font-size: 11px;
+  margin-top: 3px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(201,146,42,0.3);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  color: rgba(240,201,107,0.8);
+}
+.sync-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation: pulse 2s infinite;
+}
+.sync-dot.offline { background: #f44336; animation: none; }
+.sync-dot.syncing { background: var(--gold-light); }
+@keyframes pulse {
+  0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+
+/* ── NAV ── */
+.nav {
+  display: flex;
+  background: var(--deep);
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid rgba(201,146,42,0.15);
+}
+.nav-btn {
+  flex: 1; padding: 10px 4px 9px;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: rgba(240,201,107,0.4);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px; font-weight: 600;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  transition: all 0.2s;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.nav-icon { font-size: 17px; }
+.nav-btn.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+
+/* ── PAGES ── */
+.page { display: none; padding: 14px; animation: fadeUp 0.2s ease; }
+.page.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* ── FORM ── */
+.form-section-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.form-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.form-group { margin-bottom: 13px; }
+.form-label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--muted); margin-bottom: 5px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.required { color: var(--rose); margin-left: 2px; }
+.form-control {
+  width: 100%; padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--text);
+  background: #FDFAF5;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none; appearance: none;
+}
+.form-control:focus { border-color: var(--gold); background: var(--white); }
+.form-control::placeholder { color: #C8B49A; }
+select.form-control {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239B7B60' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 34px;
+  cursor: pointer;
+}
+.amount-wrap { position: relative; }
+.amount-prefix {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  font-size: 15px; color: var(--muted); font-weight: 500; pointer-events: none;
+}
+.amount-wrap .form-control { padding-left: 28px; font-size: 17px; font-weight: 600; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ── PAYER TOGGLE ── */
+.payer-toggle { display: flex; gap: 8px; }
+.payer-btn {
+  flex: 1; padding: 12px 8px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #FDFAF5;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; text-align: center;
+  transition: all 0.2s; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.payer-btn .payer-initial {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  background: var(--border); color: var(--muted);
+  transition: all 0.2s;
+}
+.payer-btn.active-praveen { border-color: var(--praveen); background: #FFF8E8; color: var(--praveen); }
+.payer-btn.active-praveen .payer-initial { background: var(--praveen); color: white; }
+.payer-btn.active-aswin { border-color: var(--aswin); background: var(--rose-light); color: var(--aswin); }
+.payer-btn.active-aswin .payer-initial { background: var(--aswin); color: white; }
+
+/* ── FILE UPLOAD ── */
+.file-upload-area {
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #FDFAF5;
+  position: relative;
+}
+.file-upload-area:hover { border-color: var(--gold); background: var(--gold-pale); }
+.file-upload-area input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon { font-size: 24px; margin-bottom: 4px; }
+.upload-text { font-size: 12px; color: var(--muted); }
+.upload-text strong { color: var(--gold); }
+.file-chosen {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  background: var(--gold-pale);
+  border-radius: 8px; margin-top: 8px;
+}
+.file-chosen-name { font-size: 12px; color: var(--warm); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-chosen-remove { background: none; border: none; color: var(--rose); cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; }
+
+/* ── UPLOAD PROGRESS ── */
+.upload-progress { margin-top: 8px; }
+.upload-progress-bar {
+  height: 4px; background: var(--border); border-radius: 4px; overflow: hidden;
+}
+.upload-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 4px; transition: width 0.3s;
+  width: 0%;
+}
+.upload-status { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; }
+
+/* ── SUBMIT ── */
+.btn-submit {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #C9922A 0%, #A07020 100%);
+  color: white; border: none; border-radius: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.3px;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(201,146,42,0.35);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-submit:active { transform: scale(0.98); opacity: 0.9; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-sm {
+  padding: 8px 14px;
+  background: var(--cream); color: var(--warm);
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-sm:hover { background: var(--gold-pale); border-color: var(--gold); }
+.btn-sm.danger { color: var(--rose); border-color: var(--rose-light); }
+.btn-sm.danger:hover { background: var(--rose-light); }
+
+/* ── DASHBOARD ── */
+.total-banner {
+  background: linear-gradient(135deg, var(--deep) 0%, #5C2E1A 100%);
+  border-radius: var(--radius); padding: 18px;
+  text-align: center; margin-bottom: 12px;
+  position: relative; overflow: hidden;
+}
+.total-banner::before {
+  content: '';
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(201,146,42,0.12);
+}
+.total-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(240,201,107,0.6); margin-bottom: 4px; }
+.total-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.total-count { font-size: 12px; color: rgba(240,201,107,0.5); margin-top: 4px; }
+
+.split-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.split-card {
+  flex: 1; border-radius: var(--radius); padding: 14px; text-align: center;
+  border: 1px solid transparent;
+}
+.split-card.praveen { background: linear-gradient(135deg, #FFF8E8, #FFF0CC); border-color: #EDD898; }
+.split-card.aswin { background: linear-gradient(135deg, #FFF0F3, var(--rose-light)); border-color: #F0B8C8; }
+.split-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+.split-card.praveen .split-name { color: var(--praveen); }
+.split-card.aswin .split-name { color: var(--aswin); }
+.split-amount { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+.split-card.praveen .split-amount { color: var(--warm); }
+.split-card.aswin .split-amount { color: var(--rose); }
+.split-count { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.balance-pill {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 30px; padding: 10px 16px;
+  text-align: center; margin-bottom: 12px;
+  font-size: 13px; color: var(--text);
+}
+.balance-pill strong { color: var(--warm); }
+.balance-pill.even { color: var(--muted); font-style: italic; }
+
+/* Category bars */
+.section-head {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; color: var(--warm);
+  margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.section-head-count { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--muted); font-weight: 400; }
+
+.cat-item { margin-bottom: 12px; }
+.cat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.cat-left { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; }
+.cat-emoji { font-size: 15px; }
+.cat-pct { font-size: 11px; color: var(--muted); margin-left: 2px; }
+.cat-right { font-size: 13px; font-weight: 700; color: var(--warm); }
+.cat-bar { height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.cat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+
+/* ── EXPENSE LIST ── */
+.filter-bar {
+  display: flex; gap: 6px;
+  overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px;
+  scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.chip {
+  padding: 6px 12px; border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--white); font-size: 12px; font-weight: 500;
+  color: var(--muted); white-space: nowrap; cursor: pointer;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chip.active { background: var(--deep); border-color: var(--deep); color: var(--gold-light); }
+
+.expense-item {
+  background: var(--white);
+  border-radius: 13px; padding: 13px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 6px rgba(44,24,16,0.07);
+  border: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 11px;
+  position: relative;
+}
+.exp-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; flex-shrink: 0;
+}
+.exp-body { flex: 1; min-width: 0; }
+.exp-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.exp-meta {
+  font-size: 11px; color: var(--muted);
+  margin-top: 3px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.exp-badge {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.badge-praveen { background: #FFF3D0; color: #A07020; border: 1px solid #EDD898; }
+.badge-aswin { background: var(--rose-light); color: var(--rose); border: 1px solid #F0B8C8; }
+.exp-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.exp-amount { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--warm); }
+.exp-actions { display: flex; gap: 5px; }
+.exp-del { background: none; border: none; color: var(--border); cursor: pointer; font-size: 15px; transition: color 0.2s; padding: 2px; }
+.exp-del:hover { color: var(--rose); }
+.exp-invoice-link { font-size: 10px; color: var(--gold); text-decoration: none; display: flex; align-items: center; gap: 3px; }
+.exp-notes { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.empty-state { text-align: center; padding: 50px 20px; color: var(--muted); }
+.empty-icon { font-size: 44px; margin-bottom: 10px; opacity: 0.4; }
+.empty-text { font-size: 14px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 82px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--deep); color: var(--gold-light);
+  padding: 10px 20px; border-radius: 30px;
+  font-size: 13px; font-weight: 500;
+  z-index: 999; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  max-width: calc(100vw - 40px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── SPINNER OVERLAY ── */
+.spinner-overlay {
+  position: fixed; inset: 0;
+  background: rgba(30,15,8,0.5);
+  z-index: 300; display: none;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  backdrop-filter: blur(3px);
+}
+.spinner-overlay.show { display: flex; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(240,201,107,0.2);
+  border-top-color: var(--gold-light);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner-text { color: var(--gold-light); font-size: 13px; }
+
+/* ── SETUP BANNER ── */
+.setup-banner {
+  background: linear-gradient(135deg, #1E0F08, #3D1F10);
+  border-radius: var(--radius); padding: 16px;
+  margin-bottom: 12px; border: 1px solid rgba(201,146,42,0.3);
+}
+.setup-banner h3 { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 15px; margin-bottom: 8px; }
+.setup-banner p { color: rgba(240,201,107,0.7); font-size: 12px; line-height: 1.6; margin-bottom: 10px; }
+.setup-input-row { display: flex; gap: 8px; }
+.setup-input {
+  flex: 1; padding: 10px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(201,146,42,0.3);
+  border-radius: 9px; color: var(--gold-light);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none;
+}
+.setup-input::placeholder { color: rgba(240,201,107,0.35); }
+.setup-input:focus { border-color: var(--gold); }
+.btn-save-url {
+  padding: 10px 14px;
+  background: var(--gold); color: var(--deep);
+  border: none; border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+
+/* ── EXPORT ROW ── */
+.export-row { display: flex; gap: 8px; margin-bottom: 12px; }
+
+/* Payment method pill */
+.payment-icon { font-size: 12px; }
+
+/* ── SHIMMER while loading ── */
+.shimmer {
+  background: linear-gradient(90deg, var(--border) 25%, #F5ECD8 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.shimmer-item { height: 72px; margin-bottom: 8px; border-radius: 13px; }
+</style>
+</head>
+<body>
+
+<!-- SPINNER -->
+<div class="spinner-overlay" id="spinner">
+  <div class="spinner"></div>
+  <div class="spinner-text" id="spinner-text">Saving…</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-flowers">🌸 🪷 🌸</div>
+    <h1>Half Saree Function</h1>
+    <div class="header-sub">Praveen &amp; Aswin · Expense Tracker</div>
+    <div class="sync-indicator">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-status">Connecting…</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('add')" id="nav-add">
+    <span class="nav-icon">➕</span>Add
+  </button>
+  <button class="nav-btn" onclick="showPage('dashboard')" id="nav-dashboard">
+    <span class="nav-icon">📊</span>Summary
+  </button>
+  <button class="nav-btn" onclick="showPage('list')" id="nav-list">
+    <span class="nav-icon">🧾</span>Expenses
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     PAGE: ADD EXPENSE
+════════════════════════════════════════ -->
+<div id="page-add" class="page active">
+
+  <!-- Setup banner (shown when no API URL) -->
+  <div class="setup-banner" id="setup-banner" style="display:none">
+    <h3>⚙️ One-time Setup Required</h3>
+    <p>Paste your <strong>Google Apps Script Web App URL</strong> below to enable real-time sync between Praveen and Aswin.</p>
+    <div class="setup-input-row">
+      <input class="setup-input" id="script-url-input" type="url" placeholder="https://script.google.com/macros/s/…/exec">
+      <button class="btn-save-url" onclick="saveScriptUrl()">Save</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="form-section-label">Who paid</div>
+    <div class="form-group">
+      <div class="payer-toggle">
+        <button class="payer-btn active-praveen" id="payer-praveen" onclick="setPayer('Praveen')">
+          <div class="payer-initial">P</div>
+          Praveen
+        </button>
+        <button class="payer-btn" id="payer-aswin" onclick="setPayer('Aswin')">
+          <div class="payer-initial">A</div>
+          Aswin
+        </button>
+      </div>
+    </div>
+
+    <div class="form-section-label">Expense details</div>
+
+    <div class="form-group">
+      <label class="form-label">Description <span class="required">*</span></label>
+      <input class="form-control" id="exp-desc" type="text" placeholder="e.g. Catering advance, Flower decoration…" maxlength="100">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Amount (₹) <span class="required">*</span></label>
+        <div class="amount-wrap">
+          <span class="amount-prefix">₹</span>
+          <input class="form-control" id="exp-amount" type="number" inputmode="decimal" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date <span class="required">*</span></label>
+        <input class="form-control" id="exp-date" type="date">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-control" id="exp-category">
+          <option value="Venue">🏛️ Venue</option>
+          <option value="Catering">🍽️ Catering</option>
+          <option value="Decoration">🌸 Decoration</option>
+          <option value="Clothing">👗 Clothing</option>
+          <option value="Photography">📸 Photography</option>
+          <option value="Music & DJ">🎵 Music & DJ</option>
+          <option value="Invitations">📬 Invitations</option>
+          <option value="Gifts">🎁 Gifts</option>
+          <option value="Transport">🚗 Transport</option>
+          <option value="Makeup">💄 Makeup</option>
+          <option value="Jewellery">💍 Jewellery</option>
+          <option value="Pooja Items">🪔 Pooja Items</option>
+          <option value="Miscellaneous">📦 Miscellaneous</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Mode</label>
+        <select class="form-control" id="exp-payment">
+          <option value="UPI">📱 UPI</option>
+          <option value="Cash">💵 Cash</option>
+          <option value="Card">💳 Card</option>
+          <option value="Bank Transfer">🏦 Bank Transfer</option>
+          <option value="Cheque">📄 Cheque</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <input class="form-control" id="exp-notes" type="text" placeholder="e.g. Paid 50% advance, balance due on 15th…" maxlength="200">
+    </div>
+
+    <div class="form-section-label">Receipt / Invoice</div>
+    <div class="form-group">
+      <div class="file-upload-area" id="upload-area" onclick="document.getElementById('receipt-file').click()">
+        <input type="file" id="receipt-file" accept="image/*,application/pdf" onchange="handleFileSelect(event)">
+        <div class="upload-icon">📎</div>
+        <div class="upload-text">Tap to attach <strong>photo or PDF</strong><br><span style="font-size:10px">Uploads to Google Drive</span></div>
+      </div>
+      <div id="file-chosen" style="display:none" class="file-chosen">
+        <span class="file-chosen-name" id="file-chosen-name"></span>
+        <button class="file-chosen-remove" onclick="clearFile()">×</button>
+      </div>
+      <div id="upload-progress" class="upload-progress" style="display:none">
+        <div class="upload-progress-bar"><div class="upload-progress-fill" id="upload-fill"></div></div>
+        <div class="upload-status" id="upload-status-text">Uploading…</div>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="submit-btn" onclick="submitExpense()">
+      <span>✨</span> Add Expense
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: DASHBOARD
+════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+
+  <div class="total-banner" id="total-banner">
+    <div class="total-label">Total Spent</div>
+    <div class="total-amount" id="dash-total">₹0</div>
+    <div class="total-count" id="dash-count">0 expenses</div>
+  </div>
+
+  <div class="split-row">
+    <div class="split-card praveen">
+      <div class="split-name">Praveen</div>
+      <div class="split-amount" id="dash-praveen">₹0</div>
+      <div class="split-count" id="dash-praveen-count">0 items</div>
+    </div>
+    <div class="split-card aswin">
+      <div class="split-name">Aswin</div>
+      <div class="split-amount" id="dash-aswin">₹0</div>
+      <div class="split-count" id="dash-aswin-count">0 items</div>
+    </div>
+  </div>
+
+  <div class="balance-pill" id="balance-pill">Calculating…</div>
+
+  <div class="card">
+    <div class="section-head">
+      By Category
+      <span class="section-head-count" id="cat-count"></span>
+    </div>
+    <div id="cat-breakdown"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">Payment Methods</div>
+    <div id="payment-breakdown"></div>
+  </div>
+
+  <div class="export-row">
+    <button class="btn-sm" onclick="exportCSV()" style="flex:1">⬇️ Export CSV</button>
+    <button class="btn-sm" onclick="loadData()" style="flex:1">🔄 Refresh</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: EXPENSE LIST
+════════════════════════════════════════ -->
+<div id="page-list" class="page">
+  <div class="filter-bar" id="filter-bar">
+    <div class="chip active" onclick="setFilter('All', this)">All</div>
+    <div class="chip" onclick="setFilter('Praveen', this)">Praveen</div>
+    <div class="chip" onclick="setFilter('Aswin', this)">Aswin</div>
+    <div class="chip" onclick="setFilter('Catering', this)">🍽️ Catering</div>
+    <div class="chip" onclick="setFilter('Venue', this)">🏛️ Venue</div>
+    <div class="chip" onclick="setFilter('Decoration', this)">🌸 Decoration</div>
+    <div class="chip" onclick="setFilter('Clothing', this)">👗 Clothing</div>
+    <div class="chip" onclick="setFilter('Photography', this)">📸 Photography</div>
+    <div class="chip" onclick="setFilter('Gifts', this)">🎁 Gifts</div>
+    <div class="chip" onclick="setFilter('Miscellaneous', this)">📦 Other</div>
+  </div>
+  <div id="expense-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════
+// CONFIG
+// ═══════════════════════════════
+const STORAGE_KEY = 'halfsaree_script_url';
+const DRIVE_FOLDER_KEY = 'halfsaree_drive_folder';
+
+let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || '';
+let expenses = [];
+let currentPayer = 'Praveen';
+let currentFilter = 'All';
+let selectedFile = null;
+
+const CAT_COLORS = {
+  'Venue': '#7B4F2E',
+  'Catering': '#C9922A',
+  'Decoration': '#B5445A',
+  'Clothing': '#8B5E9E',
+  'Photography': '#2A7BC9',
+  'Music & DJ': '#2AC9A5',
+  'Invitations': '#C9672A',
+  'Gifts': '#4CAF50',
+  'Transport': '#607D8B',
+  'Makeup': '#E91E8C',
+  'Jewellery': '#FFD700',
+  'Pooja Items': '#FF7043',
+  'Miscellaneous': '#9E9E9E'
+};
+
+const CAT_EMOJI = {
+  'Venue':'🏛️','Catering':'🍽️','Decoration':'🌸','Clothing':'👗',
+  'Photography':'📸','Music & DJ':'🎵','Invitations':'📬','Gifts':'🎁',
+  'Transport':'🚗','Makeup':'💄','Jewellery':'💍','Pooja Items':'🪔','Miscellaneous':'📦'
+};
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('exp-date').valueAsDate = new Date();
+  checkSetup();
+  loadData();
+});
+
+function checkSetup() {
+  const banner = document.getElementById('setup-banner');
+  if (!SCRIPT_URL) {
+    banner.style.display = 'block';
+    setSyncStatus('offline', 'Not configured');
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function saveScriptUrl() {
+  const val = document.getElementById('script-url-input').value.trim();
+  if (!val.startsWith('https://script.google.com')) {
+    showToast('⚠️ Please enter a valid Apps Script URL'); return;
+  }
+  SCRIPT_URL = val;
+  localStorage.setItem(STORAGE_KEY, val);
+  document.getElementById('setup-banner').style.display = 'none';
+  showToast('✅ Script URL saved!');
+  loadData();
+}
+
+// ═══════════════════════════════
+// SYNC STATUS
+// ═══════════════════════════════
+function setSyncStatus(state, text) {
+  const dot = document.getElementById('sync-dot');
+  const status = document.getElementById('sync-status');
+  dot.className = 'sync-dot' + (state === 'offline' ? ' offline' : state === 'syncing' ? ' syncing' : '');
+  status.textContent = text;
+}
+
+// ═══════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'list') renderList();
+}
+
+// ═══════════════════════════════
+// PAYER
+// ═══════════════════════════════
+function setPayer(name) {
+  currentPayer = name;
+  document.getElementById('payer-praveen').className = 'payer-btn' + (name === 'Praveen' ? ' active-praveen' : '');
+  document.getElementById('payer-aswin').className = 'payer-btn' + (name === 'Aswin' ? ' active-aswin' : '');
+}
+
+// ═══════════════════════════════
+// FILE HANDLING
+// ═══════════════════════════════
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ File too large (max 10MB)'); return; }
+  selectedFile = file;
+  document.getElementById('file-chosen').style.display = 'flex';
+  document.getElementById('file-chosen-name').textContent = '📎 ' + file.name;
+  document.getElementById('upload-area').style.display = 'none';
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('receipt-file').value = '';
+  document.getElementById('file-chosen').style.display = 'none';
+  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('upload-progress').style.display = 'none';
+}
+
+// ═══════════════════════════════
+// SUBMIT EXPENSE
+// ═══════════════════════════════
+async function submitExpense() {
+  if (!SCRIPT_URL) { showToast('⚠️ Please configure the Script URL first'); return; }
+
+  const desc = document.getElementById('exp-desc').value.trim();
+  const amount = parseFloat(document.getElementById('exp-amount').value);
+  const date = document.getElementById('exp-date').value;
+  if (!desc) { showToast('⚠️ Please enter a description'); return; }
+  if (!amount || amount <= 0) { showToast('⚠️ Please enter a valid amount'); return; }
+  if (!date) { showToast('⚠️ Please select a date'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+
+  let driveLink = '';
+
+  // Upload file if selected
+  if (selectedFile) {
+    driveLink = await uploadToDrive(selectedFile);
+  }
+
+  const expense = {
+    id: Date.now().toString(),
+    description: desc,
+    amount: amount,
+    date: date,
+    category: document.getElementById('exp-category').value,
+    paidBy: currentPayer,
+    paymentMode: document.getElementById('exp-payment').value,
+    notes: document.getElementById('exp-notes').value.trim(),
+    driveLink: driveLink,
+    timestamp: new Date().toISOString()
+  };
+
+  showSpinner('Saving expense…');
+  setSyncStatus('syncing', 'Syncing…');
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'addExpense', expense })
+    });
+
+    // no-cors returns opaque response — assume success
+    expenses.push(expense);
+    resetForm();
+    showToast('✅ Expense saved & synced!');
+    setSyncStatus('online', 'Synced');
+    setTimeout(() => loadData(), 1500);
+  } catch (err) {
+    showToast('❌ Sync failed. Check connection.');
+    setSyncStatus('offline', 'Sync failed');
+  }
+
+  hideSpinner();
+  btn.disabled = false;
+}
+
+async function uploadToDrive(file) {
+  if (!SCRIPT_URL) return '';
+  return new Promise((resolve) => {
+    const progress = document.getElementById('upload-progress');
+    const fill = document.getElementById('upload-fill');
+    const statusText = document.getElementById('upload-status-text');
+    progress.style.display = 'block';
+    fill.style.width = '0%';
+    statusText.textContent = 'Reading file…';
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      fill.style.width = '40%';
+      statusText.textContent = 'Uploading to Drive…';
+      const base64 = e.target.result.split(',')[1];
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'uploadFile',
+            fileName: file.name,
+            mimeType: file.type,
+            fileData: base64
+          })
+        });
+        fill.style.width = '100%';
+        statusText.textContent = 'Uploaded ✓';
+        // With no-cors we can't read response — resolve with placeholder
+        resolve('uploaded');
+      } catch {
+        statusText.textContent = 'Upload failed';
+        resolve('');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function resetForm() {
+  document.getElementById('exp-desc').value = '';
+  document.getElementById('exp-amount').value = '';
+  document.getElementById('exp-notes').value = '';
+  document.getElementById('exp-date').valueAsDate = new Date();
+  document.getElementById('exp-category').value = 'Venue';
+  document.getElementById('exp-payment').value = 'UPI';
+  clearFile();
+  setPayer('Praveen');
+}
+
+// ═══════════════════════════════
+// LOAD DATA FROM SHEETS
+// ═══════════════════════════════
+async function loadData() {
+  if (!SCRIPT_URL) { setSyncStatus('offline', 'Not configured'); return; }
+  setSyncStatus('syncing', 'Loading…');
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=getExpenses', { cache: 'no-store' });
+    const data = await res.json();
+    if (data.success) {
+      expenses = data.expenses || [];
+      setSyncStatus('online', 'Live · ' + formatTime(new Date()));
+      renderDashboard();
+      renderList();
+    } else {
+      setSyncStatus('offline', 'Error loading');
+    }
+  } catch {
+    setSyncStatus('offline', 'Offline');
+  }
+}
+
+// ═══════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════
+function renderDashboard() {
+  if (!document.getElementById('page-dashboard').classList.contains('active')) return;
+
+  const total = expenses.reduce((s, e) => s + Number(e.amount), 0);
+  const praveen = expenses.filter(e => e.paidBy === 'Praveen').reduce((s, e) => s + Number(e.amount), 0);
+  const aswin = expenses.filter(e => e.paidBy === 'Aswin').reduce((s, e) => s + Number(e.amount), 0);
+  const praveenCount = expenses.filter(e => e.paidBy === 'Praveen').length;
+  const aswinCount = expenses.filter(e => e.paidBy === 'Aswin').length;
+
+  document.getElementById('dash-total').textContent = fmt(total);
+  document.getElementById('dash-count').textContent = expenses.length + ' expense' + (expenses.length !== 1 ? 's' : '');
+  document.getElementById('dash-praveen').textContent = fmt(praveen);
+  document.getElementById('dash-aswin').textContent = fmt(aswin);
+  document.getElementById('dash-praveen-count').textContent = praveenCount + ' items';
+  document.getElementById('dash-aswin-count').textContent = aswinCount + ' items';
+
+  const pill = document.getElementById('balance-pill');
+  const idealEach = total / 2;
+  const diff = Math.abs(praveen - aswin);
+  if (diff < 1) {
+    pill.innerHTML = '✅ Perfectly split — each paid ₹' + fmt(idealEach);
+    pill.className = 'balance-pill even';
+  } else if (praveen > aswin) {
+    pill.innerHTML = '⚖️ <strong>Aswin</strong> owes Praveen <strong>₹' + fmt(diff / 2) + '</strong> to equalize';
+    pill.className = 'balance-pill';
+  } else {
+    pill.innerHTML = '⚖️ <strong>Praveen</strong> owes Aswin <strong>₹' + fmt(diff / 2) + '</strong> to equalize';
+    pill.className = 'balance-pill';
+  }
+
+  // Category breakdown
+  const cats = {};
+  expenses.forEach(e => { cats[e.category] = (cats[e.category] || 0) + Number(e.amount); });
+  const sortedCats = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+  const maxCat = sortedCats[0]?.[1] || 1;
+
+  let catHTML = '';
+  sortedCats.forEach(([cat, amt]) => {
+    const pct = Math.round((amt / total) * 100);
+    const color = CAT_COLORS[cat] || '#999';
+    catHTML += `
+      <div class="cat-item">
+        <div class="cat-row">
+          <div class="cat-left">
+            <span class="cat-emoji">${CAT_EMOJI[cat] || '📦'}</span>
+            ${cat} <span class="cat-pct">${pct}%</span>
+          </div>
+          <div class="cat-right">${fmt(amt)}</div>
+        </div>
+        <div class="cat-bar">
+          <div class="cat-bar-fill" style="width:${(amt/maxCat)*100}%;background:${color}"></div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('cat-breakdown').innerHTML = catHTML || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px">No data yet</div>';
+  document.getElementById('cat-count').textContent = sortedCats.length + ' categories';
+
+  // Payment mode breakdown
+  const modes = {};
+  expenses.forEach(e => { modes[e.paymentMode] = (modes[e.paymentMode] || 0) + Number(e.amount); });
+  const modeIcons = { 'UPI':'📱','Cash':'💵','Card':'💳','Bank Transfer':'🏦','Cheque':'📄' };
+  let modeHTML = '';
+  Object.entries(modes).sort((a,b)=>b[1]-a[1]).forEach(([mode, amt]) => {
+    const pct = Math.round((amt/total)*100);
+    modeHTML += `<div class="cat-item">
+      <div class="cat-row">
+        <div class="cat-left"><span class="cat-emoji">${modeIcons[mode]||'💰'}</span>${mode} <span class="cat-pct">${pct}%</span></div>
+        <div class="cat-right">${fmt(amt)}</div>
+      </div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%;background:var(--gold)"></div></div>
+    </div>`;
+  });
+  document.getElementById('payment-breakdown').innerHTML = modeHTML || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px">No data yet</div>';
+}
+
+// ═══════════════════════════════
+// EXPENSE LIST
+// ═══════════════════════════════
+function setFilter(val, el) {
+  currentFilter = val;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+
+function renderList() {
+  if (!document.getElementById('page-list').classList.contains('active')) return;
+  const container = document.getElementById('expense-list');
+
+  let filtered = expenses.filter(e => {
+    if (currentFilter === 'All') return true;
+    if (currentFilter === 'Praveen' || currentFilter === 'Aswin') return e.paidBy === currentFilter;
+    return e.category === currentFilter;
+  });
+
+  filtered = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🌸</div><div class="empty-text">No expenses yet${currentFilter !== 'All' ? ' for this filter' : ''}</div></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(e => {
+    const badgeClass = e.paidBy === 'Praveen' ? 'badge-praveen' : 'badge-aswin';
+    const iconBg = e.paidBy === 'Praveen' ? '#FFF3D0' : 'var(--rose-light)';
+    const invoiceBtn = e.driveLink && e.driveLink !== 'uploaded'
+      ? `<a class="exp-invoice-link" href="${e.driveLink}" target="_blank">📎 Receipt</a>`
+      : (e.driveLink === 'uploaded' ? `<span style="font-size:10px;color:var(--muted)">📎 Receipt in Drive</span>` : '');
+    const modeIcons = { 'UPI':'📱','Cash':'💵','Card':'💳','Bank Transfer':'🏦','Cheque':'📄' };
+    return `
+    <div class="expense-item">
+      <div class="exp-icon" style="background:${iconBg}">${CAT_EMOJI[e.category]||'📦'}</div>
+      <div class="exp-body">
+        <div class="exp-title">${escHtml(e.description)}</div>
+        <div class="exp-meta">
+          <span class="exp-badge ${badgeClass}">${e.paidBy}</span>
+          <span>${formatDate(e.date)}</span>
+          <span>${modeIcons[e.paymentMode]||''} ${e.paymentMode}</span>
+        </div>
+        ${e.notes ? `<div class="exp-notes">${escHtml(e.notes)}</div>` : ''}
+        ${invoiceBtn}
+      </div>
+      <div class="exp-right">
+        <div class="exp-amount">${fmt(e.amount)}</div>
+        <button class="exp-del" onclick="deleteExpense('${e.id}')" title="Delete">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════
+// DELETE
+// ═══════════════════════════════
+async function deleteExpense(id) {
+  if (!confirm('Delete this expense?')) return;
+  if (!SCRIPT_URL) { showToast('⚠️ Not configured'); return; }
+
+  showSpinner('Deleting…');
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'deleteExpense', id })
+    });
+    expenses = expenses.filter(e => e.id !== id);
+    renderList();
+    renderDashboard();
+    showToast('🗑️ Expense deleted');
+  } catch {
+    showToast('❌ Failed to delete');
+  }
+  hideSpinner();
+}
+
+// ═══════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════
+function exportCSV() {
+  if (!expenses.length) { showToast('No expenses to export'); return; }
+  const headers = ['Date','Description','Category','Paid By','Amount','Payment Mode','Notes','Receipt'];
+  const rows = expenses.map(e => [
+    e.date, `"${e.description}"`, e.category, e.paidBy, e.amount, e.paymentMode, `"${e.notes||''}"`, e.driveLink||''
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'halfsaree-expenses.csv'; a.click();
+  showToast('📥 CSV exported!');
+}
+
+// ═══════════════════════════════
+// HELPERS
+// ═══════════════════════════════
+function fmt(n) { return '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 0 }); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function formatDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' });
+}
+function formatTime(d) {
+  return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function showSpinner(msg) {
+  document.getElementById('spinner-text').textContent = msg || 'Loading…';
+  document.getElementById('spinner').classList.add('show');
+}
+function hideSpinner() { document.getElementById('spinner').classList.remove('show'); }
+
+// Auto-refresh every 30 seconds
+setInterval(() => { if (SCRIPT_URL) loadData(); }, 30000);
+</script>
+</body>
+</html>
