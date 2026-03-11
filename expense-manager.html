@@ -559,6 +559,65 @@ select.form-control {
 .side-stat.common .side-stat-name { color: #2E7D32; }
 .side-stat-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--warm); }
 .side-stat-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* ── GUEST ACTIONS ROW ── */
+.guest-actions-row {
+  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+}
+.btn-call {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 20px;
+  background: #E8F5E9; border: 1.5px solid #A5D6A7;
+  color: #2E7D32; font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-decoration: none; transition: all 0.15s;
+}
+.btn-call:hover { background: #C8E6C9; }
+.btn-called-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 20px;
+  background: var(--cream); border: 1.5px solid var(--border);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-called-toggle.called {
+  background: #FFF8E8; border-color: var(--gold-light); color: var(--gold);
+}
+.btn-edit-guest {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 10px; border-radius: 20px;
+  background: var(--cream); border: 1.5px solid var(--border);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s; margin-left: auto;
+}
+.btn-edit-guest:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--warm); }
+
+/* ── EDIT MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(30,15,8,0.55);
+  z-index: 200; display: none; align-items: flex-end;
+  backdrop-filter: blur(3px);
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--white); border-radius: 20px 20px 0 0;
+  padding: 20px; width: 100%;
+  max-height: 88vh; overflow-y: auto;
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.modal-title { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--warm); }
+.modal-close {
+  background: none; border: none; font-size: 22px;
+  color: var(--muted); cursor: pointer; line-height: 1; padding: 2px 6px;
+}
+.modal-close:hover { color: var(--rose); }
+
 </style>
 </head>
 <body>
@@ -797,12 +856,12 @@ select.form-control {
 
     <div class="form-group">
       <label class="form-label">Family Name <span class="required">*</span></label>
-      <input class="form-control" id="g-name" type="text" placeholder="e.g. Kunisetty Family, Suresh Uncle…" maxlength="80">
+      <input class="form-control" id="g-name" type="text" placeholder="e.g. Rajan Family, Suresh Uncle…" maxlength="80">
     </div>
 
     <div class="form-group">
       <label class="form-label">Location <span class="required">*</span></label>
-      <input class="form-control" id="g-location" type="text" placeholder="e.g. Guntur, Chirala, Parchur…" maxlength="60">
+      <input class="form-control" id="g-location" type="text" placeholder="e.g. Chennai, Coimbatore, Local…" maxlength="60">
     </div>
 
     <div class="form-row">
@@ -819,6 +878,11 @@ select.form-control {
     <div class="form-group">
       <label class="form-label">Notes <span style="color:var(--muted);font-weight:400">(optional)</span></label>
       <input class="form-control" id="g-notes" type="text" placeholder="e.g. Confirmed, coming by train…" maxlength="150">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone Number <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <input class="form-control" id="g-phone" type="tel" inputmode="tel" placeholder="e.g. 9876543210" maxlength="15">
     </div>
 
     <button class="btn-submit" id="guest-submit-btn" onclick="submitGuest()">
@@ -1340,7 +1404,9 @@ async function submitGuest() {
     totalMembers: total,
     expectedAttending: attending,
     side: currentGuestSide,
+    phone: document.getElementById('g-phone').value.trim(),
     notes: document.getElementById('g-notes').value.trim(),
+    called: false,
     timestamp: new Date().toISOString()
   };
 
@@ -1372,6 +1438,7 @@ function resetGuestForm() {
   document.getElementById('g-location').value = '';
   document.getElementById('g-total').value = '';
   document.getElementById('g-attending').value = '';
+  document.getElementById('g-phone').value = '';
   document.getElementById('g-notes').value = '';
   setGuestSide('Praveen');
 }
@@ -1491,25 +1558,43 @@ function renderGuestList() {
   }
 
   const sideEmoji = { 'Praveen': 'P', 'Aswin': 'A', 'Common': '🤝' };
-  container.innerHTML = filtered.map(g => `
-    <div class="guest-item">
-      <div class="guest-avatar ${g.side.toLowerCase()}">${sideEmoji[g.side] || '?'}</div>
-      <div class="guest-body">
-        <div class="guest-name">${escHtml(g.familyName)}</div>
-        <div class="guest-meta">
-          <span>📍 ${escHtml(g.location)}</span>
-          <span class="exp-badge ${g.side === 'Praveen' ? 'badge-praveen' : g.side === 'Aswin' ? 'badge-aswin' : ''}" style="${g.side === 'Common' ? 'background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7' : ''}">${g.side}</span>
+  container.innerHTML = filtered.map(g => {
+    const badgeStyle = g.side === 'Common'
+      ? 'background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7'
+      : '';
+    const badgeClass = g.side === 'Praveen' ? 'badge-praveen' : g.side === 'Aswin' ? 'badge-aswin' : '';
+    const callBtn = g.phone
+      ? `<a class="btn-call" href="tel:${escHtml(g.phone)}">📞 ${escHtml(g.phone)}</a>`
+      : '';
+    const calledClass = g.called == true || g.called === 'true' ? 'called' : '';
+    const calledLabel = calledClass ? '✅ Called' : '📵 Not Called';
+    return `
+    <div class="guest-item" style="flex-direction:column;align-items:stretch;gap:8px" id="gitem-${g.id}">
+      <div style="display:flex;align-items:flex-start;gap:11px">
+        <div class="guest-avatar ${g.side.toLowerCase()}">${sideEmoji[g.side] || '?'}</div>
+        <div class="guest-body">
+          <div class="guest-name">${escHtml(g.familyName)}</div>
+          <div class="guest-meta">
+            <span>📍 ${escHtml(g.location)}</span>
+            <span class="exp-badge ${badgeClass}" style="${badgeStyle}">${g.side}</span>
+          </div>
+          ${g.notes ? `<div class="exp-notes">${escHtml(g.notes)}</div>` : ''}
         </div>
-        ${g.notes ? `<div class="exp-notes">${escHtml(g.notes)}</div>` : ''}
-      </div>
-      <div class="guest-right">
-        <div>
-          <div class="guest-count-badge">${g.expectedAttending || 0} <span style="font-size:11px;color:var(--muted)">/ ${g.totalMembers || 0}</span></div>
-          <div class="guest-count-label">attending / total</div>
+        <div class="guest-right" style="flex-shrink:0">
+          <div>
+            <div class="guest-count-badge">${g.expectedAttending || 0} <span style="font-size:11px;color:var(--muted)">/ ${g.totalMembers || 0}</span></div>
+            <div class="guest-count-label">attending / total</div>
+          </div>
+          <button class="guest-del" onclick="deleteGuest('${g.id}')">🗑️</button>
         </div>
-        <button class="guest-del" onclick="deleteGuest('${g.id}')">🗑️</button>
       </div>
-    </div>`).join('');
+      <div class="guest-actions-row">
+        ${callBtn}
+        <button class="btn-called-toggle ${calledClass}" onclick="toggleCalled('${g.id}')">${calledLabel}</button>
+        <button class="btn-edit-guest" onclick="openEditModal('${g.id}')">✏️ Edit</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════
@@ -1535,8 +1620,176 @@ async function deleteGuest(id) {
   hideSpinner();
 }
 
+// ═══════════════════════════════
+// TOGGLE CALLED STATUS
+// ═══════════════════════════════
+async function toggleCalled(id) {
+  const g = guests.find(x => x.id === id);
+  if (!g) return;
+  const newCalled = !(g.called == true || g.called === 'true');
+  g.called = newCalled;
+
+  // Update button instantly (optimistic)
+  const btn = document.querySelector(`#gitem-${id} .btn-called-toggle`);
+  if (btn) {
+    btn.className = 'btn-called-toggle' + (newCalled ? ' called' : '');
+    btn.textContent = newCalled ? '✅ Called' : '📵 Not Called';
+  }
+
+  if (!SCRIPT_URL) return;
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'updateGuest', guest: g })
+    });
+    showToast(newCalled ? '✅ Marked as Called' : '📵 Marked as Not Called');
+  } catch {
+    showToast('⚠️ Could not sync called status');
+  }
+}
+
+// ═══════════════════════════════
+// EDIT MODAL
+// ═══════════════════════════════
+let editGuestSide = 'Praveen';
+
+function openEditModal(id) {
+  const g = guests.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('edit-g-id').value = g.id;
+  document.getElementById('edit-g-name').value = g.familyName || '';
+  document.getElementById('edit-g-location').value = g.location || '';
+  document.getElementById('edit-g-total').value = g.totalMembers || '';
+  document.getElementById('edit-g-attending').value = g.expectedAttending || '';
+  document.getElementById('edit-g-phone').value = g.phone || '';
+  document.getElementById('edit-g-notes').value = g.notes || '';
+  setEditSide(g.side || 'Praveen');
+  document.getElementById('edit-modal').classList.add('show');
+  // Prevent body scroll
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function setEditSide(side) {
+  editGuestSide = side;
+  ['Praveen','Aswin','Common'].forEach(s => {
+    const btn = document.getElementById('edit-side-' + s.toLowerCase());
+    if (btn) btn.className = 'side-btn' + (side === s ? ' active-' + s.toLowerCase() : '');
+  });
+}
+
+async function saveEditGuest() {
+  const id = document.getElementById('edit-g-id').value;
+  const name = document.getElementById('edit-g-name').value.trim();
+  const location = document.getElementById('edit-g-location').value.trim();
+  if (!name) { showToast('⚠️ Family name required'); return; }
+  if (!location) { showToast('⚠️ Location required'); return; }
+
+  const idx = guests.findIndex(x => x.id === id);
+  if (idx === -1) return;
+
+  const updated = {
+    ...guests[idx],
+    familyName: name,
+    location: location,
+    totalMembers: parseInt(document.getElementById('edit-g-total').value) || 0,
+    expectedAttending: parseInt(document.getElementById('edit-g-attending').value) || 0,
+    phone: document.getElementById('edit-g-phone').value.trim(),
+    notes: document.getElementById('edit-g-notes').value.trim(),
+    side: editGuestSide
+  };
+
+  showSpinner('Saving…');
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'updateGuest', guest: updated })
+    });
+    guests[idx] = updated;
+    closeEditModal();
+    renderGuestSummary();
+    renderGuestList();
+    showToast('✅ Entry updated!');
+    setTimeout(() => loadData(), 1500);
+  } catch {
+    showToast('❌ Failed to save changes');
+  }
+  hideSpinner();
+}
+
+// Close modal on backdrop tap
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+
 // Auto-refresh every 30 seconds
 setInterval(() => { if (SCRIPT_URL) loadData(); }, 30000);
 </script>
+<!-- ═══════════════════════════════════════
+     EDIT GUEST MODAL
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Family</div>
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+
+    <input type="hidden" id="edit-g-id">
+
+    <div class="form-group">
+      <label class="form-label">Whose side</label>
+      <div class="side-toggle" id="edit-side-toggle">
+        <button class="side-btn active-praveen" id="edit-side-praveen" onclick="setEditSide('Praveen')">
+          <div class="side-initial">P</div>Praveen
+        </button>
+        <button class="side-btn" id="edit-side-aswin" onclick="setEditSide('Aswin')">
+          <div class="side-initial">A</div>Aswin
+        </button>
+        <button class="side-btn" id="edit-side-common" onclick="setEditSide('Common')">
+          <div class="side-initial">🤝</div>Common
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Family Name <span class="required">*</span></label>
+      <input class="form-control" id="edit-g-name" type="text" maxlength="80">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Location <span class="required">*</span></label>
+      <input class="form-control" id="edit-g-location" type="text" maxlength="60">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Total in Family</label>
+        <input class="form-control" id="edit-g-total" type="number" inputmode="numeric" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expected to Attend</label>
+        <input class="form-control" id="edit-g-attending" type="number" inputmode="numeric" min="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <input class="form-control" id="edit-g-phone" type="tel" inputmode="tel" maxlength="15">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <input class="form-control" id="edit-g-notes" type="text" maxlength="150">
+    </div>
+
+    <button class="btn-submit" onclick="saveEditGuest()">
+      <span>💾</span> Save Changes
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
