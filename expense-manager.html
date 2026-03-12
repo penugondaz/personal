@@ -509,91 +509,83 @@ select.form-control {
 
 /* ── GUEST CARD ── */
 .guest-item {
-  background: var(--white); border-radius: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 3px 14px rgba(26,16,53,0.09);
+  background: var(--white); border-radius: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(26,16,53,0.08);
   border: 1px solid var(--border);
-  overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+  overflow: hidden;
 }
-.guest-item:active { transform: scale(0.99); }
-.guest-item.is-called { border-left: 4px solid var(--teal); }
-.guest-item.not-called { border-left: 4px solid var(--border); }
+.guest-item.is-called  { border-left: 4px solid var(--teal); }
+.guest-item.not-called { border-left: 4px solid #E2D9F3; }
 
-/* Top row: avatar + info + pax count */
-.guest-card-top {
-  display: flex; align-items: stretch;
-  gap: 0; padding: 0;
+/* Main row */
+.gc-main {
+  display: flex; align-items: center;
+  gap: 10px; padding: 12px 12px 10px;
 }
-.guest-avatar-col {
+.gc-avatar {
+  width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  padding: 14px 12px 14px 14px; flex-shrink: 0;
-}
-.guest-avatar {
-  width: 46px; height: 46px; border-radius: 13px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 700;
-  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; font-family: 'Playfair Display', serif;
   position: relative;
 }
-.guest-avatar.praveen { background: linear-gradient(135deg,#FFE9A0,#FFD166); color: #7A4800; }
-.guest-avatar.aswin   { background: linear-gradient(135deg,#FFB3CB,#FF7FAA); color: #8A0030; }
-.guest-avatar.common  { background: linear-gradient(135deg,#80DEEA,#26C6DA); color: #004D50; }
+.gc-avatar.praveen { background: linear-gradient(135deg,#FFE9A0,#FFD166); color: #7A4800; }
+.gc-avatar.aswin   { background: linear-gradient(135deg,#FFB3CB,#FF7FAA); color: #8A0030; }
+.gc-avatar.common  { background: linear-gradient(135deg,#80DEEA,#26C6DA); color: #004D50; }
 .guest-called-dot {
   position: absolute; bottom: -2px; right: -2px;
-  width: 13px; height: 13px; border-radius: 50%;
-  border: 2.5px solid white; background: #CBD5E1;
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid white; background: #CBD5E1;
 }
 .guest-called-dot.yes { background: var(--teal); }
-.guest-info-col {
-  flex: 1; min-width: 0;
-  padding: 12px 8px 10px 2px;
-  display: flex; flex-direction: column; justify-content: center;
+
+/* Info block */
+.gc-info { flex: 1; min-width: 0; }
+.gc-name-row {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 2px;
 }
-.guest-name { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.25; }
-.guest-loc {
-  font-size: 11px; color: var(--muted);
-  margin-top: 3px; display: flex; align-items: center; gap: 3px;
+.gc-name { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gc-icons { display: flex; gap: 2px; flex-shrink: 0; }
+.gc-icon-btn {
+  background: none; border: none; font-size: 15px; cursor: pointer;
+  padding: 3px 5px; border-radius: 7px; line-height: 1;
+  transition: background 0.15s;
 }
-.guest-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+.gc-icon-btn:active     { background: var(--purple-light); }
+.gc-icon-btn.del:active { background: var(--rose-light); }
+.gc-loc { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.gc-tags { display: flex; gap: 4px; flex-wrap: wrap; }
 .gtag {
-  font-size: 10px; font-weight: 700; padding: 2px 8px;
-  border-radius: 20px; letter-spacing: 0.3px; line-height: 1.5;
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 20px; letter-spacing: 0.2px; line-height: 1.5;
 }
 .gtag-praveen { background: #FFF3CC; color: #7A4800; border: 1px solid #FFD166; }
 .gtag-aswin   { background: var(--rose-light); color: var(--rose); border: 1px solid #FFB3CB; }
 .gtag-common  { background: var(--teal-light); color: #066B68; border: 1px solid #80DEEA; }
+.gtag-called  { background: var(--teal-light); color: #066B68; border: 1px solid #80DEEA; }
 
-/* Pax count column on the right */
-.guest-pax-col {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 12px 14px 10px 8px; flex-shrink: 0;
-  min-width: 64px;
+/* Pax block */
+.gc-pax {
+  text-align: center; flex-shrink: 0;
+  padding: 4px 10px;
   border-left: 1px solid var(--border);
-  background: linear-gradient(180deg, #FAF8FF, var(--white));
+  min-width: 52px;
 }
-.guest-pax-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1; }
-.guest-pax-of  { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.guest-pax-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+.gc-pax-num { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--navy); line-height: 1; }
+.gc-pax-sub { font-size: 10px; color: var(--muted); }
 
-/* Notes row */
-.guest-notes-row {
+/* Notes */
+.gc-notes {
   font-size: 11px; color: var(--muted); font-style: italic;
-  padding: 0 14px 9px 14px;
-  display: flex; align-items: center; gap: 5px;
+  padding: 0 12px 8px; margin-top: -4px;
 }
 
-/* ── GUEST ACTIONS BAR ── */
-.guest-actions-row {
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 10px 12px 12px; border-top: 1px solid var(--border);
+/* Actions bar */
+.gc-actions {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px 10px; border-top: 1px solid var(--border);
   background: #F8F5FF;
-}
-.guest-actions-top {
-  display: flex; align-items: center; gap: 7px;
-}
-.guest-actions-bottom {
-  display: flex; align-items: center; justify-content: flex-end; gap: 7px;
 }
 .btn-call {
   display: inline-flex; align-items: center; gap: 5px;
@@ -601,7 +593,7 @@ select.form-control {
   background: var(--green-light); border: 1.5px solid #6FCF97;
   color: #0A7A3C; font-family: 'DM Sans', sans-serif;
   font-size: 12px; font-weight: 700; cursor: pointer;
-  text-decoration: none; transition: all 0.15s; white-space: nowrap;
+  text-decoration: none; white-space: nowrap;
 }
 .btn-call:active { background: #B7EDD0; }
 .btn-called-toggle {
@@ -612,27 +604,8 @@ select.form-control {
   font-size: 12px; font-weight: 600; cursor: pointer;
   transition: all 0.2s; white-space: nowrap;
 }
-.btn-called-toggle.called {
-  background: var(--teal-light); border-color: var(--teal); color: #066B68; font-weight: 700;
-}
+.btn-called-toggle.called { background: var(--teal-light); border-color: var(--teal); color: #066B68; font-weight: 700; }
 .btn-called-toggle:active { transform: scale(0.96); }
-.btn-edit-guest {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 7px 11px; border-radius: 20px;
-  background: var(--purple-light); border: 1.5px solid #C4B5FD;
-  color: var(--purple); font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-edit-guest:active { background: #DDD6FE; }
-.btn-del-guest {
-  display: inline-flex; align-items: center;
-  padding: 7px 9px; border-radius: 20px;
-  background: transparent; border: 1.5px solid var(--border);
-  color: #CBD5E1; font-size: 13px; cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-del-guest:active { border-color: var(--rose); color: var(--rose); background: var(--rose-light); }
 
 /* ── GUEST TOOLBAR ── */
 .guest-toolbar {
@@ -671,7 +644,6 @@ select.form-control {
   background: var(--white); border-radius: 22px 22px 0 0;
   z-index: 401; transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
   border-top: 3px solid var(--purple);
-  max-height: 85vh; overflow-y: auto;
   padding-bottom: env(safe-area-inset-bottom, 16px);
 }
 .fm-drawer.open { transform: translateX(-50%) translateY(0); }
@@ -695,7 +667,7 @@ select.form-control {
   padding: 5px 9px; cursor: pointer; line-height: 1;
 }
 .fm-close:active { background: var(--rose-light); color: var(--rose); }
-.fm-body { padding: 14px 18px 6px; overflow-y: visible; }
+.fm-body { padding: 16px 18px 8px; }
 .fm-group { margin-bottom: 20px; }
 .fm-group-label {
   font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -723,7 +695,6 @@ select.form-control {
   padding: 12px 18px 16px;
   border-top: 1px solid var(--border);
   background: #FAF8FF;
-  position: sticky; bottom: 0;
 }
 .fm-reset {
   flex: 1; padding: 12px;
@@ -1974,40 +1945,36 @@ function renderGuestList() {
       : '';
     return `
     <div class="guest-item ${isCalled?'is-called':'not-called'}" id="gitem-${g.id}">
-      <div class="guest-card-top">
-        <div class="guest-avatar-col">
-          <div class="guest-avatar ${g.side.toLowerCase()}">
-            ${sideInit[g.side]||'?'}
-            <div class="guest-called-dot ${isCalled?'yes':''}"></div>
-          </div>
+      <div class="gc-main">
+        <div class="gc-avatar ${g.side.toLowerCase()}">
+          ${sideInit[g.side]||'?'}
+          <div class="guest-called-dot ${isCalled?'yes':''}"></div>
         </div>
-        <div class="guest-info-col">
-          <div class="guest-name">${escHtml(g.familyName)}</div>
-          <div class="guest-loc">📍 ${escHtml(g.location||'—')}</div>
-          <div class="guest-tags">
+        <div class="gc-info">
+          <div class="gc-name-row">
+            <span class="gc-name">${escHtml(g.familyName)}</span>
+            <span class="gc-icons">
+              <button class="gc-icon-btn" onclick="openEditModal('${g.id}')" title="Edit">✏️</button>
+              <button class="gc-icon-btn del" onclick="deleteGuest('${g.id}')" title="Delete">🗑️</button>
+            </span>
+          </div>
+          <div class="gc-loc">📍 ${escHtml(g.location||'—')}</div>
+          <div class="gc-tags">
             <span class="gtag ${tagClass}">${g.side}</span>
-            ${g.phone ? `<span class="gtag" style="background:#E0F2FE;color:#0369A1;border:1px solid #7DD3FC">📱 Phone</span>` : ''}
-            ${isCalled ? `<span class="gtag" style="background:var(--teal-light);color:#066B68;border:1px solid #80DEEA">✅ Called</span>` : ''}
+            ${isCalled ? `<span class="gtag gtag-called">✅ Called</span>` : ''}
           </div>
         </div>
-        <div class="guest-pax-col">
-          <div class="guest-pax-num">${g.expectedAttending||0}</div>
-          <div class="guest-pax-of">of ${g.totalMembers||0}</div>
-          <div class="guest-pax-label">attending</div>
+        <div class="gc-pax">
+          <div class="gc-pax-num">${g.expectedAttending||0}</div>
+          <div class="gc-pax-sub">of ${g.totalMembers||0}</div>
         </div>
       </div>
-      ${g.notes ? `<div class="guest-notes-row">💬 ${escHtml(g.notes)}</div>` : ''}
-      <div class="guest-actions-row">
-        <div class="guest-actions-top">
-          ${callBtn}
-          <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
-            ${isCalled ? '✅ Called' : '📵 Not Called'}
-          </button>
-        </div>
-        <div class="guest-actions-bottom">
-          <button class="btn-edit-guest" onclick="openEditModal('${g.id}')">✏️ Edit</button>
-          <button class="btn-del-guest" onclick="deleteGuest('${g.id}')">🗑️</button>
-        </div>
+      ${g.notes ? `<div class="gc-notes">💬 ${escHtml(g.notes)}</div>` : ''}
+      <div class="gc-actions">
+        ${callBtn}
+        <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
+          ${isCalled ? '✅ Called' : '📵 Not Called'}
+        </button>
       </div>
     </div>`;
   }).join('');
@@ -2042,11 +2009,14 @@ async function toggleCalled(id) {
   const newCalled = !(g.called == true || g.called === 'true');
   g.called = newCalled;
 
-  // Update button instantly (optimistic UI)
-  const btn = document.querySelector(`#gitem-${id} .btn-called-toggle`);
-  if (btn) {
-    btn.className = 'btn-called-toggle' + (newCalled ? ' called' : '');
-    btn.textContent = newCalled ? '✅ Called' : '📵 Not Called';
+  // Optimistic UI update
+  const item = document.getElementById(`gitem-${id}`);
+  if (item) {
+    item.className = `guest-item ${newCalled ? 'is-called' : 'not-called'}`;
+    const dot = item.querySelector('.guest-called-dot');
+    if (dot) dot.className = `guest-called-dot ${newCalled ? 'yes' : ''}`;
+    const btn = item.querySelector('.btn-called-toggle');
+    if (btn) { btn.className = 'btn-called-toggle' + (newCalled ? ' called' : ''); btn.textContent = newCalled ? '✅ Called' : '📵 Not Called'; }
   }
 
   if (!SCRIPT_URL) return;
