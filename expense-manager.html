@@ -490,35 +490,137 @@ select.form-control {
 .side-btn.active-common { border-color: #4CAF50; background: #F0FFF0; color: #2E7D32; }
 .side-btn.active-common .side-initial { background: #4CAF50; color: white; }
 
+/* ── GUEST CARD (redesigned) ── */
 .guest-item {
-  background: var(--white); border-radius: 13px;
-  padding: 13px 12px; margin-bottom: 8px;
-  box-shadow: 0 1px 6px rgba(44,24,16,0.07);
+  background: var(--white); border-radius: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(44,24,16,0.08);
   border: 1px solid var(--border);
-  display: flex; align-items: center; gap: 11px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.guest-item.is-called { border-left: 3px solid #4CAF50; }
+.guest-item.not-called { border-left: 3px solid var(--border); }
+.guest-card-top {
+  display: flex; align-items: flex-start;
+  gap: 11px; padding: 13px 13px 10px;
 }
 .guest-avatar {
-  width: 40px; height: 40px; border-radius: 10px;
+  width: 42px; height: 42px; border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 17px; font-weight: 700; flex-shrink: 0;
+  font-size: 16px; font-weight: 700; flex-shrink: 0;
   font-family: 'Playfair Display', serif;
+  position: relative;
 }
-.guest-avatar.praveen { background: #FFF3D0; color: var(--praveen); }
-.guest-avatar.aswin { background: var(--rose-light); color: var(--aswin); }
-.guest-avatar.common { background: #E8F5E9; color: #2E7D32; }
+.guest-avatar.praveen { background: linear-gradient(135deg,#FFF3D0,#FFE8A0); color: var(--praveen); }
+.guest-avatar.aswin { background: linear-gradient(135deg,#FFE8EE,var(--rose-light)); color: var(--aswin); }
+.guest-avatar.common { background: linear-gradient(135deg,#E8F5E9,#C8E6C9); color: #2E7D32; }
+.guest-called-dot {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid white;
+  background: #ccc;
+}
+.guest-called-dot.yes { background: #4CAF50; }
 .guest-body { flex: 1; min-width: 0; }
-.guest-name { font-size: 14px; font-weight: 600; color: var(--text); }
-.guest-meta { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; gap: 8px; flex-wrap: wrap; }
-.guest-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
-.guest-count-badge {
-  font-family: 'Playfair Display', serif;
-  font-size: 14px; font-weight: 700; color: var(--warm);
-  text-align: right;
+.guest-name { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.guest-loc {
+  font-size: 11px; color: var(--muted);
+  margin-top: 3px; display: flex; align-items: center; gap: 4px;
 }
-.guest-count-label { font-size: 10px; color: var(--muted); text-align: right; }
-.guest-del { background: none; border: none; color: var(--border); cursor: pointer; font-size: 14px; transition: color 0.2s; }
-.guest-del:hover { color: var(--rose); }
+.guest-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+.gtag {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 20px; letter-spacing: 0.3px;
+}
+.gtag-praveen { background: #FFF3D0; color: #A07020; border: 1px solid #EDD898; }
+.gtag-aswin { background: var(--rose-light); color: var(--rose); border: 1px solid #F0B8C8; }
+.gtag-common { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+.guest-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.guest-pax-big { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--warm); line-height: 1; }
+.guest-pax-label { font-size: 10px; color: var(--muted); text-align: right; }
+.guest-pax-total { font-size: 11px; color: var(--muted); }
+.guest-notes-row {
+  font-size: 11px; color: var(--muted); font-style: italic;
+  padding: 0 13px 8px; margin-top: -4px;
+}
 
+/* ── GUEST ACTIONS BAR ── */
+.guest-actions-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 13px 11px; border-top: 1px solid var(--border);
+  background: #FDFAF5; flex-wrap: wrap;
+}
+.btn-call {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 20px;
+  background: #E8F5E9; border: 1.5px solid #A5D6A7;
+  color: #2E7D32; font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-decoration: none; transition: all 0.15s; white-space: nowrap;
+}
+.btn-call:active { background: #C8E6C9; }
+.btn-called-toggle {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 11px; border-radius: 20px;
+  background: var(--cream); border: 1.5px solid var(--border);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-called-toggle.called {
+  background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32;
+}
+.btn-called-toggle:active { transform: scale(0.97); }
+.btn-edit-guest {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 10px; border-radius: 20px;
+  background: transparent; border: 1.5px solid var(--border);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s; margin-left: auto;
+}
+.btn-edit-guest:active { background: var(--gold-pale); border-color: var(--gold); color: var(--warm); }
+.btn-del-guest {
+  display: inline-flex; align-items: center;
+  padding: 6px 8px; border-radius: 20px;
+  background: transparent; border: 1.5px solid var(--border);
+  color: var(--border); font-size: 13px; cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-del-guest:active { border-color: var(--rose); color: var(--rose); }
+
+/* ── FILTER PANEL ── */
+.filter-panel { background: var(--white); border-radius: 14px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.filter-section-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.filter-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.filter-chips:last-child { margin-bottom: 0; }
+.fchip {
+  padding: 5px 12px; border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--cream); font-size: 12px; font-weight: 500;
+  color: var(--muted); cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.fchip.active { background: var(--deep); border-color: var(--deep); color: var(--gold-light); }
+.fchip.active-green { background: #2E7D32; border-color: #2E7D32; color: white; }
+.fchip.active-amber { background: var(--warm); border-color: var(--warm); color: white; }
+.filter-result-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; padding: 0 2px;
+}
+.filter-result-text { font-size: 12px; color: var(--muted); }
+.filter-result-text strong { color: var(--warm); }
+.btn-clear-filters {
+  font-size: 11px; color: var(--rose); background: none; border: none;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; padding: 0;
+}
+
+/* ── SUMMARY CARDS ── */
 .guests-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .gstat {
   background: var(--white); border-radius: var(--radius);
@@ -531,20 +633,25 @@ select.form-control {
 .gstat-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
 .lunch-banner {
-  background: linear-gradient(135deg, #1E4D1E, #2E7D32);
-  border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
-  text-align: center;
+  background: linear-gradient(135deg, #1A3D1A 0%, #2E7D32 100%);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 12px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.lunch-banner::before {
+  content: '🍽️';
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  font-size: 40px; opacity: 0.15;
 }
 .lunch-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
-.lunch-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #A5D6A7; line-height: 1; }
-.lunch-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.lunch-number { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: #A5D6A7; line-height: 1; }
+.lunch-sub { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 5px; }
 
-.location-item { margin-bottom: 10px; }
-.location-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.location-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+.location-item { margin-bottom: 11px; }
+.location-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.location-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; color: var(--text); }
 .location-counts { font-size: 12px; color: var(--muted); }
-.location-bar { height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
-.location-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; }
+.location-bar { height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.location-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; transition: width 0.5s ease; }
 
 .side-breakdown { display: flex; gap: 8px; margin-bottom: 12px; }
 .side-stat {
@@ -557,42 +664,8 @@ select.form-control {
 .side-stat.praveen .side-stat-name { color: var(--praveen); }
 .side-stat.aswin .side-stat-name { color: var(--aswin); }
 .side-stat.common .side-stat-name { color: #2E7D32; }
-.side-stat-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--warm); }
+.side-stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--warm); }
 .side-stat-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-/* ── GUEST ACTIONS ROW ── */
-.guest-actions-row {
-  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
-}
-.btn-call {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 12px; border-radius: 20px;
-  background: #E8F5E9; border: 1.5px solid #A5D6A7;
-  color: #2E7D32; font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  text-decoration: none; transition: all 0.15s;
-}
-.btn-call:hover { background: #C8E6C9; }
-.btn-called-toggle {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 6px 12px; border-radius: 20px;
-  background: var(--cream); border: 1.5px solid var(--border);
-  color: var(--muted); font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-called-toggle.called {
-  background: #FFF8E8; border-color: var(--gold-light); color: var(--gold);
-}
-.btn-edit-guest {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 6px 10px; border-radius: 20px;
-  background: var(--cream); border: 1.5px solid var(--border);
-  color: var(--muted); font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  transition: all 0.15s; margin-left: auto;
-}
-.btn-edit-guest:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--warm); }
 
 /* ── EDIT MODAL ── */
 .modal-overlay {
@@ -892,16 +965,33 @@ select.form-control {
 
   <div id="guest-summary-section"></div>
 
-  <div class="section-head" style="margin-top:4px">
-    All Families
-    <span class="section-head-count" id="guest-list-count"></span>
+  <!-- FILTER PANEL -->
+  <div class="filter-panel">
+    <div class="filter-section-label">By Side</div>
+    <div class="filter-chips" id="gf-side">
+      <div class="fchip active" onclick="setGF('side','All',this)">All</div>
+      <div class="fchip" onclick="setGF('side','Praveen',this)">👤 Praveen's</div>
+      <div class="fchip" onclick="setGF('side','Aswin',this)">👤 Aswin's</div>
+      <div class="fchip" onclick="setGF('side','Common',this)">🤝 Common</div>
+    </div>
+
+    <div class="filter-section-label">By Call Status</div>
+    <div class="filter-chips" id="gf-called">
+      <div class="fchip active" onclick="setGF('called','All',this)">All</div>
+      <div class="fchip" onclick="setGF('called','Yes',this)">✅ Called</div>
+      <div class="fchip" onclick="setGF('called','No',this)">📵 Not Called</div>
+      <div class="fchip" onclick="setGF('called','Phone',this)">📞 Has Phone</div>
+    </div>
+
+    <div class="filter-section-label">By Location</div>
+    <div class="filter-chips" id="gf-location">
+      <div class="fchip active" onclick="setGF('location','All',this)">All</div>
+    </div>
   </div>
 
-  <div class="filter-bar" id="guest-filter-bar">
-    <div class="chip active" onclick="setGuestFilter('All', this)">All</div>
-    <div class="chip" onclick="setGuestFilter('Praveen', this)">Praveen's</div>
-    <div class="chip" onclick="setGuestFilter('Aswin', this)">Aswin's</div>
-    <div class="chip" onclick="setGuestFilter('Common', this)">🤝 Common</div>
+  <div class="filter-result-bar">
+    <div class="filter-result-text" id="guest-list-count">Loading…</div>
+    <button class="btn-clear-filters" onclick="clearGuestFilters()" id="clear-filters-btn" style="display:none">✕ Clear filters</button>
   </div>
 
   <div id="guest-list"></div>
@@ -982,7 +1072,7 @@ let guests = [];
 let currentPayer = 'Praveen';
 let currentFilter = 'All';
 let currentGuestSide = 'Praveen';
-let currentGuestFilter = 'All';
+let gFilters = { side: 'All', called: 'All', location: 'All' };
 let selectedFile = null;
 
 const CAT_COLORS = {
@@ -1062,7 +1152,7 @@ function showPage(name) {
   document.getElementById('nav-' + name).classList.add('active');
   if (name === 'dashboard') renderDashboard();
   if (name === 'list') renderList();
-  if (name === 'guests') { renderGuestSummary(); renderGuestList(); }
+  if (name === 'guests') { buildLocationChips(); renderGuestSummary(); renderGuestList(); }
 }
 
 // ═══════════════════════════════
@@ -1508,13 +1598,45 @@ function resetGuestForm() {
 }
 
 // ═══════════════════════════════
-// GUEST FILTER
+// GUEST FILTERS (multi-dimensional)
 // ═══════════════════════════════
-function setGuestFilter(val, el) {
-  currentGuestFilter = val;
-  document.querySelectorAll('#guest-filter-bar .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
+function setGF(dimension, value, el) {
+  gFilters[dimension] = value;
+  const row = document.getElementById('gf-' + dimension);
+  if (row) row.querySelectorAll('.fchip').forEach(c => c.classList.remove('active','active-green','active-amber'));
+  if (el) {
+    if (value === 'Yes' || value === 'Phone') el.classList.add('active-green');
+    else if (value === 'No') el.classList.add('active-amber');
+    else el.classList.add('active');
+  }
+  const hasActive = gFilters.side !== 'All' || gFilters.called !== 'All' || gFilters.location !== 'All';
+  const clearBtn = document.getElementById('clear-filters-btn');
+  if (clearBtn) clearBtn.style.display = hasActive ? 'block' : 'none';
   renderGuestList();
+}
+
+function clearGuestFilters() {
+  gFilters = { side: 'All', called: 'All', location: 'All' };
+  ['gf-side','gf-called','gf-location'].forEach(rowId => {
+    const row = document.getElementById(rowId);
+    if (row) {
+      row.querySelectorAll('.fchip').forEach((c,i) => {
+        c.classList.remove('active','active-green','active-amber');
+        if (i === 0) c.classList.add('active');
+      });
+    }
+  });
+  document.getElementById('clear-filters-btn').style.display = 'none';
+  renderGuestList();
+}
+
+function buildLocationChips() {
+  const locs = [...new Set(guests.map(g => g.location).filter(Boolean))].sort();
+  const row = document.getElementById('gf-location');
+  if (!row) return;
+  const cur = gFilters.location;
+  row.innerHTML = `<div class="fchip${cur==='All'?' active':''}" onclick="setGF('location','All',this)">All</div>` +
+    locs.map(loc => `<div class="fchip${cur===loc?' active':''}" onclick="setGF('location',${JSON.stringify(loc)},this)">📍 ${escHtml(loc)}</div>`).join('');
 }
 
 // ═══════════════════════════════
@@ -1522,7 +1644,9 @@ function setGuestFilter(val, el) {
 // ═══════════════════════════════
 function renderGuestSummary() {
   const container = document.getElementById('guest-summary-section');
-  if (!guests.length) { container.innerHTML = ''; return; }
+  if (!guests.length) { container.innerHTML = ''; buildLocationChips(); return; }
+
+  buildLocationChips();
 
   const totalFamilies = guests.length;
   const totalMembers = guests.reduce((s, g) => s + Number(g.totalMembers || 0), 0);
@@ -1536,12 +1660,10 @@ function renderGuestSummary() {
   const pFamilies = guests.filter(g => g.side === 'Praveen');
   const aFamilies = guests.filter(g => g.side === 'Aswin');
   const cFamilies = guests.filter(g => g.side === 'Common');
-
   const pAttending = pFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
   const aAttending = aFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
   const cAttending = cFamilies.reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
 
-  // Location breakdown
   const locs = {};
   guests.forEach(g => {
     const loc = g.location || 'Unknown';
@@ -1551,39 +1673,32 @@ function renderGuestSummary() {
   });
   const sortedLocs = Object.entries(locs).sort((a, b) => b[1].attending - a[1].attending);
   const maxLocAtt = sortedLocs[0]?.[1].attending || 1;
+  const calledPct = totalFamilies > 0 ? Math.round((calledCount/totalFamilies)*100) : 0;
 
-  let locHTML = sortedLocs.map(([loc, data]) => `
+  const locHTML = sortedLocs.map(([loc, data]) => `
     <div class="location-item">
       <div class="location-row">
         <div class="location-name">📍 ${escHtml(loc)}</div>
         <div class="location-counts">${data.families} families · <strong>${data.attending} pax</strong></div>
       </div>
-      <div class="location-bar">
-        <div class="location-fill" style="width:${(data.attending/maxLocAtt)*100}%"></div>
-      </div>
+      <div class="location-bar"><div class="location-fill" style="width:${(data.attending/maxLocAtt)*100}%"></div></div>
     </div>`).join('');
 
   container.innerHTML = `
     <div class="lunch-banner">
-      <div class="lunch-label">🍽️ Expected for Lunch</div>
+      <div class="lunch-label">Expected for Lunch</div>
       <div class="lunch-number">${totalAttending}</div>
-      <div class="lunch-sub">people across ${totalFamilies} families</div>
+      <div class="lunch-sub">${totalFamilies} families · ${totalMembers} total members</div>
     </div>
 
     <div class="guests-summary-grid">
       <div class="gstat">
-        <div class="gstat-label">Total Families</div>
+        <div class="gstat-label">Families</div>
         <div class="gstat-value">${totalFamilies}</div>
       </div>
       <div class="gstat">
         <div class="gstat-label">Total Members</div>
         <div class="gstat-value">${totalMembers}</div>
-        <div class="gstat-sub">in all families</div>
-      </div>
-      <div class="gstat full">
-        <div class="gstat-label">Confirmed Attending</div>
-        <div class="gstat-value">${totalAttending}</div>
-        <div class="gstat-sub">${totalMembers > 0 ? Math.round((totalAttending/totalMembers)*100) : 0}% of total members expected</div>
       </div>
     </div>
 
@@ -1605,28 +1720,28 @@ function renderGuestSummary() {
       </div>
     </div>
 
-    <div class="card">
-      <div class="section-head">📞 Call Status</div>
-      <div style="display:flex;gap:10px;margin-bottom:8px">
-        <div style="flex:1;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:13px;text-align:center">
+    <div class="card" style="margin-bottom:12px">
+      <div class="section-head" style="margin-bottom:10px">📞 Call Status <span class="section-head-count">${calledPct}% done</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <div style="flex:1;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','Yes',document.querySelector('#gf-called .fchip:nth-child(2)'));document.querySelector('.filter-panel').scrollIntoView({behavior:'smooth'})">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#2E7D32;margin-bottom:4px">✅ Called</div>
-          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#1B5E20">${calledCount}</div>
-          <div style="font-size:11px;color:#4CAF50;margin-top:2px">${calledAttending} pax expected</div>
+          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1B5E20;line-height:1">${calledCount}</div>
+          <div style="font-size:11px;color:#4CAF50;margin-top:3px">${calledAttending} attending</div>
         </div>
-        <div style="flex:1;background:#FFF8E8;border:1px solid #EDD898;border-radius:12px;padding:13px;text-align:center">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);margin-bottom:4px">📵 Not Called</div>
-          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--warm)">${notCalledCount}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">${notCalledAttending} pax expected</div>
+        <div style="flex:1;background:#FFF8E8;border:1px solid #EDD898;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','No',document.querySelector('#gf-called .fchip:nth-child(3)'));document.querySelector('.filter-panel').scrollIntoView({behavior:'smooth'})">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);margin-bottom:4px">📵 Pending</div>
+          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--warm);line-height:1">${notCalledCount}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${notCalledAttending} attending</div>
         </div>
       </div>
-      <div style="background:var(--border);border-radius:6px;height:8px;overflow:hidden">
-        <div style="height:100%;background:linear-gradient(90deg,#4CAF50,#81C784);border-radius:6px;width:${totalFamilies > 0 ? Math.round((calledCount/totalFamilies)*100) : 0}%;transition:width 0.5s ease"></div>
+      <div style="background:var(--border);border-radius:6px;height:10px;overflow:hidden">
+        <div style="height:100%;background:linear-gradient(90deg,#4CAF50,#81C784);border-radius:6px;width:${calledPct}%;transition:width 0.6s ease"></div>
       </div>
-      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:5px">${totalFamilies > 0 ? Math.round((calledCount/totalFamilies)*100) : 0}% families called</div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:5px">${calledCount} of ${totalFamilies} families called</div>
     </div>
 
-    <div class="card">
-      <div class="section-head">By Location</div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="section-head">📍 By Location</div>
       ${locHTML || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px">No data</div>'}
     </div>`;
 }
@@ -1636,59 +1751,73 @@ function renderGuestSummary() {
 // ═══════════════════════════════
 function renderGuestList() {
   const container = document.getElementById('guest-list');
-  let filtered = guests.filter(g => currentGuestFilter === 'All' || g.side === currentGuestFilter);
-  filtered = [...filtered].sort((a, b) => (a.location || '').localeCompare(b.location || ''));
 
-  document.getElementById('guest-list-count').textContent = filtered.length + ' families';
+  let filtered = guests.filter(g => {
+    if (gFilters.side !== 'All' && g.side !== gFilters.side) return false;
+    if (gFilters.called === 'Yes' && !(g.called == true || g.called === 'true')) return false;
+    if (gFilters.called === 'No' && (g.called == true || g.called === 'true')) return false;
+    if (gFilters.called === 'Phone' && !g.phone) return false;
+    if (gFilters.location !== 'All' && g.location !== gFilters.location) return false;
+    return true;
+  });
 
-  if (!filtered.length) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">👨‍👩‍👧</div><div class="empty-text">No families added yet${currentGuestFilter !== 'All' ? ' for this filter' : ''}</div></div>`;
+  filtered = [...filtered].sort((a, b) => {
+    const locCmp = (a.location||'').localeCompare(b.location||'');
+    return locCmp !== 0 ? locCmp : (a.familyName||'').localeCompare(b.familyName||'');
+  });
+
+  const total = filtered.length;
+  const totalAtt = filtered.reduce((s,g) => s + Number(g.expectedAttending||0), 0);
+  const countEl = document.getElementById('guest-list-count');
+  if (countEl) countEl.innerHTML = `<strong>${total}</strong> ${total===1?'family':'families'} · <strong>${totalAtt}</strong> expected`;
+
+  if (!total) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No families match the selected filters</div></div>`;
     return;
   }
 
-  const sideEmoji = { 'Praveen': 'P', 'Aswin': 'A', 'Common': '🤝' };
+  const sideInit = { 'Praveen': 'P', 'Aswin': 'A', 'Common': '🤝' };
   container.innerHTML = filtered.map(g => {
-    const badgeStyle = g.side === 'Common'
-      ? 'background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7'
-      : '';
-    const badgeClass = g.side === 'Praveen' ? 'badge-praveen' : g.side === 'Aswin' ? 'badge-aswin' : '';
+    const isCalled = g.called == true || g.called === 'true';
+    const tagClass = g.side === 'Praveen' ? 'gtag-praveen' : g.side === 'Aswin' ? 'gtag-aswin' : 'gtag-common';
     const callBtn = g.phone
       ? `<a class="btn-call" href="tel:${escHtml(g.phone)}">📞 ${escHtml(g.phone)}</a>`
       : '';
-    const calledClass = g.called == true || g.called === 'true' ? 'called' : '';
-    const calledLabel = calledClass ? '✅ Called' : '📵 Not Called';
     return `
-    <div class="guest-item" style="flex-direction:column;align-items:stretch;gap:8px" id="gitem-${g.id}">
-      <div style="display:flex;align-items:flex-start;gap:11px">
-        <div class="guest-avatar ${g.side.toLowerCase()}">${sideEmoji[g.side] || '?'}</div>
+    <div class="guest-item ${isCalled?'is-called':'not-called'}" id="gitem-${g.id}">
+      <div class="guest-card-top">
+        <div class="guest-avatar ${g.side.toLowerCase()}">
+          ${sideInit[g.side]||'?'}
+          <div class="guest-called-dot ${isCalled?'yes':''}"></div>
+        </div>
         <div class="guest-body">
           <div class="guest-name">${escHtml(g.familyName)}</div>
-          <div class="guest-meta">
-            <span>📍 ${escHtml(g.location)}</span>
-            <span class="exp-badge ${badgeClass}" style="${badgeStyle}">${g.side}</span>
+          <div class="guest-loc">📍 ${escHtml(g.location||'—')}</div>
+          <div class="guest-tags">
+            <span class="gtag ${tagClass}">${g.side}</span>
+            ${g.phone ? `<span class="gtag" style="background:#E3F2FD;color:#1565C0;border:1px solid #90CAF9">📱 Phone</span>` : ''}
+            ${isCalled ? `<span class="gtag" style="background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7">✅ Called</span>` : ''}
           </div>
-          ${g.notes ? `<div class="exp-notes">${escHtml(g.notes)}</div>` : ''}
         </div>
-        <div class="guest-right" style="flex-shrink:0">
-          <div>
-            <div class="guest-count-badge">${g.expectedAttending || 0} <span style="font-size:11px;color:var(--muted)">/ ${g.totalMembers || 0}</span></div>
-            <div class="guest-count-label">attending / total</div>
-          </div>
-          <button class="guest-del" onclick="deleteGuest('${g.id}')">🗑️</button>
+        <div class="guest-right">
+          <div class="guest-pax-big">${g.expectedAttending||0}</div>
+          <div class="guest-pax-label">attending</div>
+          <div class="guest-pax-total">of ${g.totalMembers||0}</div>
         </div>
       </div>
+      ${g.notes ? `<div class="guest-notes-row">💬 ${escHtml(g.notes)}</div>` : ''}
       <div class="guest-actions-row">
         ${callBtn}
-        <button class="btn-called-toggle ${calledClass}" onclick="toggleCalled('${g.id}')">${calledLabel}</button>
+        <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
+          ${isCalled ? '✅ Called' : '📵 Not Called'}
+        </button>
         <button class="btn-edit-guest" onclick="openEditModal('${g.id}')">✏️ Edit</button>
+        <button class="btn-del-guest" onclick="deleteGuest('${g.id}')">🗑️</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════
-// DELETE GUEST
-// ═══════════════════════════════
 async function deleteGuest(id) {
   if (!confirm('Remove this family?')) return;
   if (!SCRIPT_URL) { showToast('⚠️ Not configured'); return; }
