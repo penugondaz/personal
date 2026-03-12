@@ -671,7 +671,8 @@ select.form-control {
   background: var(--white); border-radius: 22px 22px 0 0;
   z-index: 401; transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
   border-top: 3px solid var(--purple);
-  padding-bottom: env(safe-area-inset-bottom, 12px);
+  max-height: 85vh; overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
 }
 .fm-drawer.open { transform: translateX(-50%) translateY(0); }
 .fm-handle {
@@ -694,19 +695,35 @@ select.form-control {
   padding: 5px 9px; cursor: pointer; line-height: 1;
 }
 .fm-close:active { background: var(--rose-light); color: var(--rose); }
-.fm-body { padding: 14px 18px 6px; overflow-y: auto; max-height: 55vh; }
-.fm-group { margin-bottom: 18px; }
+.fm-body { padding: 14px 18px 6px; overflow-y: visible; }
+.fm-group { margin-bottom: 20px; }
 .fm-group-label {
   font-size: 11px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 1px; color: var(--muted);
-  margin-bottom: 9px; display: flex; align-items: center; gap: 6px;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
 }
 .fm-group-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── FILTER CHIPS (inside drawer) ── */
+.filter-chips { display: flex; gap: 7px; flex-wrap: wrap; }
+.fchip {
+  padding: 9px 16px; border-radius: 22px;
+  border: 2px solid var(--border);
+  background: #FAF8FF; font-size: 13px; font-weight: 500;
+  color: var(--muted); cursor: pointer;
+  white-space: nowrap; line-height: 1.2;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; transition: all 0.15s;
+}
+.fchip.active       { background: var(--deep);  border-color: var(--deep);  color: var(--gold-light); font-weight: 700; }
+.fchip.active-green { background: var(--teal);  border-color: var(--teal);  color: #fff;              font-weight: 700; }
+.fchip.active-amber { background: var(--rose);  border-color: var(--rose);  color: #fff;              font-weight: 700; }
 .fm-footer {
   display: flex; gap: 10px;
   padding: 12px 18px 16px;
   border-top: 1px solid var(--border);
   background: #FAF8FF;
+  position: sticky; bottom: 0;
 }
 .fm-reset {
   flex: 1; padding: 12px;
@@ -1756,6 +1773,7 @@ function resetGuestForm() {
 // GUEST FILTERS (multi-dimensional)
 // ═══════════════════════════════
 function openFilterMenu() {
+  buildLocationChips(); // always rebuild so location chips are fresh
   document.getElementById('fm-overlay').classList.add('open');
   document.getElementById('fm-drawer').classList.add('open');
 }
