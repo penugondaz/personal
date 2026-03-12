@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Half Saree Function — Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -1097,7 +1099,7 @@ select.form-control {
 </div>
 
 <!-- FILTER MENU OVERLAY -->
-<div class="fm-overlay" id="fm-overlay" onclick="closeFilterMenu()"></div>
+<div class="fm-overlay" id="fm-overlay"></div>
 
 <!-- FILTER MENU DRAWER -->
 <div class="fm-drawer" id="fm-drawer">
@@ -1252,9 +1254,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('exp-date').valueAsDate = new Date();
   checkSetup();
   loadData();
-  // Modal backdrop close
+  // Edit modal backdrop close
   document.getElementById('edit-modal').addEventListener('click', function(e) {
     if (e.target === this) closeEditModal();
+  });
+  // Filter drawer: close on overlay click, stop propagation inside drawer
+  document.getElementById('fm-overlay').addEventListener('click', closeFilterMenu);
+  document.getElementById('fm-drawer').addEventListener('click', function(e) {
+    e.stopPropagation();
   });
 });
 
