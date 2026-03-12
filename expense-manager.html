@@ -626,39 +626,97 @@ select.form-control {
 }
 .btn-del-guest:active { border-color: var(--rose); color: var(--rose); background: var(--rose-light); }
 
-/* ── FILTER PANEL ── */
-.filter-panel {
-  background: var(--white); border-radius: 16px;
-  padding: 14px 14px 10px; margin-bottom: 12px;
-  border: 1px solid var(--border); box-shadow: var(--shadow);
-}
-.filter-section-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-  color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-}
-.filter-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
-.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-.filter-chips:last-child { margin-bottom: 0; }
-.fchip {
-  padding: 6px 13px; border-radius: 20px;
-  border: 1.5px solid var(--border);
-  background: #FAF8FF; font-size: 12px; font-weight: 500;
-  color: var(--muted); cursor: pointer; transition: all 0.15s;
-  white-space: nowrap;
-}
-.fchip.active { background: var(--deep); border-color: var(--deep); color: var(--gold-light); }
-.fchip.active-green { background: var(--teal); border-color: var(--teal); color: white; font-weight: 700; }
-.fchip.active-amber { background: var(--rose); border-color: var(--rose); color: white; font-weight: 700; }
-.filter-result-bar {
+/* ── GUEST TOOLBAR ── */
+.guest-toolbar {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px; padding: 0 2px;
+  margin-bottom: 12px; padding: 0 2px;
 }
-.filter-result-text { font-size: 12px; color: var(--muted); }
-.filter-result-text strong { color: var(--navy); }
-.btn-clear-filters {
-  font-size: 11px; color: var(--rose); background: none; border: none;
-  cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 700; padding: 0;
+.btn-filter-icon {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 22px;
+  background: var(--deep); border: none;
+  color: var(--gold-light); font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: opacity 0.15s; position: relative;
 }
+.btn-filter-icon:active { opacity: 0.8; }
+.filter-badge {
+  background: var(--rose); color: white;
+  font-size: 10px; font-weight: 700;
+  min-width: 17px; height: 17px; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 4px; margin-left: 2px;
+}
+
+/* ── FILTER MENU OVERLAY ── */
+.fm-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,16,53,0.50);
+  z-index: 200; backdrop-filter: blur(3px);
+}
+.fm-overlay.open { display: block; }
+
+/* ── FILTER MENU DRAWER ── */
+.fm-drawer {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+  width: 100%; max-width: 500px;
+  background: var(--white); border-radius: 22px 22px 0 0;
+  z-index: 201; transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  border-top: 3px solid var(--purple);
+  padding-bottom: env(safe-area-inset-bottom, 12px);
+}
+.fm-drawer.open { transform: translateX(-50%) translateY(0); }
+.fm-handle {
+  width: 40px; height: 4px; border-radius: 4px;
+  background: var(--border); margin: 10px auto 0;
+}
+.fm-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.fm-title {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Playfair Display', serif; font-size: 17px; color: var(--navy);
+  font-weight: 700;
+}
+.fm-close {
+  background: var(--border); border: none; border-radius: 8px;
+  color: var(--muted); font-size: 14px; font-weight: 700;
+  padding: 5px 9px; cursor: pointer; line-height: 1;
+}
+.fm-close:active { background: var(--rose-light); color: var(--rose); }
+.fm-body { padding: 14px 18px 6px; overflow-y: auto; max-height: 55vh; }
+.fm-group { margin-bottom: 18px; }
+.fm-group-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--muted);
+  margin-bottom: 9px; display: flex; align-items: center; gap: 6px;
+}
+.fm-group-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.fm-footer {
+  display: flex; gap: 10px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--border);
+  background: #FAF8FF;
+}
+.fm-reset {
+  flex: 1; padding: 12px;
+  background: none; border: 1.5px solid var(--border);
+  border-radius: 12px; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.fm-reset:active { background: var(--rose-light); border-color: var(--rose); color: var(--rose); }
+.fm-apply {
+  flex: 2; padding: 12px;
+  background: linear-gradient(135deg, var(--purple), #5B21B6);
+  border: none; border-radius: 12px; color: white;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(123,47,190,0.3);
+  transition: opacity 0.15s;
+}
+.fm-apply:active { opacity: 0.85; }
 
 /* ── GUEST SUMMARY CARDS ── */
 .guests-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -1014,36 +1072,71 @@ select.form-control {
 
   <div id="guest-summary-section"></div>
 
-  <!-- FILTER PANEL -->
-  <div class="filter-panel">
-    <div class="filter-section-label">By Side</div>
-    <div class="filter-chips" id="gf-side">
-      <div class="fchip active" onclick="setGF('side','All',this)">All</div>
-      <div class="fchip" onclick="setGF('side','Praveen',this)">👤 Praveen's</div>
-      <div class="fchip" onclick="setGF('side','Aswin',this)">👤 Aswin's</div>
-      <div class="fchip" onclick="setGF('side','Common',this)">🤝 Common</div>
+  <!-- LIST TOOLBAR -->
+  <div class="guest-toolbar">
+    <span class="filter-result-text" id="guest-list-count">Loading…</span>
+    <div style="display:flex;align-items:center;gap:7px">
+      <button class="btn-clear-filters" onclick="clearGuestFilters()" id="clear-filters-btn" style="display:none">✕ Clear</button>
+      <button class="btn-filter-icon" id="btn-filter-icon" onclick="openFilterMenu()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+        Filters
+        <span class="filter-badge" id="filter-badge" style="display:none">0</span>
+      </button>
     </div>
-
-    <div class="filter-section-label">By Call Status</div>
-    <div class="filter-chips" id="gf-called">
-      <div class="fchip active" onclick="setGF('called','All',this)">All</div>
-      <div class="fchip" onclick="setGF('called','Yes',this)">✅ Called</div>
-      <div class="fchip" onclick="setGF('called','No',this)">📵 Not Called</div>
-      <div class="fchip" onclick="setGF('called','Phone',this)">📞 Has Phone</div>
-    </div>
-
-    <div class="filter-section-label">By Location</div>
-    <div class="filter-chips" id="gf-location">
-      <div class="fchip active" onclick="setGF('location','All',this)">All</div>
-    </div>
-  </div>
-
-  <div class="filter-result-bar">
-    <div class="filter-result-text" id="guest-list-count">Loading…</div>
-    <button class="btn-clear-filters" onclick="clearGuestFilters()" id="clear-filters-btn" style="display:none">✕ Clear filters</button>
   </div>
 
   <div id="guest-list"></div>
+</div>
+
+<!-- FILTER MENU OVERLAY -->
+<div class="fm-overlay" id="fm-overlay" onclick="closeFilterMenu()"></div>
+
+<!-- FILTER MENU DRAWER -->
+<div class="fm-drawer" id="fm-drawer">
+  <div class="fm-handle"></div>
+  <div class="fm-head">
+    <div class="fm-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      Filter Guests
+    </div>
+    <button class="fm-close" onclick="closeFilterMenu()">✕</button>
+  </div>
+
+  <div class="fm-body">
+    <div class="fm-group">
+      <div class="fm-group-label">👤 Side</div>
+      <div class="filter-chips" id="gf-side">
+        <div class="fchip active" onclick="setGF('side','All',this)">All</div>
+        <div class="fchip" onclick="setGF('side','Praveen',this)">👤 Praveen's</div>
+        <div class="fchip" onclick="setGF('side','Aswin',this)">👤 Aswin's</div>
+        <div class="fchip" onclick="setGF('side','Common',this)">🤝 Common</div>
+      </div>
+    </div>
+
+    <div class="fm-group">
+      <div class="fm-group-label">📞 Call Status</div>
+      <div class="filter-chips" id="gf-called">
+        <div class="fchip active" onclick="setGF('called','All',this)">All</div>
+        <div class="fchip" onclick="setGF('called','Yes',this)">✅ Called</div>
+        <div class="fchip" onclick="setGF('called','No',this)">📵 Not Called</div>
+        <div class="fchip" onclick="setGF('called','Phone',this)">📱 Has Phone</div>
+      </div>
+    </div>
+
+    <div class="fm-group">
+      <div class="fm-group-label">📍 Location</div>
+      <div class="filter-chips" id="gf-location">
+        <div class="fchip active" onclick="setGF('location','All',this)">All</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fm-footer">
+    <button class="fm-reset" onclick="clearGuestFilters()">Reset All</button>
+    <button class="fm-apply" onclick="closeFilterMenu()">Show Results</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1649,6 +1742,24 @@ function resetGuestForm() {
 // ═══════════════════════════════
 // GUEST FILTERS (multi-dimensional)
 // ═══════════════════════════════
+function openFilterMenu() {
+  document.getElementById('fm-overlay').classList.add('open');
+  document.getElementById('fm-drawer').classList.add('open');
+}
+function closeFilterMenu() {
+  document.getElementById('fm-overlay').classList.remove('open');
+  document.getElementById('fm-drawer').classList.remove('open');
+}
+function updateFilterBadge() {
+  const active = [gFilters.side, gFilters.called, gFilters.location].filter(v => v !== 'All').length;
+  const badge = document.getElementById('filter-badge');
+  const clearBtn = document.getElementById('clear-filters-btn');
+  const iconBtn = document.getElementById('btn-filter-icon');
+  if (badge) { badge.textContent = active; badge.style.display = active ? 'inline-flex' : 'none'; }
+  if (clearBtn) clearBtn.style.display = active ? 'inline-block' : 'none';
+  if (iconBtn) iconBtn.style.background = active ? 'var(--purple)' : 'var(--deep)';
+}
+
 function setGF(dimension, value, el) {
   gFilters[dimension] = value;
   const row = document.getElementById('gf-' + dimension);
@@ -1658,9 +1769,7 @@ function setGF(dimension, value, el) {
     else if (value === 'No') el.classList.add('active-amber');
     else el.classList.add('active');
   }
-  const hasActive = gFilters.side !== 'All' || gFilters.called !== 'All' || gFilters.location !== 'All';
-  const clearBtn = document.getElementById('clear-filters-btn');
-  if (clearBtn) clearBtn.style.display = hasActive ? 'block' : 'none';
+  updateFilterBadge();
   renderGuestList();
 }
 
@@ -1675,7 +1784,7 @@ function clearGuestFilters() {
       });
     }
   });
-  document.getElementById('clear-filters-btn').style.display = 'none';
+  updateFilterBadge();
   renderGuestList();
 }
 
@@ -1772,12 +1881,12 @@ function renderGuestSummary() {
     <div class="card" style="margin-bottom:12px">
       <div class="section-head" style="margin-bottom:10px">📞 Call Status <span class="section-head-count">${calledPct}% done</span></div>
       <div style="display:flex;gap:10px;margin-bottom:10px">
-        <div style="flex:1;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','Yes',document.querySelector('#gf-called .fchip:nth-child(2)'));document.querySelector('.filter-panel').scrollIntoView({behavior:'smooth'})">
+        <div style="flex:1;background:#E8F5E9;border:1px solid #A5D6A7;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','Yes',document.querySelector('#gf-called .fchip:nth-child(2)'));openFilterMenu()">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#2E7D32;margin-bottom:4px">✅ Called</div>
           <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1B5E20;line-height:1">${calledCount}</div>
           <div style="font-size:11px;color:#4CAF50;margin-top:3px">${calledAttending} attending</div>
         </div>
-        <div style="flex:1;background:#FFF8E8;border:1px solid #EDD898;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','No',document.querySelector('#gf-called .fchip:nth-child(3)'));document.querySelector('.filter-panel').scrollIntoView({behavior:'smooth'})">
+        <div style="flex:1;background:#FFF8E8;border:1px solid #EDD898;border-radius:12px;padding:12px;text-align:center;cursor:pointer" onclick="setGF('called','No',document.querySelector('#gf-called .fchip:nth-child(3)'));openFilterMenu()">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold);margin-bottom:4px">📵 Pending</div>
           <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy);line-height:1">${notCalledCount}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:3px">${notCalledAttending} attending</div>
