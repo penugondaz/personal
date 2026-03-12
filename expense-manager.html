@@ -1120,13 +1120,6 @@ select.form-control {
         <div class="fchip" onclick="setGF('called','Phone',this)">📱 Has Phone</div>
       </div>
     </div>
-
-    <div class="fm-group">
-      <div class="fm-group-label">📍 Location</div>
-      <div class="filter-chips" id="gf-location">
-        <div class="fchip active" onclick="setGF('location','All',this)">All</div>
-      </div>
-    </div>
   </div>
 
   <div class="fm-footer">
@@ -1210,7 +1203,7 @@ let guests = [];
 let currentPayer = 'Praveen';
 let currentFilter = 'All';
 let currentGuestSide = 'Praveen';
-let gFilters = { side: 'All', called: 'All', location: 'All' };
+let gFilters = { side: 'All', called: 'All' };
 let selectedFile = null;
 
 const CAT_COLORS = {
@@ -1295,7 +1288,7 @@ function showPage(name) {
   document.getElementById('nav-' + name).classList.add('active');
   if (name === 'dashboard') renderDashboard();
   if (name === 'list') renderList();
-  if (name === 'guests') { buildLocationChips(); renderGuestSummary(); renderGuestList(); }
+  if (name === 'guests') { renderGuestSummary(); renderGuestList(); }
 }
 
 // ═══════════════════════════════
@@ -1744,7 +1737,6 @@ function resetGuestForm() {
 // GUEST FILTERS (multi-dimensional)
 // ═══════════════════════════════
 function openFilterMenu() {
-  buildLocationChips(); // always rebuild so location chips are fresh
   document.getElementById('fm-overlay').classList.add('open');
   document.getElementById('fm-drawer').classList.add('open');
 }
@@ -1753,7 +1745,7 @@ function closeFilterMenu() {
   document.getElementById('fm-drawer').classList.remove('open');
 }
 function updateFilterBadge() {
-  const active = [gFilters.side, gFilters.called, gFilters.location].filter(v => v !== 'All').length;
+  const active = [gFilters.side, gFilters.called].filter(v => v !== 'All').length;
   const badge = document.getElementById('filter-badge');
   const clearBtn = document.getElementById('clear-filters-btn');
   const iconBtn = document.getElementById('btn-filter-icon');
@@ -1776,8 +1768,8 @@ function setGF(dimension, value, el) {
 }
 
 function clearGuestFilters() {
-  gFilters = { side: 'All', called: 'All', location: 'All' };
-  ['gf-side','gf-called','gf-location'].forEach(rowId => {
+  gFilters = { side: 'All', called: 'All' };
+  ['gf-side','gf-called'].forEach(rowId => {
     const row = document.getElementById(rowId);
     if (row) {
       row.querySelectorAll('.fchip').forEach((c,i) => {
@@ -1790,23 +1782,12 @@ function clearGuestFilters() {
   renderGuestList();
 }
 
-function buildLocationChips() {
-  const locs = [...new Set(guests.map(g => g.location).filter(Boolean))].sort();
-  const row = document.getElementById('gf-location');
-  if (!row) return;
-  const cur = gFilters.location;
-  row.innerHTML = `<div class="fchip${cur==='All'?' active':''}" onclick="setGF('location','All',this)">All</div>` +
-    locs.map(loc => `<div class="fchip${cur===loc?' active':''}" onclick="setGF('location',${JSON.stringify(loc)},this)">📍 ${escHtml(loc)}</div>`).join('');
-}
-
 // ═══════════════════════════════
 // RENDER GUEST SUMMARY
 // ═══════════════════════════════
 function renderGuestSummary() {
   const container = document.getElementById('guest-summary-section');
-  if (!guests.length) { container.innerHTML = ''; buildLocationChips(); return; }
-
-  buildLocationChips();
+  if (!guests.length) { container.innerHTML = ''; return; }
 
   const totalFamilies = guests.length;
   const totalMembers = guests.reduce((s, g) => s + Number(g.totalMembers || 0), 0);
@@ -1917,7 +1898,6 @@ function renderGuestList() {
     if (gFilters.called === 'Yes' && !(g.called == true || g.called === 'true')) return false;
     if (gFilters.called === 'No' && (g.called == true || g.called === 'true')) return false;
     if (gFilters.called === 'Phone' && !g.phone) return false;
-    if (gFilters.location !== 'All' && g.location !== gFilters.location) return false;
     return true;
   });
 
