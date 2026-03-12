@@ -583,9 +583,15 @@ select.form-control {
 
 /* ── GUEST ACTIONS BAR ── */
 .guest-actions-row {
-  display: flex; align-items: center; gap: 6px;
-  padding: 9px 12px 11px; border-top: 1px solid var(--border);
-  background: #F8F5FF; flex-wrap: wrap;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 10px 12px 12px; border-top: 1px solid var(--border);
+  background: #F8F5FF;
+}
+.guest-actions-top {
+  display: flex; align-items: center; gap: 7px;
+}
+.guest-actions-bottom {
+  display: flex; align-items: center; justify-content: flex-end; gap: 7px;
 }
 .btn-call {
   display: inline-flex; align-items: center; gap: 5px;
@@ -614,7 +620,7 @@ select.form-control {
   background: var(--purple-light); border: 1.5px solid #C4B5FD;
   color: var(--purple); font-family: 'DM Sans', sans-serif;
   font-size: 12px; font-weight: 600; cursor: pointer;
-  transition: all 0.15s; margin-left: auto;
+  transition: all 0.15s;
 }
 .btn-edit-guest:active { background: #DDD6FE; }
 .btn-del-guest {
@@ -652,16 +658,16 @@ select.form-control {
 .fm-overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(26,16,53,0.50);
-  z-index: 200; backdrop-filter: blur(3px);
+  z-index: 400; backdrop-filter: blur(3px);
 }
 .fm-overlay.open { display: block; }
 
 /* ── FILTER MENU DRAWER ── */
 .fm-drawer {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(110%);
   width: 100%; max-width: 500px;
   background: var(--white); border-radius: 22px 22px 0 0;
-  z-index: 201; transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
+  z-index: 401; transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
   border-top: 3px solid var(--purple);
   padding-bottom: env(safe-area-inset-bottom, 12px);
 }
@@ -1967,12 +1973,16 @@ function renderGuestList() {
       </div>
       ${g.notes ? `<div class="guest-notes-row">💬 ${escHtml(g.notes)}</div>` : ''}
       <div class="guest-actions-row">
-        ${callBtn}
-        <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
-          ${isCalled ? '✅ Called' : '📵 Not Called'}
-        </button>
-        <button class="btn-edit-guest" onclick="openEditModal('${g.id}')">✏️ Edit</button>
-        <button class="btn-del-guest" onclick="deleteGuest('${g.id}')">🗑️</button>
+        <div class="guest-actions-top">
+          ${callBtn}
+          <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
+            ${isCalled ? '✅ Called' : '📵 Not Called'}
+          </button>
+        </div>
+        <div class="guest-actions-bottom">
+          <button class="btn-edit-guest" onclick="openEditModal('${g.id}')">✏️ Edit</button>
+          <button class="btn-del-guest" onclick="deleteGuest('${g.id}')">🗑️</button>
+        </div>
       </div>
     </div>`;
   }).join('');
