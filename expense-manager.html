@@ -746,6 +746,39 @@ select.form-control {
 .lunch-number { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; color: var(--gold-light); line-height: 1; }
 .lunch-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 5px; }
 
+.gift-banner {
+  background: linear-gradient(135deg, #4A0080 0%, #7B2FBE 50%, #C026D3 100%);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.gift-banner::before {
+  content: '🎁';
+  position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+  font-size: 44px; opacity: 0.12;
+}
+.gift-banner::after {
+  content: '';
+  position: absolute; bottom: -20px; left: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,209,102,0.10);
+}
+.gift-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,209,102,0.65); margin-bottom: 4px; }
+.gift-number { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+.gift-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 5px; }
+
+.btn-gift-toggle {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 11px; border-radius: 20px;
+  background: var(--white); border: 1.5px solid var(--border);
+  color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-gift-toggle.gifted {
+  background: #F3E8FF; border-color: #C4B5FD; color: var(--purple); font-weight: 700;
+}
+.btn-gift-toggle:active { transform: scale(0.96); }
+
 .location-item { margin-bottom: 12px; }
 .location-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .location-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; color: var(--text); }
@@ -1697,6 +1730,7 @@ async function submitGuest() {
     phone: document.getElementById('g-phone').value.trim(),
     notes: document.getElementById('g-notes').value.trim(),
     called: false,
+    gift: false,
     timestamp: new Date().toISOString()
   };
 
@@ -1798,6 +1832,10 @@ function renderGuestSummary() {
   const calledAttending = guests.filter(g => g.called == true || g.called === 'true').reduce((s, g) => s + Number(g.expectedAttending || 0), 0);
   const notCalledAttending = totalAttending - calledAttending;
 
+  const giftedCount   = guests.filter(g => g.gift == true || g.gift === 'true').length;
+  const ungiftedCount = totalFamilies - giftedCount;
+  const giftPct = totalFamilies > 0 ? Math.round((giftedCount / totalFamilies) * 100) : 0;
+
   const pFamilies = guests.filter(g => g.side === 'Praveen');
   const aFamilies = guests.filter(g => g.side === 'Aswin');
   const cFamilies = guests.filter(g => g.side === 'Common');
@@ -1830,6 +1868,15 @@ function renderGuestSummary() {
       <div class="lunch-label">Expected for Lunch</div>
       <div class="lunch-number">${totalAttending}</div>
       <div class="lunch-sub">${totalFamilies} families · ${totalMembers} total members</div>
+    </div>
+
+    <div class="gift-banner">
+      <div class="gift-label">Gifts Sorted</div>
+      <div class="gift-number">${giftedCount} <span style="font-size:24px;opacity:0.6">/ ${totalFamilies}</span></div>
+      <div class="gift-sub">${ungiftedCount} still to arrange · ${giftPct}% done</div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:6px;height:8px;overflow:hidden;margin:10px 0 0;position:relative;z-index:1">
+        <div style="height:100%;background:var(--gold-light);border-radius:6px;width:${giftPct}%;transition:width 0.6s ease"></div>
+      </div>
     </div>
 
     <div class="guests-summary-grid">
@@ -1955,6 +2002,9 @@ function renderGuestList() {
         <button class="btn-called-toggle ${isCalled?'called':''}" onclick="toggleCalled('${g.id}')">
           ${isCalled ? '✅ Called' : '📵 Not Called'}
         </button>
+        <button class="btn-gift-toggle ${g.gift?'gifted':''}" onclick="toggleGift('${g.id}')">
+          ${g.gift ? '🎁 Gift ✓' : '🎁 Gift?'}
+        </button>
       </div>
     </div>`;
   }).join('');
@@ -2013,8 +2063,34 @@ async function toggleCalled(id) {
 }
 
 // ═══════════════════════════════
-// EDIT MODAL
+// TOGGLE GIFT STATUS
 // ═══════════════════════════════
+async function toggleGift(id) {
+  const g = guests.find(x => String(x.id) === String(id));
+  if (!g) return;
+  const newGift = !(g.gift == true || g.gift === 'true');
+  g.gift = newGift;
+
+  // Optimistic UI update
+  const btn = document.querySelector(`#gitem-${id} .btn-gift-toggle`);
+  if (btn) {
+    btn.className = 'btn-gift-toggle' + (newGift ? ' gifted' : '');
+    btn.textContent = newGift ? '🎁 Gift ✓' : '🎁 Gift?';
+  }
+  renderGuestSummary();
+
+  if (!SCRIPT_URL) return;
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'updateGuest', guest: g })
+    });
+    showToast(newGift ? '🎁 Gift marked as sorted!' : '🎁 Gift marked as pending');
+  } catch {
+    showToast('⚠️ Could not sync gift status');
+  }
+}
 let editGuestSide = 'Praveen';
 
 function openEditModal(id) {
