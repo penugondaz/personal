@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhoti & Half Saree Ceremony</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Noto+Sans+Telugu:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --turmeric: #e8a020;
+  --turmeric-deep: #c47c00;
+  --turmeric-light: #f5c842;
+  --turmeric-pale: #fdf3d0;
+  --turmeric-glow: #ffe08a;
+  --saffron: #f77f00;
+  --vermilion: #c0392b;
+  --kumkum: #9b1a1a;
+  --green: #2d6a3f;
+  --green-light: #4caf69;
+  --cream: #fffbef;
+  --ivory: #fef9e7;
+  --deep-brown: #2a1200;
+  --brown: #5a2d00;
+  --muted: #7a4500;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  min-height: 100vh;
+  background: #1a0d00;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; overflow-x: hidden;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(232,160,32,0.18) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 80%, rgba(192,57,43,0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, #1a0d00 0%, #2a1200 100%);
+  z-index: -2;
+}
+.dot {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; animation: twinkle ease-in-out infinite; z-index: -1;
+}
+@keyframes twinkle {
+  0%,100%{opacity:0.2;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.4)}
+}
+.lang-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 100;
+  display: flex; gap: 0;
+  background: rgba(26,13,0,0.85);
+  border: 1px solid rgba(232,160,32,0.4);
+  border-radius: 30px; padding: 3px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.lang-btn {
+  padding: 7px 18px; border-radius: 24px; border: none;
+  background: transparent; color: rgba(253,243,208,0.7);
+  font-size: 13px; cursor: pointer;
+  font-family: 'Cinzel', serif; letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.lang-btn.active {
+  background: linear-gradient(135deg, var(--turmeric), var(--saffron));
+  color: var(--deep-brown); font-weight: 600;
+}
+.lang-btn.telugu { font-family: 'Noto Sans Telugu', sans-serif; font-size: 14px; letter-spacing: 0; }
+.card {
+  background: var(--cream); max-width: 700px; width: 100%;
+  position: relative; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(232,160,32,0.4), 0 0 0 6px rgba(232,160,32,0.08), 0 0 80px rgba(232,160,32,0.2), 0 50px 100px rgba(0,0,0,0.7);
+  animation: cardReveal 1.4s cubic-bezier(0.16,1,0.3,1) forwards;
+  opacity: 0; transform: translateY(40px) scale(0.97);
+}
+@keyframes cardReveal { to { opacity:1; transform:translateY(0) scale(1); } }
+.rainbow-bar {
+  height: 7px;
+  background: linear-gradient(90deg, var(--kumkum) 0%, var(--vermilion) 15%, var(--saffron) 30%, var(--turmeric) 45%, var(--turmeric-light) 55%, var(--green-light) 70%, var(--green) 85%, var(--kumkum) 100%);
+  animation: shimmer 4s linear infinite; background-size: 200% 100%;
+}
+@keyframes shimmer { 0%{background-position:0% 0} 100%{background-position:200% 0} }
+.kolam { position: absolute; width: 100px; height: 100px; opacity: 0.18; pointer-events: none; }
+.kolam-tl { top:7px; left:0; }
+.kolam-tr { top:7px; right:0; transform:scaleX(-1); }
+.kolam-bl { bottom:7px; left:0; transform:scaleY(-1); }
+.kolam-br { bottom:7px; right:0; transform:scale(-1,-1); }
+.bg-motif {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 380px; height: 380px; opacity: 0.04; pointer-events: none;
+  animation: slowSpin 40s linear infinite;
+}
+@keyframes slowSpin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+.inner { padding: 44px 56px 40px; position: relative; z-index: 1; }
+.invite-label { text-align: center; animation: slideDown 0.8s 0.4s both; }
+@keyframes slideDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+.invite-label .top-text {
+  font-style: italic; font-size: 15px; color: var(--muted);
+  letter-spacing: 2.5px; text-transform: uppercase; display: block; margin-bottom: 10px;
+}
+.divider-row {
+  display: flex; align-items: center; gap: 10px;
+  justify-content: center; margin-bottom: 16px;
+}
+.div-line { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--turmeric)); }
+.div-line.r { background: linear-gradient(90deg, var(--turmeric), transparent); }
+.div-gem {
+  width: 8px; height: 8px; background: var(--turmeric);
+  transform: rotate(45deg); box-shadow: 0 0 8px var(--turmeric-light);
+  animation: gemPulse 2s ease-in-out infinite;
+}
+@keyframes gemPulse {
+  0%,100%{box-shadow:0 0 8px var(--turmeric-light)}
+  50%{box-shadow:0 0 20px var(--turmeric-light),0 0 40px rgba(232,160,32,0.4)}
+}
+.main-title {
+  font-family: 'Cinzel', serif; font-size: 30px; font-weight: 700;
+  color: var(--kumkum); text-align: center; letter-spacing: 3px; line-height: 1.2;
+  animation: slideDown 0.8s 0.6s both;
+  text-shadow: 0 2px 8px rgba(155,26,26,0.15);
+}
+.main-title .amp {
+  color: var(--turmeric); font-size: 22px; margin: 0 10px; display: inline-block;
+  animation: ampGlow 2s ease-in-out infinite;
+}
+@keyframes ampGlow {
+  0%,100%{text-shadow:0 0 8px rgba(232,160,32,0.4)}
+  50%{text-shadow:0 0 24px rgba(232,160,32,0.9),0 0 50px rgba(247,127,0,0.5)}
+}
+.subtitle {
+  font-style: italic; font-size: 14px; color: var(--muted);
+  text-align: center; letter-spacing: 1.5px; margin-top: 6px; margin-bottom: 28px;
+  animation: slideDown 0.8s 0.7s both;
+}
+.characters-section {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: end; gap: 0; margin-bottom: 32px;
+  animation: slideDown 0.8s 0.8s both;
+}
+.char-block {
+  text-align: center; padding: 16px 10px 20px; position: relative;
+  background: linear-gradient(180deg, rgba(232,160,32,0.04), rgba(232,160,32,0.1));
+  border: 1px solid rgba(232,160,32,0.22);
+}
+.char-block.dhoti-block { border-right: none; }
+.char-block.saree-block { border-left: none; }
+.char-label {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px;
+  color: var(--turmeric-deep); text-transform: uppercase; display: block; margin-bottom: 10px;
+}
+.svg-char { display: block; margin: 0 auto 12px; filter: drop-shadow(0 4px 8px rgba(232,160,32,0.2)); }
+.boy-char { animation: floatBoy 3s ease-in-out infinite; }
+.girl1-char { animation: floatGirl1 3.5s ease-in-out infinite; }
+.girl2-char { animation: floatGirl2 3.2s ease-in-out infinite; }
+@keyframes floatBoy { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes floatGirl1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+@keyframes floatGirl2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+.char-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 600;
+  color: var(--deep-brown); display: block; line-height: 1.25;
+}
+.char-name-sep {
+  display: block; font-size: 13px; color: var(--turmeric-deep);
+  font-style: italic; margin: 3px 0;
+}
+.chars-and {
+  font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 32px;
+  color: var(--turmeric); padding: 0 6px; text-align: center; align-self: center;
+  line-height: 1; text-shadow: 0 0 12px rgba(232,160,32,0.4);
+}
+.details-band {
+  background: linear-gradient(135deg, var(--kumkum) 0%, #7a1010 50%, var(--kumkum) 100%);
+  margin: 0 -56px; padding: 22px 56px; margin-bottom: 28px;
+  position: relative; overflow: hidden; animation: slideDown 0.8s 1s both;
+}
+.details-band::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 40px);
+}
+.details-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-bottom: 16px; position: relative;
+}
+.detail-item { text-align: center; color: var(--turmeric-pale); }
+.detail-item .d-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+.detail-item .d-label {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  font-family: 'Cinzel', serif; color: rgba(253,243,208,0.55); display: block; margin-bottom: 3px;
+}
+.detail-item .d-val { font-size: 16px; font-weight: 600; font-family: 'Cormorant Garamond', serif; line-height: 1.3; }
+.detail-item .d-sub { font-size: 11px; opacity: 0.65; }
+.venue-row {
+  text-align: center; border-top: 1px solid rgba(232,160,32,0.25);
+  padding-top: 14px; position: relative;
+}
+.venue-name-big {
+  font-family: 'Cinzel', serif; font-size: 16px;
+  color: var(--turmeric-glow); display: block; letter-spacing: 1px;
+}
+.venue-addr-sm {
+  font-size: 14px; font-style: italic; color: rgba(253,243,208,0.72);
+  display: block; margin-top: 3px; font-family: 'Cormorant Garamond', serif;
+}
+.hosted-section { text-align: center; margin-bottom: 22px; animation: slideDown 0.8s 1.1s both; }
+.section-label {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px;
+  color: var(--turmeric-deep); text-transform: uppercase; display: block; margin-bottom: 12px;
+}
+.hosts-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 0; }
+.host-pair { padding: 0 22px; position: relative; text-align: center; }
+.host-pair + .host-pair::before {
+  content: '✦'; position: absolute; left: -5px; top: 50%;
+  transform: translateY(-50%); color: var(--turmeric); font-size: 10px;
+}
+.h-name { font-size: 18px; font-weight: 600; color: var(--deep-brown); display: block; }
+.h-spouse { font-size: 14px; font-style: italic; color: var(--muted); display: block; }
+.blessings {
+  background: linear-gradient(135deg, rgba(232,160,32,0.1), rgba(247,127,0,0.06));
+  border: 1px solid rgba(232,160,32,0.28); border-left: 4px solid var(--turmeric);
+  padding: 16px 20px; margin-bottom: 18px; text-align: center;
+  animation: slideDown 0.8s 1.2s both;
+}
+.bless-with { font-style: italic; font-size: 14px; color: var(--muted); display: block; margin-bottom: 5px; }
+.bless-late { font-size: 16px; font-weight: 600; color: var(--kumkum); display: block; margin-bottom: 3px; }
+.bless-living { font-size: 16px; font-weight: 600; color: var(--green); display: block; margin-bottom: 6px; }
+.bless-note { font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.6; }
+.aadhya {
+  text-align: center; font-size: 15px; font-style: italic;
+  color: var(--muted); margin-bottom: 26px; animation: slideDown 0.8s 1.3s both;
+}
+.aadhya strong { color: var(--kumkum); font-style: normal; }
+.closing { text-align: center; animation: slideDown 0.8s 1.4s both; }
+.closing-flow {
+  font-size: 24px; letter-spacing: 5px; display: block; margin-bottom: 8px;
+  animation: flowerSway 3s ease-in-out infinite;
+}
+@keyframes flowerSway { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+.closing-msg {
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px;
+  color: var(--turmeric-deep); text-transform: uppercase; display: block;
+}
+.rainbow-bar-bottom {
+  height: 7px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 15%, var(--turmeric-light) 30%, var(--turmeric) 45%, var(--saffron) 55%, var(--vermilion) 70%, var(--kumkum) 100%);
+  animation: shimmer 4s linear infinite reverse; background-size: 200% 100%;
+}
+.petal { position:fixed; pointer-events:none; font-size:18px; opacity:0; animation:petalFall linear infinite; z-index:0; }
+@keyframes petalFall {
+  0%{opacity:0;transform:translateY(0) rotate(0deg) translateX(0)}
+  10%{opacity:0.7} 90%{opacity:0.5}
+  100%{opacity:0;transform:translateY(-110vh) rotate(720deg) translateX(40px)}
+}
+/* Language visibility */
+.en { display: block; }
+.te { display: none; }
+body.telugu .en { display: none; }
+body.telugu .te { display: block; }
+span.en { display: inline; }
+span.te { display: none; }
+body.telugu span.en { display: none; }
+body.telugu span.te { display: inline; }
+/* Inline-block for char names in Telugu */
+body.telugu .char-name.te { display: block; }
+
+@media(max-width:580px){
+  .inner{padding:32px 20px 28px}
+  .details-band{margin:0 -20px;padding:18px 20px}
+  .main-title{font-size:22px}
+  .chars-and{font-size:22px}
+  .char-name{font-size:18px}
+  .host-pair{padding:0 12px}
+  .kolam{width:70px;height:70px}
+}
+</style>
+</head>
+<body id="body">
+
+<div class="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')">English</button>
+  <button class="lang-btn telugu" onclick="setLang('te')">తెలుగు</button>
+</div>
+
+<!-- Floating petals -->
+<div class="petal" style="left:5%;bottom:-40px;animation-duration:12s;animation-delay:0s;">🌸</div>
+<div class="petal" style="left:15%;bottom:-40px;animation-duration:15s;animation-delay:3s;">🌺</div>
+<div class="petal" style="left:35%;bottom:-40px;animation-duration:11s;animation-delay:6s;">🌼</div>
+<div class="petal" style="left:55%;bottom:-40px;animation-duration:13s;animation-delay:1s;">🌸</div>
+<div class="petal" style="left:72%;bottom:-40px;animation-duration:14s;animation-delay:9s;">✿</div>
+<div class="petal" style="left:88%;bottom:-40px;animation-duration:10s;animation-delay:4s;">🌺</div>
+<div class="petal" style="left:48%;bottom:-40px;animation-duration:16s;animation-delay:11s;">🌸</div>
+<div class="petal" style="left:25%;bottom:-40px;animation-duration:9s;animation-delay:7s;">🌼</div>
+
+<!-- Ambient dots -->
+<div class="dot" style="width:4px;height:4px;background:#e8a020;top:10%;left:8%;animation-duration:3s;animation-delay:0.5s;"></div>
+<div class="dot" style="width:3px;height:3px;background:#f77f00;top:25%;right:10%;animation-duration:4s;animation-delay:1s;"></div>
+<div class="dot" style="width:5px;height:5px;background:#e8a020;top:70%;left:5%;animation-duration:2.5s;animation-delay:0s;"></div>
+<div class="dot" style="width:3px;height:3px;background:#f5c842;top:60%;right:8%;animation-duration:3.5s;animation-delay:2s;"></div>
+
+<div class="card">
+  <div class="rainbow-bar"></div>
+
+  <!-- Kolam corners -->
+  <svg class="kolam kolam-tl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 5 L5 50 Q5 5 50 5 Z" stroke="#c47c00" stroke-width="1.8" fill="rgba(201,120,0,0.12)"/>
+    <path d="M5 5 L35 5 Q20 12 10 22 L5 35 Z" fill="rgba(232,160,32,0.2)"/>
+    <circle cx="5" cy="5" r="4" fill="#c47c00"/>
+    <circle cx="50" cy="5" r="2.5" fill="rgba(201,120,0,0.5)"/>
+    <circle cx="5" cy="50" r="2.5" fill="rgba(201,120,0,0.5)"/>
+    <path d="M18 5 Q10 10 5 18" stroke="#c47c00" stroke-width="1" opacity="0.7"/>
+    <path d="M32 5 Q16 16 5 32" stroke="#c47c00" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="20" cy="20" r="2" fill="none" stroke="#e8a020" stroke-width="0.8" opacity="0.6"/>
+    <circle cx="30" cy="12" r="1.5" fill="#f5c842" opacity="0.5"/>
+    <circle cx="12" cy="30" r="1.5" fill="#f5c842" opacity="0.5"/>
+  </svg>
+  <svg class="kolam kolam-tr" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 5 L5 50 Q5 5 50 5 Z" stroke="#c47c00" stroke-width="1.8" fill="rgba(201,120,0,0.12)"/>
+    <path d="M5 5 L35 5 Q20 12 10 22 L5 35 Z" fill="rgba(232,160,32,0.2)"/>
+    <circle cx="5" cy="5" r="4" fill="#c47c00"/>
+    <circle cx="50" cy="5" r="2.5" fill="rgba(201,120,0,0.5)"/>
+    <circle cx="5" cy="50" r="2.5" fill="rgba(201,120,0,0.5)"/>
+    <path d="M18 5 Q10 10 5 18" stroke="#c47c00" stroke-width="1" opacity="0.7"/>
+    <path d="M32 5 Q16 16 5 32" stroke="#c47c00" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="20" cy="20" r="2" fill="none" stroke="#e8a020" stroke-width="0.8" opacity="0.6"/>
+  </svg>
+  <svg class="kolam kolam-bl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 5 L5 50 Q5 5 50 5 Z" stroke="#c47c00" stroke-width="1.8" fill="rgba(201,120,0,0.12)"/>
+    <path d="M5 5 L35 5 Q20 12 10 22 L5 35 Z" fill="rgba(232,160,32,0.2)"/>
+    <circle cx="5" cy="5" r="4" fill="#c47c00"/>
+  </svg>
+  <svg class="kolam kolam-br" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 5 L5 50 Q5 5 50 5 Z" stroke="#c47c00" stroke-width="1.8" fill="rgba(201,120,0,0.12)"/>
+    <path d="M5 5 L35 5 Q20 12 10 22 L5 35 Z" fill="rgba(232,160,32,0.2)"/>
+    <circle cx="5" cy="5" r="4" fill="#c47c00"/>
+  </svg>
+
+  <!-- Watermark mandala -->
+  <svg class="bg-motif" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="150" cy="150" r="120" stroke="#c47c00" stroke-width="1"/>
+    <circle cx="150" cy="150" r="90" stroke="#c47c00" stroke-width="0.8"/>
+    <circle cx="150" cy="150" r="60" stroke="#c47c00" stroke-width="0.6"/>
+    <circle cx="150" cy="150" r="30" stroke="#c47c00" stroke-width="0.5"/>
+    <circle cx="150" cy="150" r="6" fill="#c47c00"/>
+    <line x1="150" y1="30" x2="150" y2="270" stroke="#c47c00" stroke-width="0.5"/>
+    <line x1="30" y1="150" x2="270" y2="150" stroke="#c47c00" stroke-width="0.5"/>
+    <line x1="65" y1="65" x2="235" y2="235" stroke="#c47c00" stroke-width="0.5"/>
+    <line x1="235" y1="65" x2="65" y2="235" stroke="#c47c00" stroke-width="0.5"/>
+    <ellipse cx="150" cy="60" rx="12" ry="20" fill="#c47c00" opacity="0.4"/>
+    <ellipse cx="150" cy="240" rx="12" ry="20" fill="#c47c00" opacity="0.4"/>
+    <ellipse cx="60" cy="150" rx="20" ry="12" fill="#c47c00" opacity="0.4"/>
+    <ellipse cx="240" cy="150" rx="20" ry="12" fill="#c47c00" opacity="0.4"/>
+    <ellipse cx="97" cy="97" rx="10" ry="16" fill="#c47c00" opacity="0.3" transform="rotate(45 97 97)"/>
+    <ellipse cx="203" cy="97" rx="10" ry="16" fill="#c47c00" opacity="0.3" transform="rotate(-45 203 97)"/>
+    <ellipse cx="97" cy="203" rx="10" ry="16" fill="#c47c00" opacity="0.3" transform="rotate(-45 97 203)"/>
+    <ellipse cx="203" cy="203" rx="10" ry="16" fill="#c47c00" opacity="0.3" transform="rotate(45 203 203)"/>
+  </svg>
+
+  <div class="inner">
+
+    <div class="invite-label">
+      <span class="top-text en">With Joy &amp; Blessings, We Invite You To</span>
+      <span class="top-text te" style="font-family:'Noto Sans Telugu',sans-serif;font-style:normal;font-size:14px;">ఆనందంతో మరియు ఆశీర్వాదాలతో మిమ్మల్ని ఆహ్వానిస్తున్నాము</span>
+      <div class="divider-row">
+        <div class="div-line"></div><div class="div-gem"></div><div class="div-line r"></div>
+      </div>
+    </div>
+
+    <h1 class="main-title">
+      <span class="en">Dhoti <span class="amp">✦</span> Half Saree</span>
+      <span class="te" style="font-family:'Noto Sans Telugu',sans-serif;font-weight:600;font-size:26px;">ధోతి <span class="amp">✦</span> హాఫ్ సారీ</span>
+    </h1>
+    <p class="subtitle">
+      <span class="en">Vestitur Ceremony — A Sacred Coming of Age Tradition</span>
+      <span class="te" style="font-family:'Noto Sans Telugu',sans-serif;font-style:normal;font-size:13px;">పవిత్రమైన యుక్తవయస్సు సంప్రదాయ వేడుక</span>
+    </p>
+
+    <!-- Characters + Names -->
+    <div class="characters-section">
+
+      <div class="char-block dhoti-block">
+        <span class="char-label en">Dhoti Ceremony</span>
+        <span class="char-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">ధోతి వేడుక</span>
+
+        <!-- Boy in dhoti -->
+        <svg class="svg-char boy-char" width="90" height="132" viewBox="0 0 90 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="45" cy="22" r="16" fill="#f5c8a0" stroke="#c47c00" stroke-width="1.2"/>
+          <path d="M29 18 Q34 5 45 7 Q56 5 61 18 Q55 10 45 11 Q35 10 29 18Z" fill="#1a0800"/>
+          <rect x="43" y="9" width="4" height="9" rx="2" fill="#c0392b" opacity="0.9"/>
+          <circle cx="29" cy="22" r="2.5" fill="none" stroke="#e8a020" stroke-width="1.5"/>
+          <circle cx="61" cy="22" r="2.5" fill="none" stroke="#e8a020" stroke-width="1.5"/>
+          <ellipse cx="39" cy="20" rx="3" ry="3.5" fill="#1a0800"/>
+          <ellipse cx="51" cy="20" rx="3" ry="3.5" fill="#1a0800"/>
+          <circle cx="40" cy="19" r="1.1" fill="white"/>
+          <circle cx="52" cy="19" r="1.1" fill="white"/>
+          <path d="M39 28 Q45 33 51 28" stroke="#8b4513" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <rect x="41" y="37" width="8" height="8" rx="2" fill="#f5c8a0"/>
+          <!-- Angavastram -->
+          <path d="M28 42 Q45 39 62 42 L64 50 Q45 46 26 50Z" fill="#f77f00" opacity="0.9"/>
+          <!-- Shirt/angarkha -->
+          <rect x="28" y="42" width="34" height="28" rx="5" fill="#fffbef" stroke="#e8a020" stroke-width="1"/>
+          <line x1="45" y1="42" x2="45" y2="70" stroke="#e8a020" stroke-width="0.7" opacity="0.6"/>
+          <!-- Dhoti -->
+          <path d="M24 70 Q30 67 45 69 Q60 67 66 70 L69 104 Q55 100 45 102 Q35 100 21 104Z" fill="#f5c842" stroke="#c47c00" stroke-width="1"/>
+          <line x1="34" y1="72" x2="29" y2="102" stroke="#c47c00" stroke-width="0.8" opacity="0.55"/>
+          <line x1="45" y1="70" x2="45" y2="102" stroke="#c47c00" stroke-width="0.8" opacity="0.55"/>
+          <line x1="56" y1="72" x2="61" y2="102" stroke="#c47c00" stroke-width="0.8" opacity="0.55"/>
+          <!-- Dhoti border strip -->
+          <path d="M24 101 Q45 105 66 101 L69 107 Q45 111 21 107Z" fill="#c0392b"/>
+          <!-- Feet -->
+          <ellipse cx="34" cy="116" rx="8" ry="4" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.8"/>
+          <ellipse cx="56" cy="116" rx="8" ry="4" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.8"/>
+          <!-- Anklets -->
+          <path d="M26 116 Q34 120 42 116" stroke="#e8a020" stroke-width="1.2" fill="none"/>
+          <path d="M48 116 Q56 120 64 116" stroke="#e8a020" stroke-width="1.2" fill="none"/>
+          <!-- Arms -->
+          <path d="M28 50 Q17 58 19 70" stroke="#f5c8a0" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <path d="M62 50 Q73 58 71 70" stroke="#f5c8a0" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <!-- Hands namaste -->
+          <ellipse cx="45" cy="62" rx="10" ry="5" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.8" opacity="0.85"/>
+          <!-- Dhoti shine -->
+          <path d="M38 78 Q45 76 52 78" stroke="#ffe08a" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+          <path d="M36 87 Q45 84 54 87" stroke="#ffe08a" stroke-width="1" opacity="0.45" stroke-linecap="round"/>
+        </svg>
+
+        <span class="char-name en">Mohit Ram</span>
+        <span class="char-name te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:18px;display:none;">మోహిత్ రామ్</span>
+      </div>
+
+      <div class="chars-and">&amp;</div>
+
+      <div class="char-block saree-block">
+        <span class="char-label en">Half Saree Ceremony</span>
+        <span class="char-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">హాఫ్ సారీ వేడుక</span>
+
+        <div style="display:flex;justify-content:center;gap:6px;margin-bottom:12px;">
+
+          <!-- Girl 1: Srinidhi - crimson blouse, yellow langa -->
+          <svg class="svg-char girl1-char" width="74" height="130" viewBox="0 0 74 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="37" cy="20" r="14" fill="#f5c8a0" stroke="#c47c00" stroke-width="1"/>
+            <!-- Bun hair -->
+            <path d="M23 16 Q25 4 37 6 Q49 4 51 16 Q45 8 37 9 Q29 8 23 16Z" fill="#1a0800"/>
+            <circle cx="37" cy="6" r="5.5" fill="#1a0800"/>
+            <circle cx="37" cy="3" r="4" fill="#c0392b"/>
+            <!-- Bindi -->
+            <circle cx="37" cy="11" r="2.5" fill="#c0392b"/>
+            <!-- Earrings -->
+            <circle cx="23" cy="20" r="2.2" fill="none" stroke="#e8a020" stroke-width="1.3"/>
+            <circle cx="51" cy="20" r="2.2" fill="none" stroke="#e8a020" stroke-width="1.3"/>
+            <!-- Eyes -->
+            <ellipse cx="32" cy="19" rx="2.6" ry="2.9" fill="#1a0800"/>
+            <ellipse cx="42" cy="19" rx="2.6" ry="2.9" fill="#1a0800"/>
+            <circle cx="32.8" cy="18.2" r="0.9" fill="white"/>
+            <circle cx="42.8" cy="18.2" r="0.9" fill="white"/>
+            <path d="M32 26 Q37 30 42 26" stroke="#8b4513" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <!-- Neck + necklace -->
+            <rect x="34" y="33" width="6" height="7" rx="2" fill="#f5c8a0"/>
+            <path d="M28 38 Q37 43 46 38" stroke="#e8a020" stroke-width="1.5" fill="none"/>
+            <circle cx="37" cy="43" r="2" fill="#e8a020"/>
+            <!-- Blouse - crimson -->
+            <rect x="25" y="39" width="24" height="19" rx="3" fill="#9b1a1a" stroke="#6b0000" stroke-width="0.8"/>
+            <path d="M29 44 Q37 41 45 44" stroke="#ffe08a" stroke-width="1" opacity="0.5" stroke-linecap="round"/>
+            <!-- Langa - yellow -->
+            <path d="M23 57 Q37 54 51 57 L53 95 Q37 99 21 95Z" fill="#f5c842" stroke="#c47c00" stroke-width="0.8"/>
+            <line x1="30" y1="58" x2="27" y2="94" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <line x1="37" y1="57" x2="37" y2="95" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <line x1="44" y1="58" x2="47" y2="94" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <!-- Langa border -->
+            <path d="M23 93 Q37 97 51 93 L53 99 Q37 103 21 99Z" fill="#9b1a1a"/>
+            <!-- Dupatta - saffron drape -->
+            <path d="M25 39 Q15 50 13 68 Q11 78 17 83" stroke="#f77f00" stroke-width="5.5" fill="none" stroke-linecap="round" opacity="0.88"/>
+            <path d="M49 39 Q56 52 54 65" stroke="#f77f00" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.78"/>
+            <!-- Feet -->
+            <ellipse cx="30" cy="107" rx="6.5" ry="3.5" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.7"/>
+            <ellipse cx="44" cy="107" rx="6.5" ry="3.5" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.7"/>
+            <path d="M24 107 Q30 111 36 107" stroke="#e8a020" stroke-width="1" fill="none"/>
+            <path d="M38 107 Q44 111 50 107" stroke="#e8a020" stroke-width="1" fill="none"/>
+            <!-- Arms -->
+            <path d="M25 46 Q16 56 18 66" stroke="#f5c8a0" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <path d="M49 46 Q58 56 56 66" stroke="#f5c8a0" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <circle cx="18" cy="66" r="4" fill="none" stroke="#e8a020" stroke-width="2"/>
+            <circle cx="56" cy="66" r="4" fill="none" stroke="#e8a020" stroke-width="2"/>
+            <!-- Langa shine -->
+            <path d="M31 72 Q37 69 43 72" stroke="#ffe08a" stroke-width="1.2" opacity="0.65" stroke-linecap="round"/>
+          </svg>
+
+          <!-- Girl 2: Aashrita - green blouse, orange langa -->
+          <svg class="svg-char girl2-char" width="74" height="130" viewBox="0 0 74 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="37" cy="20" r="14" fill="#f5c8a0" stroke="#c47c00" stroke-width="1"/>
+            <!-- Loose hair with side flowers -->
+            <path d="M23 16 Q25 4 37 6 Q49 4 51 16 Q45 8 37 9 Q29 8 23 16Z" fill="#1a0800"/>
+            <path d="M23 14 Q19 25 21 34" stroke="#1a0800" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+            <path d="M51 14 Q55 25 53 34" stroke="#1a0800" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+            <!-- Flower in hair -->
+            <circle cx="24" cy="13" r="4.5" fill="#f77f00" opacity="0.95"/>
+            <circle cx="24" cy="13" r="2" fill="#ffe08a"/>
+            <!-- Bindi -->
+            <circle cx="37" cy="11" r="2.5" fill="#c47c00"/>
+            <!-- Dangling earrings -->
+            <line x1="23" y1="20" x2="23" y2="28" stroke="#e8a020" stroke-width="1.5"/>
+            <circle cx="23" cy="30" r="2.8" fill="#e8a020"/>
+            <line x1="51" y1="20" x2="51" y2="28" stroke="#e8a020" stroke-width="1.5"/>
+            <circle cx="51" cy="30" r="2.8" fill="#e8a020"/>
+            <!-- Eyes -->
+            <ellipse cx="32" cy="19" rx="2.6" ry="2.9" fill="#1a0800"/>
+            <ellipse cx="42" cy="19" rx="2.6" ry="2.9" fill="#1a0800"/>
+            <circle cx="32.8" cy="18.2" r="0.9" fill="white"/>
+            <circle cx="42.8" cy="18.2" r="0.9" fill="white"/>
+            <path d="M32 26 Q37 30 42 26" stroke="#8b4513" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <!-- Neck + necklace -->
+            <rect x="34" y="33" width="6" height="7" rx="2" fill="#f5c8a0"/>
+            <path d="M28 38 Q37 43 46 38" stroke="#c47c00" stroke-width="1.5" fill="none"/>
+            <circle cx="37" cy="43" r="2.2" fill="#c47c00"/>
+            <!-- Blouse - forest green -->
+            <rect x="25" y="39" width="24" height="19" rx="3" fill="#2d6a3f" stroke="#1a4228" stroke-width="0.8"/>
+            <path d="M29 44 Q37 41 45 44" stroke="#4caf69" stroke-width="1" opacity="0.55" stroke-linecap="round"/>
+            <!-- Langa - saffron/orange -->
+            <path d="M23 57 Q37 54 51 57 L53 95 Q37 99 21 95Z" fill="#f77f00" stroke="#c47c00" stroke-width="0.8"/>
+            <line x1="30" y1="58" x2="27" y2="94" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <line x1="37" y1="57" x2="37" y2="95" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <line x1="44" y1="58" x2="47" y2="94" stroke="#c47c00" stroke-width="0.6" opacity="0.5"/>
+            <!-- Langa border -->
+            <path d="M23 93 Q37 97 51 93 L53 99 Q37 103 21 99Z" fill="#2d6a3f"/>
+            <!-- Dupatta - green drape -->
+            <path d="M25 39 Q15 50 13 68 Q11 78 17 83" stroke="#1a4228" stroke-width="5.5" fill="none" stroke-linecap="round" opacity="0.88"/>
+            <path d="M49 39 Q56 52 54 65" stroke="#1a4228" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.78"/>
+            <!-- Feet -->
+            <ellipse cx="30" cy="107" rx="6.5" ry="3.5" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.7"/>
+            <ellipse cx="44" cy="107" rx="6.5" ry="3.5" fill="#f5c8a0" stroke="#c47c00" stroke-width="0.7"/>
+            <path d="M24 107 Q30 111 36 107" stroke="#e8a020" stroke-width="1" fill="none"/>
+            <path d="M38 107 Q44 111 50 107" stroke="#e8a020" stroke-width="1" fill="none"/>
+            <!-- Arms -->
+            <path d="M25 46 Q16 56 18 66" stroke="#f5c8a0" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <path d="M49 46 Q58 56 56 66" stroke="#f5c8a0" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <circle cx="18" cy="66" r="4" fill="none" stroke="#c47c00" stroke-width="2"/>
+            <circle cx="56" cy="66" r="4" fill="none" stroke="#c47c00" stroke-width="2"/>
+            <path d="M31 72 Q37 69 43 72" stroke="#ffe08a" stroke-width="1.2" opacity="0.65" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- Both names equal size -->
+        <span class="char-name en">Srinidhi</span>
+        <span class="char-name te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:20px;display:none;">శ్రీనిధి</span>
+        <span class="char-name-sep en">&amp;</span>
+        <span class="char-name-sep te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">&amp;</span>
+        <span class="char-name en">Aashrita</span>
+        <span class="char-name te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:20px;display:none;">ఆశ్రిత</span>
+      </div>
+
+    </div>
+
+    <!-- Details band -->
+    <div class="details-band">
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="d-icon">📅</span>
+          <span class="d-label en">Date</span>
+          <span class="d-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">తేదీ</span>
+          <span class="d-val">4<sup style="font-size:11px">th</sup> May 2026<br>
+            <span class="d-sub en">Monday</span>
+            <span class="d-sub te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">సోమవారం</span>
+          </span>
+        </div>
+        <div class="detail-item">
+          <span class="d-icon">⏰</span>
+          <span class="d-label en">Time</span>
+          <span class="d-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">సమయం</span>
+          <span class="d-val">10:00 AM<br>
+            <span class="d-sub en">Onwards</span>
+            <span class="d-sub te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">నుండి</span>
+          </span>
+        </div>
+        <div class="detail-item">
+          <span class="d-icon">🍽️</span>
+          <span class="d-label en">Followed By</span>
+          <span class="d-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">తర్వాత</span>
+          <span class="d-val">
+            <span class="en">Grand Lunch</span>
+            <span class="te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">భోజనం</span>
+          </span>
+        </div>
+      </div>
+      <div class="venue-row">
+        <span style="font-size:16px;color:#f5c842;margin-right:6px;">📍</span>
+        <span class="venue-name-big">Mahalakshmi Convention Hall</span>
+        <span class="venue-addr-sm">Chirala Road, Parchur</span>
+      </div>
+    </div>
+
+    <!-- Hosted by -->
+    <div class="hosted-section">
+      <span class="section-label en">Joyfully Hosted By</span>
+      <span class="section-label te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">ఆనందంగా నిర్వహిస్తున్నారు</span>
+      <div class="hosts-row">
+        <div class="host-pair">
+          <span class="h-name en">Penugonda Aswin Kumar</span>
+          <span class="h-name te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:15px;display:none;">పెనుగొండ అశ్విన్ కుమార్</span>
+          <span class="h-spouse en">&amp; Tejaswi</span>
+          <span class="h-spouse te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">&amp; తేజస్వి</span>
+        </div>
+        <div class="host-pair">
+          <span class="h-name en">Praveen Kumar</span>
+          <span class="h-name te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:15px;display:none;">ప్రవీణ్ కుమార్</span>
+          <span class="h-spouse en">&amp; Bhavya</span>
+          <span class="h-spouse te" style="font-family:'Noto Sans Telugu',sans-serif;display:none;">&amp; భవ్య</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blessings -->
+    <div class="blessings">
+      <span class="bless-with en">With the blessings of</span>
+      <span class="bless-with te" style="font-family:'Noto Sans Telugu',sans-serif;font-style:normal;font-size:13px;display:none;">వీరి ఆశీర్వాదాలతో</span>
+
+      <span class="bless-late en">Late Penugonda Ramachandra Rao 🙏</span>
+      <span class="bless-late te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:15px;display:none;">故 పెనుగొండ రామచంద్రరావు 🙏</span>
+
+      <span class="bless-living en">&amp; Rama Devi</span>
+      <span class="bless-living te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:15px;display:none;">&amp; రామాదేవి</span>
+
+      <span class="bless-note en">Whose love and blessings continue to brighten our lives and this celebration</span>
+      <span class="bless-note te" style="font-family:'Noto Sans Telugu',sans-serif;font-style:normal;font-size:13px;display:none;">వారి ప్రేమ మరియు ఆశీర్వాదాలు మన జీవితాలను మరియు ఈ వేడుకను ప్రకాశవంతంగా చేస్తాయి</span>
+    </div>
+
+    <!-- Aadhya -->
+    <div class="aadhya">
+      <span class="en">Along with little <strong>Aadhya Shree 💛</strong> who is excited to welcome you all!</span>
+      <span class="te" style="font-family:'Noto Sans Telugu',sans-serif;font-style:normal;font-size:14px;display:none;">చిన్నారి <strong style="color:var(--kumkum);font-style:normal;">ఆధ్య శ్రీ 💛</strong> మీ అందరినీ స్వాగతించడానికి సంతోషంగా ఉంది!</span>
+    </div>
+
+    <!-- Closing -->
+    <div class="closing">
+      <div class="divider-row" style="margin-bottom:14px">
+        <div class="div-line"></div><div class="div-gem"></div><div class="div-line r"></div>
+      </div>
+      <span class="closing-flow">🌸 🌺 🌼 🌺 🌸</span>
+      <span class="closing-msg en">Your presence will make this occasion more special</span>
+      <span class="closing-msg te" style="font-family:'Noto Sans Telugu',sans-serif;font-size:11px;letter-spacing:0;display:none;">మీ రాక ఈ వేడుకను మరింత ప్రత్యేకంగా చేస్తుంది</span>
+    </div>
+
+  </div>
+
+  <div class="rainbow-bar-bottom"></div>
+</div>
+
+<script>
+function setLang(lang) {
+  const body = document.getElementById('body');
+  const btns = document.querySelectorAll('.lang-btn');
+  btns.forEach(b => b.classList.remove('active'));
+
+  // Hide all, show chosen
+  document.querySelectorAll('.en').forEach(el => {
+    el.style.display = el.tagName === 'SPAN' && !el.classList.contains('closing-msg') && !el.classList.contains('bless-with') && !el.classList.contains('bless-note') ? 'inline' : 'block';
+  });
+  document.querySelectorAll('.te').forEach(el => { el.style.display = 'none'; });
+
+  if (lang === 'te') {
+    body.classList.add('telugu');
+    btns[1].classList.add('active');
+    // hide en, show te
+    document.querySelectorAll('.en').forEach(el => { el.style.display = 'none'; });
+    document.querySelectorAll('.te').forEach(el => {
+      const tag = el.tagName;
+      // determine display type
+      const blockTags = ['SPAN','DIV','P','H1','H2','H3'];
+      // for spans that are block-level labels
+      if (el.classList.contains('char-label') || el.classList.contains('section-label') || el.classList.contains('char-name') || el.classList.contains('char-name-sep') || el.classList.contains('h-name') || el.classList.contains('h-spouse') || el.classList.contains('bless-with') || el.classList.contains('bless-late') || el.classList.contains('bless-living') || el.classList.contains('bless-note') || el.classList.contains('closing-msg') || el.classList.contains('top-text') || el.classList.contains('venue-name-big') || el.classList.contains('d-label') || el.classList.contains('d-sub')) {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'block';
+      }
+    });
+  } else {
+    body.classList.remove('telugu');
+    btns[0].classList.add('active');
+    // show en, hide te
+    document.querySelectorAll('.en').forEach(el => { el.style.display = 'block'; });
+    // special: some .en spans need inline
+    document.querySelectorAll('.te').forEach(el => { el.style.display = 'none'; });
+  }
+}
+// init clean
+setLang('en');
+</script>
+
+</body>
+</html>
