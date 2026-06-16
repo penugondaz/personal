@@ -4,20 +4,9 @@ import { notFound } from "next/navigation";
 import SalaryInputCalculator from "@/components/SalaryInputCalculator";
 import { SALARY_LPA_VALUES, salarySlug, parseSalarySlug, lpaToAnnualCtc } from "@/lib/salary-data";
 import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
+import { compareRegimes } from "@/lib/calculators/income-tax";
 import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
-
-/**
- * Programmatic SEO template: one statically-generated page per CTC slab
- * (e.g. /salary/5-lpa-in-hand, /salary/12-5-lpa-in-hand). The page count
- * scales by adding entries to SALARY_LPA_VALUES in lib/salary-data.ts —
- * no template changes needed to go from dozens to thousands of pages.
- *
- * Content sections follow the brief's required structure: hero,
- * calculator, formula explanation, FAQ, related pages — each populated
- * from the actual computed numbers for this specific LPA so pages don't
- * read as thin/duplicate content despite sharing one template.
- */
 
 export function generateStaticParams() {
   return SALARY_LPA_VALUES.map((lpa) => ({ slug: salarySlug(lpa) }));
@@ -50,6 +39,7 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
 
   const annualCtc = lpaToAnnualCtc(lpa);
   const result = calculateSalaryBreakup({ annualCtc, regime: "new" });
+  const regimeComparison = compareRegimes(result.grossSalaryAnnual);
 
   const relatedLpas = SALARY_LPA_VALUES.filter((v) => Math.abs(v - lpa) > 0 && Math.abs(v - lpa) <= 3).slice(
     0,
@@ -58,7 +48,6 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-ink-muted" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-ledger">
           Home
@@ -71,7 +60,6 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         <span aria-current="page">{lpa} LPA</span>
       </nav>
 
-      {/* Hero */}
       <h1 className="font-display text-3xl text-ink sm:text-4xl">
         {lpa} LPA In-Hand Salary — Monthly Take-Home Breakdown
       </h1>
@@ -83,12 +71,10 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         tax deductions.
       </p>
 
-      {/* Calculator */}
       <div className="mt-10">
         <SalaryInputCalculator initialAnnualCtc={annualCtc} />
       </div>
 
-      {/* Formula / explanation */}
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">
           How {lpa} LPA Becomes {formatINR(result.inHandMonthly)} In-Hand
@@ -126,7 +112,6 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         </ol>
       </section>
 
-      {/* Benefits / context */}
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">Annual Summary</h2>
         <div className="mt-4 overflow-hidden rounded-lg border border-rule">
@@ -142,7 +127,66 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         </div>
       </section>
 
-      {/* FAQ */}
+      <section className="mt-10">
+        <h2 className="font-display text-2xl text-ink">Old Regime vs. New Regime</h2>
+        <p className="mt-3 text-ink-muted">
+          At this CTC, the{" "}
+          <strong className="text-ledger">
+            {regimeComparison.betterRegime === "new" ? "new" : "old"} tax regime
+          </strong>{" "}
+          works out cheaper by {formatINR(regimeComparison.savings)} per year — though the old
+          regime&apos;s actual benefit depends heavily on deductions like 80C, HRA exemption, and
+          home loan interest, which aren&apos;t available under the new regime.
+        </p>
+        <div className="mt-4 overflow-hidden rounded-lg border border-rule">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-rule bg-paper text-left">
+                <th className="px-4 py-2.5 font-medium text-ink-muted"></th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-muted">New Regime</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-muted">
+                  Old Regime (no extra deductions)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-rule">
+                <td className="px-4 py-2.5 text-ink-muted">Standard deduction</td>
+                <td className="tabular px-4 py-2.5 text-right text-ink">
+                  {formatINR(regimeComparison.new.standardDeduction)}
+                </td>
+                <td className="tabular px-4 py-2.5 text-right text-ink">
+                  {formatINR(regimeComparison.old.standardDeduction)}
+                </td>
+              </tr>
+              <tr className="border-b border-rule">
+                <td className="px-4 py-2.5 text-ink-muted">Taxable income</td>
+                <td className="tabular px-4 py-2.5 text-right text-ink">
+                  {formatINR(regimeComparison.new.taxableIncome)}
+                </td>
+                <td className="tabular px-4 py-2.5 text-right text-ink">
+                  {formatINR(regimeComparison.old.taxableIncome)}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 font-semibold text-ink">Tax payable</td>
+                <td className="tabular px-4 py-2.5 text-right font-semibold text-ink">
+                  {formatINR(regimeComparison.new.totalTaxPayable)}
+                </td>
+                <td className="tabular px-4 py-2.5 text-right font-semibold text-ink">
+                  {formatINR(regimeComparison.old.totalTaxPayable)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-ink-muted">
+          The old-regime figure above assumes no additional deductions claimed. If you have
+          significant 80C investments, HRA, or home loan interest, the old regime may work out
+          better than shown here.
+        </p>
+      </section>
+
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
         <div className="mt-4 space-y-5">
@@ -161,7 +205,6 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         </div>
       </section>
 
-      {/* Related salary pages */}
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Salary Calculators</h2>
         <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
