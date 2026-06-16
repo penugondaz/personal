@@ -2,9 +2,10 @@
 #
 # Repo layout assumption: this workflow file lives at the REPO ROOT
 # (penugondaz/personal/.github/workflows/deploy-take-home-calculators.yml),
-# and the app itself lives in the subfolder `take-home-calculators/`.
+# and the app source lives in the subfolder `take-home-calculators/`.
 #
-# Live URL after deploy: https://penugondaz.github.io/personal/take-home-calculators/
+# DEPLOYMENT TARGET: the repo root of the Pages site, i.e.
+#   https://penugondaz.github.io/personal/
 #
 # IMPORTANT — one-time GitHub Pages setup (Settings > Pages):
 #   Source: "GitHub Actions" (not "Deploy from a branch")
@@ -51,7 +52,7 @@ jobs:
       - name: Build static export
         env:
           NODE_ENV: production
-   NEXT_PUBLIC_BASE_PATH: ""
+          NEXT_PUBLIC_BASE_PATH: ""
         run: npm run build
 
       - name: Add .nojekyll
