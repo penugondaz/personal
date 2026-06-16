@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SITE_URL } from "@/lib/paths";
 
 export const metadata: Metadata = {
-  // metadataBase makes next/head resolve relative og:image / canonical
-  // paths against the correct subpath-aware origin automatically.
   metadataBase: new URL(SITE_URL),
   title: {
     default: "Take Home Calculators — Salary, Tax, EPF & Payroll Calculators India",
@@ -12,6 +10,10 @@ export const metadata: Metadata = {
   },
   description:
     "Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India — accurate, fast, and easy to use.",
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light",
 };
 
 export default function RootLayout({
