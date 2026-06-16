@@ -58,6 +58,24 @@ jobs:
       - name: Add .nojekyll
         run: touch out/.nojekyll
 
+      - name: Debug — inspect out/ before upload
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "--- ls -la out ---"
+          ls -la out
+          echo "--- file type of out ---"
+          file out
+          echo "--- recursive tree (first 100 entries) ---"
+          find out -maxdepth 3 | head -100
+          echo "--- total file count under out/ ---"
+          find out -type f | wc -l
+          echo "--- _next/static/chunks check ---"
+          ls -la out/_next/static/chunks 2>&1 | head -20 || echo "NO _next/static/chunks DIRECTORY FOUND"
+          echo "--- GITHUB_WORKSPACE=$GITHUB_WORKSPACE ---"
+          ls -la "$GITHUB_WORKSPACE/take-home-calculators" | head -30
+          test -d "$GITHUB_WORKSPACE/take-home-calculators/out" && echo "YES, out is a directory" || echo "NO — missing or not a directory"
+          find "$GITHUB_WORKSPACE/take-home-calculators/out" -type f | wc -l
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
