@@ -4,8 +4,16 @@
 # (penugondaz/personal/.github/workflows/deploy-take-home-calculators.yml),
 # and the app source lives in the subfolder `take-home-calculators/`.
 #
-# DEPLOYMENT TARGET: the repo root of the Pages site, i.e.
+# DEPLOYMENT TARGET:
 #   https://penugondaz.github.io/personal/
+#
+# GitHub Pages serves any repo other than <username>.github.io itself as a
+# "project site" at username.github.io/<repo-name>/ — that /personal
+# segment is baked into the URL by GitHub regardless of where in the repo
+# the app's source lives, and Next.js has no way to know about it unless
+# `basePath` says so explicitly. NEXT_PUBLIC_BASE_PATH below must be
+# "/personal" for that reason, even though the app itself isn't deployed
+# under any further subpath of its own.
 #
 # IMPORTANT — one-time GitHub Pages setup (Settings > Pages):
 #   Source: "GitHub Actions" (not "Deploy from a branch")
@@ -52,34 +60,16 @@ jobs:
       - name: Build static export
         env:
           NODE_ENV: production
-          NEXT_PUBLIC_BASE_PATH: ""
+          NEXT_PUBLIC_BASE_PATH: "/personal"
         run: npm run build
 
       - name: Add .nojekyll
         run: touch out/.nojekyll
 
-      - name: Debug — inspect out/ before upload
-        run: |
-          echo "Working directory: $(pwd)"
-          echo "--- ls -la out ---"
-          ls -la out
-          echo "--- file type of out ---"
-          file out
-          echo "--- recursive tree (first 100 entries) ---"
-          find out -maxdepth 3 | head -100
-          echo "--- total file count under out/ ---"
-          find out -type f | wc -l
-          echo "--- _next/static/chunks check ---"
-          ls -la out/_next/static/chunks 2>&1 | head -20 || echo "NO _next/static/chunks DIRECTORY FOUND"
-          echo "--- GITHUB_WORKSPACE=$GITHUB_WORKSPACE ---"
-          ls -la "$GITHUB_WORKSPACE/take-home-calculators" | head -30
-          test -d "$GITHUB_WORKSPACE/take-home-calculators/out" && echo "YES, out is a directory" || echo "NO — missing or not a directory"
-          find "$GITHUB_WORKSPACE/take-home-calculators/out" -type f | wc -l
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: take-home-calculators/out
+          path: ${{ github.workspace }}/take-home-calculators/out
 
   deploy:
     needs: build
