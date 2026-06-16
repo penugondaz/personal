@@ -1,36 +1,48 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SalaryInputCalculator from "@/components/SalaryInputCalculator";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
 import { absoluteUrl } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "In-Hand Salary Calculator — All CTC Slabs (India)",
   description:
-    "Browse in-hand salary calculators for every common CTC slab in India, from 3 LPA to 50 LPA. See your monthly take-home pay after tax, PF, and professional tax.",
+    "Calculate your in-hand salary from any CTC, or browse pre-built breakdowns for every common CTC slab in India, from 1 LPA to 60 LPA.",
   alternates: { canonical: absoluteUrl("/salary") },
 };
 
 export default function SalaryIndexPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-3xl text-ink">In-Hand Salary Calculators</h1>
-      <p className="mt-3 text-ink-muted">
-        Select your CTC to see a full monthly breakup — basic, HRA, PF, professional tax, income
-        tax, and your actual take-home pay.
+    <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">In-Hand Salary Calculator</h1>
+      <p className="mt-4 text-lg text-ink-muted">
+        Enter any CTC below to see your full monthly breakup — basic, HRA, PF, professional tax,
+        income tax, and your actual take-home pay.
       </p>
 
-      <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {SALARY_LPA_VALUES.map((lpa) => (
-          <li key={lpa}>
-            <Link
-              href={`/salary/${salarySlug(lpa)}`}
-              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
-            >
-              {lpa} LPA
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-10">
+        <SalaryInputCalculator />
+      </div>
+
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Browse by CTC Slab</h2>
+        <p className="mt-3 text-ink-muted">
+          Or jump straight to a detailed breakdown — including the old vs. new regime comparison
+          and a year-by-year FAQ — for one of these common CTC values.
+        </p>
+        <ul className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-4">
+          {SALARY_LPA_VALUES.map((lpa) => (
+            <li key={lpa}>
+              <Link
+                href={`/salary/${salarySlug(lpa)}`}
+                className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+              >
+                {lpa} LPA
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
