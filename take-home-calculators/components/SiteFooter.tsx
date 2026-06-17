@@ -50,7 +50,7 @@ export default function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Take Home Calculators. Figures are estimates based on
+            © {new Date().getFullYear()} Salary Tools. Figures are estimates based on
             current FY 2025-26 tax rules and common salary structures — actual amounts depend on
             your specific employer policies. This site does not provide financial, tax, or legal
             advice.
