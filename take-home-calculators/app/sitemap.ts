@@ -12,6 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/guides/lpa-full-form", priority: 0.8 },
     { route: "/epf-calculator", priority: 0.85 },
     { route: "/ppf-calculator", priority: 0.85 },
+    { route: "/hra-calculator", priority: 0.8 },
+    { route: "/gratuity-calculator", priority: 0.8 },
+    { route: "/emi-calculator", priority: 0.8 },
+    { route: "/sip-calculator", priority: 0.8 },
+    { route: "/fd-calculator", priority: 0.8 },
+    { route: "/salary-hike-calculator", priority: 0.75 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({

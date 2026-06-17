@@ -118,6 +118,36 @@ export default function HomePage() {
             title="PPF"
             description="Year-by-year PPF growth at 7.1% interest."
           />
+          <DirectoryCard
+            href="/hra-calculator"
+            title="HRA Exemption"
+            description="How much of your HRA is actually tax-free."
+          />
+          <DirectoryCard
+            href="/gratuity-calculator"
+            title="Gratuity"
+            description="Lump-sum payout after 5+ years of service."
+          />
+          <DirectoryCard
+            href="/salary-hike-calculator"
+            title="Salary Hike"
+            description="What a CTC hike means for your real take-home."
+          />
+          <DirectoryCard
+            href="/emi-calculator"
+            title="EMI"
+            description="Home, personal, car & education loan EMIs."
+          />
+          <DirectoryCard
+            href="/sip-calculator"
+            title="SIP"
+            description="Project your mutual fund SIP growth."
+          />
+          <DirectoryCard
+            href="/fd-calculator"
+            title="Fixed Deposit"
+            description="FD maturity value at any compounding frequency."
+          />
         </div>
       </section>
 
