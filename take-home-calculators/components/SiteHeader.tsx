@@ -37,7 +37,7 @@ export default function SiteHeader({
         <Link href="/" className="flex items-center gap-2.5">
           <LogoMark />
           <span className="font-display text-lg font-semibold text-ink sm:text-xl">
-            Take Home Calculators
+            Salary Tools
           </span>
         </Link>
 
