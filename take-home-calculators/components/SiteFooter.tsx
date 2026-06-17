@@ -21,7 +21,7 @@ export default function SiteFooter() {
                 />
                 <path d="M11 14.4h12" stroke="white" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <span className="font-display text-base font-semibold">Take Home Calculators</span>
+              <span className="font-display text-base font-semibold">Salary Tools</span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
               Free, fast salary, tax, EPF, and PPF calculators built for India&apos;s actual tax
