@@ -34,11 +34,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Salary Tools | Take Home Calculators — Salary, Tax, EPF & Payroll Calculators India",
-    template: "%s | Take Home Calculators",
+    default: "Salary Tools — Salary, Tax, EPF & Payroll Calculators India",
+    template: "%s | Salary Tools",
   },
   description:
-    "Salary Tools" Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India — accurate, fast, and easy to use.",
+    "Salary Tools — Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India. Accurate, fast, and easy to use.",
 };
 
 export const viewport: Viewport = {
