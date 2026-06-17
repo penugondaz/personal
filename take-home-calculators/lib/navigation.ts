@@ -22,7 +22,9 @@ export const NAV_SECTIONS: NavSection[] = [
     links: [
       { href: "/epf-calculator", label: "EPF & VPF Calculator" },
       { href: "/ppf-calculator", label: "PPF Calculator" },
+      { href: "/nps-calculator", label: "NPS Calculator" },
       { href: "/gratuity-calculator", label: "Gratuity Calculator" },
+      { href: "/epf-vs-ppf", label: "EPF vs PPF" },
     ],
   },
   {
@@ -30,6 +32,11 @@ export const NAV_SECTIONS: NavSection[] = [
     links: [
       { href: "/hra-calculator", label: "HRA Calculator" },
       { href: "/salary-hike-calculator", label: "Salary Hike Calculator" },
+      { href: "/leave-encashment-calculator", label: "Leave Encashment Calculator" },
+      { href: "/overtime-calculator", label: "Overtime Calculator" },
+      { href: "/advance-tax-calculator", label: "Advance Tax Calculator" },
+      { href: "/capital-gains-calculator", label: "Capital Gains Calculator" },
+      { href: "/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
     ],
   },
   {
@@ -38,6 +45,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/emi-calculator", label: "EMI Calculator" },
       { href: "/sip-calculator", label: "SIP Calculator" },
       { href: "/fd-calculator", label: "FD Calculator" },
+      { href: "/rd-calculator", label: "RD Calculator" },
+      { href: "/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
     ],
   },
   {

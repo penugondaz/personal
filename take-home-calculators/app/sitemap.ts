@@ -18,6 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/sip-calculator", priority: 0.8 },
     { route: "/fd-calculator", priority: 0.8 },
     { route: "/salary-hike-calculator", priority: 0.75 },
+    { route: "/rd-calculator", priority: 0.8 },
+    { route: "/nps-calculator", priority: 0.8 },
+    { route: "/cagr-xirr-calculator", priority: 0.8 },
+    { route: "/leave-encashment-calculator", priority: 0.75 },
+    { route: "/overtime-calculator", priority: 0.7 },
+    { route: "/advance-tax-calculator", priority: 0.8 },
+    { route: "/capital-gains-calculator", priority: 0.8 },
+    { route: "/epf-vs-ppf", priority: 0.75 },
+    { route: "/old-vs-new-tax-regime", priority: 0.85 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({

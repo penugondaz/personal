@@ -148,6 +148,51 @@ export default function HomePage() {
             title="Fixed Deposit"
             description="FD maturity value at any compounding frequency."
           />
+          <DirectoryCard
+            href="/rd-calculator"
+            title="Recurring Deposit"
+            description="RD maturity from monthly deposits."
+          />
+          <DirectoryCard
+            href="/nps-calculator"
+            title="NPS"
+            description="Retirement corpus and estimated monthly pension."
+          />
+          <DirectoryCard
+            href="/cagr-xirr-calculator"
+            title="CAGR & XIRR"
+            description="Annualized returns for lumpsum or irregular cash flows."
+          />
+          <DirectoryCard
+            href="/leave-encashment-calculator"
+            title="Leave Encashment"
+            description="Encashment amount and tax exemption."
+          />
+          <DirectoryCard
+            href="/overtime-calculator"
+            title="Overtime Pay"
+            description="Overtime earnings at 1.5x, 2x, or custom rates."
+          />
+          <DirectoryCard
+            href="/advance-tax-calculator"
+            title="Advance Tax"
+            description="Quarterly installment schedule for advance tax."
+          />
+          <DirectoryCard
+            href="/capital-gains-calculator"
+            title="Capital Gains"
+            description="STCG & LTCG tax on equity, debt, and other assets."
+          />
+          <DirectoryCard
+            href="/old-vs-new-tax-regime"
+            title="Old vs New Regime"
+            description="Which tax regime saves you more."
+          />
+          <DirectoryCard
+            href="/epf-vs-ppf"
+            title="EPF vs PPF"
+            description="Side-by-side comparison of both retirement options."
+          />
         </div>
       </section>
 
