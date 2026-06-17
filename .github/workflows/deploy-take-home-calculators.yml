@@ -5,15 +5,11 @@
 # and the app source lives in the subfolder `take-home-calculators/`.
 #
 # DEPLOYMENT TARGET:
-#   https://penugondaz.github.io/personal/
+#   https://salarytools.in
 #
-# GitHub Pages serves any repo other than <username>.github.io itself as a
-# "project site" at username.github.io/<repo-name>/ — that /personal
-# segment is baked into the URL by GitHub regardless of where in the repo
-# the app's source lives, and Next.js has no way to know about it unless
-# `basePath` says so explicitly. NEXT_PUBLIC_BASE_PATH below must be
-# "/personal" for that reason, even though the app itself isn't deployed
-# under any further subpath of its own.
+# With the custom domain configured, the site is served at the domain
+# root — no basePath prefix is needed. The CNAME file in public/
+# tells GitHub Pages to keep using the custom domain across deploys.
 #
 # IMPORTANT — one-time GitHub Pages setup (Settings > Pages):
 #   Source: "GitHub Actions" (not "Deploy from a branch")
@@ -60,7 +56,7 @@ jobs:
       - name: Build static export
         env:
           NODE_ENV: production
-          NEXT_PUBLIC_BASE_PATH: "/personal"
+          NEXT_PUBLIC_BASE_PATH: ""
         run: npm run build
 
       - name: Add .nojekyll
