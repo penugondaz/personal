@@ -48,12 +48,12 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-ledger">
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">
           Home
         </Link>
         <span className="mx-1.5">/</span>
-        <Link href="/salary" className="hover:text-ledger">
+        <Link href="/salary" className="hover:text-brand">
           Salary Calculators
         </Link>
         <span className="mx-1.5">/</span>
@@ -63,10 +63,10 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
       <h1 className="font-display text-3xl text-ink sm:text-4xl">
         {lpa} LPA In-Hand Salary — Monthly Take-Home Breakdown
       </h1>
-      <p className="mt-4 text-lg text-ink-muted">
+      <p className="mt-4 text-lg text-ink-soft">
         On a CTC of <strong className="text-ink">{formatINRCompact(annualCtc)} per year</strong>,
         your estimated in-hand salary is{" "}
-        <strong className="text-ledger">{formatINR(result.inHandMonthly)} per month</strong>{" "}
+        <strong className="text-brand">{formatINR(result.inHandMonthly)} per month</strong>{" "}
         ({formatINR(result.inHandAnnual)} per year) under the new tax regime, after PF and income
         tax deductions.
       </p>
@@ -79,13 +79,13 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
         <h2 className="font-display text-2xl text-ink">
           How {lpa} LPA Becomes {formatINR(result.inHandMonthly)} In-Hand
         </h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           Your CTC (Cost to Company) of {formatINRCompact(annualCtc)} isn&apos;t the same as what
           lands in your bank account. Employers split CTC into fixed pay, employer contributions
           you never receive as cash, and one-time-on-exit benefits like gratuity. Here&apos;s the
           typical breakdown:
         </p>
-        <ol className="mt-4 list-decimal space-y-2 pl-5 text-ink-muted">
+        <ol className="mt-4 list-decimal space-y-2 pl-5 text-ink-soft">
           <li>
             <strong className="text-ink">Basic salary</strong> is set at roughly 40% of CTC —{" "}
             {formatINR(result.basicAnnual)} per year, or {formatINR(result.basicMonthly)}/month.
@@ -129,9 +129,9 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">Old Regime vs. New Regime</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           At this CTC, the{" "}
-          <strong className="text-ledger">
+          <strong className="text-brand">
             {regimeComparison.betterRegime === "new" ? "new" : "old"} tax regime
           </strong>{" "}
           works out cheaper by {formatINR(regimeComparison.savings)} per year — though the old
@@ -142,16 +142,16 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-rule bg-paper text-left">
-                <th className="px-4 py-2.5 font-medium text-ink-muted"></th>
-                <th className="px-4 py-2.5 text-right font-medium text-ink-muted">New Regime</th>
-                <th className="px-4 py-2.5 text-right font-medium text-ink-muted">
+                <th className="px-4 py-2.5 font-medium text-ink-soft"></th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">New Regime</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">
                   Old Regime (no extra deductions)
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-rule">
-                <td className="px-4 py-2.5 text-ink-muted">Standard deduction</td>
+                <td className="px-4 py-2.5 text-ink-soft">Standard deduction</td>
                 <td className="tabular px-4 py-2.5 text-right text-ink">
                   {formatINR(regimeComparison.new.standardDeduction)}
                 </td>
@@ -160,7 +160,7 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
                 </td>
               </tr>
               <tr className="border-b border-rule">
-                <td className="px-4 py-2.5 text-ink-muted">Taxable income</td>
+                <td className="px-4 py-2.5 text-ink-soft">Taxable income</td>
                 <td className="tabular px-4 py-2.5 text-right text-ink">
                   {formatINR(regimeComparison.new.taxableIncome)}
                 </td>
@@ -180,7 +180,7 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-ink-muted">
+        <p className="mt-2 text-xs text-ink-soft">
           The old-regime figure above assumes no additional deductions claimed. If you have
           significant 80C investments, HRA, or home loan interest, the old regime may work out
           better than shown here.
@@ -212,7 +212,7 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
             <li key={relatedLpa}>
               <Link
                 href={`/salary/${salarySlug(relatedLpa)}`}
-                className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+                className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
               >
                 {relatedLpa} LPA In Hand
               </Link>
@@ -227,7 +227,7 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
 function SummaryRow({ label, value, emphasis = false }: { label: string; value: number; emphasis?: boolean }) {
   return (
     <tr className={`border-b border-rule last:border-0 ${emphasis ? "bg-paper font-semibold" : ""}`}>
-      <td className="px-4 py-2.5 text-ink-muted">{label}</td>
+      <td className="px-4 py-2.5 text-ink-soft">{label}</td>
       <td className="tabular px-4 py-2.5 text-right text-ink">{formatINR(value)}</td>
     </tr>
   );
@@ -237,7 +237,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
     <div className="border-b border-rule pb-4">
       <h3 className="font-medium text-ink">{question}</h3>
-      <p className="mt-1.5 text-sm text-ink-muted">{answer}</p>
+      <p className="mt-1.5 text-sm text-ink-soft">{answer}</p>
     </div>
   );
 }

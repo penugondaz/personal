@@ -1,32 +1,9 @@
-/**
- * Professional Tax (PT) — a state-levied monthly tax on salaried income
- * in India, separate from central income tax. Rules are set independently
- * by each state government, so unlike EPF/income tax there is no single
- * national table — and public sources disagree more than usual on exact
- * figures (especially Maharashtra's gender-based thresholds).
- *
- * SCOPE: deliberately limited to the two states most consistently
- * verified across multiple independent sources as of June 2026
- * (Maharashtra, Karnataka), plus a `none` option for the many states that
- * levy no PT at all (Delhi, UP, Haryana, Punjab, Rajasthan, Uttarakhand).
- * Do NOT add more states without re-verifying each one individually —
- * PT slabs are notified by individual state gazettes and go stale silently.
- *
- * Maharashtra: ₹7,500/month exemption for men, ₹25,000/month for women;
- *   above threshold, ₹200/month for 11 months + ₹300 in February (so the
- *   annual total lands exactly at the ₹2,500 constitutional ceiling under
- *   Article 276).
- * Karnataka: ₹25,000/month exemption (all genders); ₹200/month flat above
- *   that, revised effective 1 April 2025, no special adjustment month.
- */
-
 export type ProfessionalTaxState = "maharashtra" | "karnataka" | "none";
 export type Gender = "male" | "female";
 
 export interface ProfessionalTaxResult {
   state: ProfessionalTaxState;
   monthlyAmount: number;
-  /** Amount specifically in the adjustment month (Maharashtra: February). null if not applicable. */
   adjustmentMonthAmount: number | null;
   annualAmount: number;
   exempt: boolean;
@@ -71,7 +48,6 @@ export function calculateProfessionalTax(
     };
   }
 
-  // Karnataka
   const threshold = 25_000;
   if (monthlyGrossSalary <= threshold) {
     return {

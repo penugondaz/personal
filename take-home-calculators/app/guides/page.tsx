@@ -21,7 +21,7 @@ export default function GuidesIndexPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="font-display text-3xl text-ink">Salary & Tax Guides</h1>
-      <p className="mt-3 text-ink-muted">
+      <p className="mt-3 text-ink-soft">
         Plain-English explanations of the terms you&apos;ll run into on offer letters, payslips,
         and tax forms in India.
       </p>
@@ -31,10 +31,10 @@ export default function GuidesIndexPage() {
           <li key={guide.href}>
             <Link
               href={guide.href}
-              className="block rounded-lg border border-rule bg-surface px-5 py-4 hover:border-ledger"
+              className="block rounded-lg border border-rule bg-surface px-5 py-4 hover:border-brand"
             >
-              <span className="font-medium text-ledger">{guide.title}</span>
-              <p className="mt-1 text-sm text-ink-muted">{guide.description}</p>
+              <span className="font-medium text-brand">{guide.title}</span>
+              <p className="mt-1 text-sm text-ink-soft">{guide.description}</p>
             </Link>
           </li>
         ))}

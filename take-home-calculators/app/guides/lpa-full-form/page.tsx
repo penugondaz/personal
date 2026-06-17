@@ -63,12 +63,12 @@ export default function LpaFullFormPage() {
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <nav className="mb-6 text-sm text-ink-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-ledger">
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">
           Home
         </Link>
         <span className="mx-1.5">/</span>
-        <Link href="/guides" className="hover:text-ledger">
+        <Link href="/guides" className="hover:text-brand">
           Guides
         </Link>
         <span className="mx-1.5">/</span>
@@ -78,7 +78,7 @@ export default function LpaFullFormPage() {
       <h1 className="font-display text-3xl text-ink sm:text-4xl">
         LPA Full Form — What Does LPA Mean in Salary?
       </h1>
-      <p className="mt-4 text-lg text-ink-muted">
+      <p className="mt-4 text-lg text-ink-soft">
         <strong className="text-ink">LPA stands for Lakh Per Annum.</strong> It&apos;s how Indian
         job offers, payslips, and salary discussions express annual pay — for example,{" "}
         <strong className="text-ink">10 LPA means ₹10,00,000 per year</strong>, not per month.
@@ -86,13 +86,13 @@ export default function LpaFullFormPage() {
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">What LPA Actually Means</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           A lakh is 1,00,000 in the Indian numbering system, and per annum simply means
           &quot;per year.&quot; Employers in India use LPA as shorthand so they don&apos;t have to
           write out long figures like ₹8,00,000 — they just say 8 LPA. You&apos;ll see this on job
           portals, campus placement offers, appraisal letters, and HR conversations.
         </p>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           The important part most people miss: LPA almost always refers to your{" "}
           <strong className="text-ink">CTC (Cost to Company)</strong>, not your take-home pay.
           CTC includes your basic salary, allowances, the employer&apos;s own PF contribution,
@@ -103,16 +103,16 @@ export default function LpaFullFormPage() {
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">LPA vs. In-Hand Salary</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           Your actual in-hand (take-home) salary is what&apos;s left after deductions are
           subtracted from the cash portion of your CTC:
         </p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-ink-muted">
+        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-ink-soft">
           <li>Your own EPF (Provident Fund) contribution, typically 12% of basic pay</li>
           <li>Professional tax, in states that levy it (varies by state and salary level)</li>
           <li>Income tax (TDS), deducted monthly based on your annual tax liability</li>
         </ul>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           That&apos;s why a 10 LPA offer doesn&apos;t mean ₹83,333 lands in your account every
           month — the real figure is usually lower, and depends on how your employer structures
           basic pay, HRA, and other components.
@@ -121,7 +121,7 @@ export default function LpaFullFormPage() {
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">LPA to Monthly Salary — Quick Reference</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           These are gross monthly figures (LPA ÷ 12), before any deductions. Tap a row to see the
           full in-hand breakdown for that CTC.
         </p>
@@ -129,8 +129,8 @@ export default function LpaFullFormPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-rule bg-paper text-left">
-                <th className="px-4 py-2.5 font-medium text-ink-muted">LPA (Annual CTC)</th>
-                <th className="px-4 py-2.5 text-right font-medium text-ink-muted">
+                <th className="px-4 py-2.5 font-medium text-ink-soft">LPA (Annual CTC)</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">
                   Gross Monthly (before deductions)
                 </th>
               </tr>
@@ -141,7 +141,7 @@ export default function LpaFullFormPage() {
                   <td className="px-4 py-2.5">
                     <Link
                       href={`/salary/${salarySlug(lpa)}`}
-                      className="font-medium text-ledger hover:underline"
+                      className="font-medium text-brand hover:underline"
                     >
                       {lpa} LPA
                     </Link>
@@ -162,17 +162,17 @@ export default function LpaFullFormPage() {
           {faqs.map((faq) => (
             <div key={faq.question} className="border-b border-rule pb-4">
               <h3 className="font-medium text-ink">{faq.question}</h3>
-              <p className="mt-1.5 text-sm text-ink-muted">{faq.answer}</p>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="mt-12 rounded-lg border border-rule bg-surface px-6 py-6 text-center">
-        <p className="text-ink-muted">Want your exact in-hand salary from any CTC?</p>
+        <p className="text-ink-soft">Want your exact in-hand salary from any CTC?</p>
         <Link
           href="/salary"
-          className="mt-3 inline-block rounded-md bg-ledger px-5 py-2.5 text-sm font-medium text-white hover:bg-ledger-soft"
+          className="mt-3 inline-block rounded-md bg-brand px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-dark"
         >
           Calculate your in-hand salary
         </Link>

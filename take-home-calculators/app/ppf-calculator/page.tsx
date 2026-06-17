@@ -58,8 +58,8 @@ export default function PpfCalculatorPage() {
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <nav className="mb-6 text-sm text-ink-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-ledger">
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">
           Home
         </Link>
         <span className="mx-1.5">/</span>
@@ -67,11 +67,11 @@ export default function PpfCalculatorPage() {
       </nav>
 
       <h1 className="font-display text-3xl text-ink sm:text-4xl">PPF Calculator</h1>
-      <p className="mt-4 text-lg text-ink-muted">
+      <p className="mt-4 text-lg text-ink-soft">
         Calculate how much your Public Provident Fund investment will grow to at maturity. For
         example, investing {formatINR(150_000)} every year for 15 years at{" "}
         {(PPF_INTEREST_RATE * 100).toFixed(1)}% grows to{" "}
-        <strong className="text-ledger">{formatINR(exampleResult.maturityAmount)}</strong>.
+        <strong className="text-brand">{formatINR(exampleResult.maturityAmount)}</strong>.
       </p>
 
       <div className="mt-10">
@@ -80,7 +80,7 @@ export default function PpfCalculatorPage() {
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">How PPF Interest Is Calculated</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           PPF pays a government-declared interest rate, currently{" "}
           {(PPF_INTEREST_RATE * 100).toFixed(1)}% per annum. Unlike EPF, which compounds monthly,
           PPF interest is calculated on your account&apos;s lowest balance between the 5th and the
@@ -92,14 +92,14 @@ export default function PpfCalculatorPage() {
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">PPF vs. EPF</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           PPF and EPF are often confused, but they work differently. EPF is tied to your
           employment — both you and your employer contribute, at a statutory 12% of basic salary.
           PPF is an entirely self-funded account that any resident Indian can open, with no
           employer involvement at all, and a fixed annual contribution ceiling of{" "}
           {formatINR(PPF_MAX_ANNUAL_DEPOSIT)}. If you want to invest beyond your mandatory EPF
           contribution while staying within the EPF framework, look at a{" "}
-          <Link href="/epf-calculator" className="text-ledger hover:underline">
+          <Link href="/epf-calculator" className="text-brand hover:underline">
             Voluntary Provident Fund (VPF)
           </Link>{" "}
           contribution instead.
@@ -112,7 +112,7 @@ export default function PpfCalculatorPage() {
           {faqs.map((faq) => (
             <div key={faq.question} className="border-b border-rule pb-4">
               <h3 className="font-medium text-ink">{faq.question}</h3>
-              <p className="mt-1.5 text-sm text-ink-muted">{faq.answer}</p>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
           ))}
         </div>
@@ -124,7 +124,7 @@ export default function PpfCalculatorPage() {
           <li>
             <Link
               href="/epf-calculator"
-              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
             >
               EPF & VPF Calculator
             </Link>
@@ -132,7 +132,7 @@ export default function PpfCalculatorPage() {
           <li>
             <Link
               href="/salary"
-              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
             >
               In-Hand Salary Calculator
             </Link>

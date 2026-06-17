@@ -1,40 +1,71 @@
 @import "tailwindcss";
 
 /*
- * Design system: "Salary Slip Ledger"
- * Grounded in the physical artifact this site replaces — the Indian
- * payslip. Earnings/deductions line items, tabular rupee figures that
- * actually align in columns, and a final net-pay line set apart by a
- * heavier rule, the way a real payslip marks its "Net Payable" total.
+ * Design system: "Ledger, Modernized"
+ *
+ * Subject: Indian salary/CTC/tax calculators, used mostly on mobile by
+ * people checking a number they care about (often mid-negotiation or
+ * mid-offer-comparison). The brief asked for a "clean fintech" feel —
+ * soft gradients, rounded cards — grounded here in the rupee/payslip
+ * subject rather than generic SaaS blue:
+ *
+ *  - Brand color is an emerald (money/growth, ledger-green heritage of
+ *    the original design) instead of a default blue.
+ *  - Display type (Fraunces) appears ONLY on big numbers and H1s — it's
+ *    the one moment of typographic personality. Body/UI text and all
+ *    tabular rupee figures use Inter, which renders numerals precisely
+ *    at small sizes (important: this is a numbers-dense product).
+ *  - The accent (coral) is reserved for actionable moments: primary
+ *    buttons, share/print actions, active nav state. It never appears
+ *    in body text or large background fills.
+ *
+ * Core Web Vitals notes:
+ *  - Fonts are loaded via next/font (see app/layout.tsx) with
+ *    display:swap and local fallback metrics, avoiding layout shift
+ *    from late-loading webfonts (CLS).
+ *  - No box-shadows with large blur radii on scroll-bound elements;
+ *    shadows here are short-throw, GPU-cheap.
+ *  - Color/typography tokens are CSS variables so no runtime JS is
+ *    needed to theme anything — zero hydration cost for visuals.
  */
+
 :root {
   color-scheme: light;
 
-  --paper: #f7f4ed;
-  --surface: #ffffff;
-  --ink: #1a1a1a;
-  --ink-muted: #6b6356;
-  --ledger-green: #0b3d2e;
-  --ledger-green-soft: #143d30;
-  --deduction: #b3471f;
-  --rule: #d9d3c4;
-  --rule-strong: #0b3d2e;
+  /* Core palette — named, not generic */
+  --ink: #14171f;            /* primary text */
+  --ink-soft: #565d6d;        /* secondary text */
+  --paper: #f7f8fa;           /* page background, cool not warm */
+  --surface: #ffffff;         /* card background */
+  --brand: #2f6f4f;           /* emerald — money/growth, brand primary */
+  --brand-dark: #1f4d36;      /* emerald, deeper, for gradients/hover */
+  --brand-soft: #e8f5ee;      /* emerald tint — badges, subtle fills */
+  --accent: #ff7a45;          /* coral — the one "alive" color, CTAs only */
+  --accent-soft: #ffe9dd;     /* coral tint */
+  --deduction: #c2410c;       /* warm red-orange for deduction line items */
+  --rule: #e4e7ec;            /* hairline borders */
+  --rule-strong: #2f6f4f;     /* heavier rule, echoes brand (net-pay line) */
+  --shadow-color: 38 50 56;   /* RGB triplet used in shadow rgba() below */
 }
 
 @theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
   --color-paper: var(--paper);
   --color-surface: var(--surface);
-  --color-ink: var(--ink);
-  --color-ink-muted: var(--ink-muted);
-  --color-ledger: var(--ledger-green);
-  --color-ledger-soft: var(--ledger-green-soft);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --color-deduction: var(--deduction);
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
 
-  --font-display: Georgia, "Times New Roman", serif;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+  /* next/font exposes these as CSS variables (see layout.tsx) */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas,
     monospace;
 }
@@ -46,6 +77,43 @@ body {
 }
 
 .tabular {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/* Soft shadow tokens — short throw, cheap to composite */
+.shadow-card {
+  box-shadow:
+    0 1px 2px rgba(var(--shadow-color) / 0.04),
+    0 6px 16px -4px rgba(var(--shadow-color) / 0.08);
+}
+.shadow-card-lg {
+  box-shadow:
+    0 2px 4px rgba(var(--shadow-color) / 0.04),
+    0 16px 32px -8px rgba(var(--shadow-color) / 0.12);
+}
+
+/* Signature gradient — used once, on the payslip/result header band */
+.brand-gradient {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+}
+
+/* Print stylesheet for calculator results — see "Print" feature */
+@media print {
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+  .print-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

@@ -56,8 +56,8 @@ export default function EpfVpfCalculatorPage() {
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <nav className="mb-6 text-sm text-ink-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-ledger">
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">
           Home
         </Link>
         <span className="mx-1.5">/</span>
@@ -65,7 +65,7 @@ export default function EpfVpfCalculatorPage() {
       </nav>
 
       <h1 className="font-display text-3xl text-ink sm:text-4xl">EPF & VPF Calculator</h1>
-      <p className="mt-4 text-lg text-ink-muted">
+      <p className="mt-4 text-lg text-ink-soft">
         See your monthly EPF contribution, your employer&apos;s matching share, and how much extra
         a Voluntary Provident Fund (VPF) top-up could add to your retirement corpus over time.
       </p>
@@ -76,7 +76,7 @@ export default function EpfVpfCalculatorPage() {
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">How EPF Contributions Work</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           Every month, {(PF_RATE * 100).toFixed(0)}% of your Basic salary + Dearness Allowance is
           deducted and matched by an equal {(PF_RATE * 100).toFixed(0)}% from your employer. Your
           entire share goes into your EPF account, but your employer&apos;s share splits two ways:{" "}
@@ -88,7 +88,7 @@ export default function EpfVpfCalculatorPage() {
 
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">Should You Add VPF Contributions?</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           VPF is one of the few investment options offering a government-backed,{" "}
           {(EPF_INTEREST_RATE_FY2025_26 * 100).toFixed(2)}% return with the same tax-free status
           as EPF — but it locks your money in, reduces your monthly take-home pay, and the
@@ -104,7 +104,7 @@ export default function EpfVpfCalculatorPage() {
           {faqs.map((faq) => (
             <div key={faq.question} className="border-b border-rule pb-4">
               <h3 className="font-medium text-ink">{faq.question}</h3>
-              <p className="mt-1.5 text-sm text-ink-muted">{faq.answer}</p>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
           ))}
         </div>
@@ -116,7 +116,7 @@ export default function EpfVpfCalculatorPage() {
           <li>
             <Link
               href="/ppf-calculator"
-              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
             >
               PPF Calculator
             </Link>
@@ -124,7 +124,7 @@ export default function EpfVpfCalculatorPage() {
           <li>
             <Link
               href="/salary"
-              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-ledger hover:border-ledger"
+              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
             >
               In-Hand Salary Calculator
             </Link>

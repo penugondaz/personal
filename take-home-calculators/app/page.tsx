@@ -32,23 +32,35 @@ const faqs = [
 export default function HomePage() {
   return (
     <main>
-      <section className="mx-auto max-w-3xl px-6 pb-10 pt-14 sm:pt-20 text-center">
-        <h1 className="font-display text-3xl text-ink sm:text-4xl">Take Home Calculators</h1>
-        <p className="mx-auto mt-4 max-w-xl text-base text-ink-muted">
-          Salary, CTC, income tax, EPF, and PPF calculators for India. See exactly what lands in
-          your bank account, not just what your offer letter says.
-        </p>
-        <Link
-          href="/salary"
-          className="mt-6 inline-block rounded-md bg-ledger px-5 py-2.5 text-sm font-medium text-white hover:bg-ledger-soft"
-        >
-          Calculate your in-hand salary
-        </Link>
+      <section className="relative overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-soft via-paper to-paper"
+        />
+        <div className="mx-auto max-w-3xl px-6 pb-12 pt-16 text-center sm:pt-24">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-surface px-3 py-1 text-xs font-medium text-brand">
+            FY 2025-26 tax rules · Updated June 2026
+          </span>
+          <h1 className="mt-5 font-display text-4xl font-semibold text-ink sm:text-5xl">
+            Take Home Calculators
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-base text-ink-soft sm:text-lg">
+            Salary, CTC, income tax, EPF, and PPF calculators for India. See exactly what lands in
+            your bank account, not just what your offer letter says.
+          </p>
+          <Link
+            href="/salary"
+            className="mt-7 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-card-lg transition hover:opacity-90"
+          >
+            Calculate your in-hand salary
+            <ArrowIcon />
+          </Link>
+        </div>
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="font-display text-xl text-ink">Quick Pick — Common CTC Slabs</h2>
-        <p className="mt-2 text-sm text-ink-muted">
+        <p className="mt-2 text-sm text-ink-soft">
           Jump straight to a full breakdown for one of the most-searched CTC values.
         </p>
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -58,10 +70,10 @@ export default function HomePage() {
               <Link
                 key={lpa}
                 href={`/salary/${salarySlug(lpa)}`}
-                className="block rounded-lg border border-rule bg-surface px-4 py-3 hover:border-ledger"
+                className="block rounded-xl border border-rule bg-surface px-4 py-3.5 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card-lg"
               >
                 <span className="font-display text-lg text-ink">{lpa} LPA</span>
-                <p className="tabular mt-1 text-xs text-ink-muted">
+                <p className="tabular mt-1 text-xs text-ink-soft">
                   {formatINR(result.inHandMonthly)}/mo in-hand
                 </p>
               </Link>
@@ -72,14 +84,14 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="font-display text-xl text-ink">Why Your In-Hand Pay Is Lower Than Your CTC</h2>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           When a company quotes a salary in LPA, that figure is almost always your CTC (Cost to
           Company) — the total amount the company spends on you in a year, not what reaches your
           bank account every month. CTC bundles together your fixed pay, the employer&apos;s own
           PF contribution, and gratuity reserved for if you stay 5+ years — none of which you
           receive as monthly cash.
         </p>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-ink-soft">
           From your actual cash salary, your own PF contribution, professional tax (in states that
           levy it), and income tax are deducted before the rest lands in your account. These
           calculators walk through that full chain — CTC → gross salary → deductions → in-hand pay
@@ -115,7 +127,7 @@ export default function HomePage() {
           {faqs.map((faq) => (
             <div key={faq.question} className="border-b border-rule pb-4">
               <h3 className="font-medium text-ink">{faq.question}</h3>
-              <p className="mt-1.5 text-sm text-ink-muted">{faq.answer}</p>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
           ))}
         </div>
@@ -126,9 +138,20 @@ export default function HomePage() {
 
 function DirectoryCard({ href, title, description }: { href: string; title: string; description: string }) {
   return (
-    <Link href={href} className="block rounded-lg border border-rule bg-surface px-5 py-4 hover:border-ledger">
-      <span className="font-medium text-ledger">{title}</span>
-      <p className="mt-1 text-sm text-ink-muted">{description}</p>
+    <Link
+      href={href}
+      className="block rounded-xl border border-rule bg-surface px-5 py-4 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card-lg"
+    >
+      <span className="font-medium text-brand">{title}</span>
+      <p className="mt-1 text-sm text-ink-soft">{description}</p>
     </Link>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

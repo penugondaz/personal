@@ -1,9 +1,3 @@
-/**
- * Site navigation structure — single source of truth used by the header,
- * sidebar, and footer, so adding a new calculator/guide here automatically
- * surfaces it everywhere rather than requiring three separate edits.
- */
-
 export interface NavLink {
   href: string;
   label: string;
@@ -39,7 +33,6 @@ export const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
-/** Flat list of primary links for the header's top-level nav (desktop). */
 export const PRIMARY_NAV_LINKS: NavLink[] = [
   { href: "/salary", label: "Salary" },
   { href: "/epf-calculator", label: "EPF & VPF" },
