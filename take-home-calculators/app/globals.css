@@ -111,6 +111,17 @@ body {
   }
 }
 
+/* Tables: horizontal scroll on small screens instead of clipping */
+@media (max-width: 640px) {
+  div:has(> table) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    min-width: 480px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

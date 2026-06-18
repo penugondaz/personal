@@ -3,6 +3,7 @@ export interface SipInput {
   annualReturnRate: number; // percent, e.g. 12
   years: number;
   annualStepUpPercent?: number; // optional yearly increase in SIP amount
+  initialInvestment?: number; // optional one-time lumpsum at the start
 }
 
 export interface SipResult {
@@ -22,12 +23,12 @@ export interface SipResult {
  * year") without needing a separate formula branch.
  */
 export function calculateSip(input: SipInput): SipResult {
-  const { monthlyInvestment, annualReturnRate, years, annualStepUpPercent = 0 } = input;
+  const { monthlyInvestment, annualReturnRate, years, annualStepUpPercent = 0, initialInvestment = 0 } = input;
   const monthlyRate = annualReturnRate / 12 / 100;
   const totalMonths = Math.round(years * 12);
 
-  let balance = 0;
-  let cumulativeInvested = 0;
+  let balance = initialInvestment;
+  let cumulativeInvested = initialInvestment;
   let currentMonthlyInvestment = monthlyInvestment;
   const yearlyBreakdown: SipResult["yearlyBreakdown"] = [];
   let investedThisYear = 0;

@@ -10,15 +10,17 @@ export default function SipCalculator() {
   const [rateInput, setRateInput] = useState("12");
   const [years, setYears] = useState(15);
   const [stepUpInput, setStepUpInput] = useState("0");
+  const [lumpsumInput, setLumpsumInput] = useState("0");
   const [showTable, setShowTable] = useState(false);
 
   const monthlyInvestment = Math.max(0, Number(monthlyInput.replace(/[^0-9.]/g, "")) || 0);
   const annualReturnRate = Math.max(0, Number(rateInput.replace(/[^0-9.]/g, "")) || 0);
   const annualStepUpPercent = Math.max(0, Number(stepUpInput.replace(/[^0-9.]/g, "")) || 0);
+  const initialInvestment = Math.max(0, Number(lumpsumInput.replace(/[^0-9.]/g, "")) || 0);
 
   const result = useMemo(
-    () => calculateSip({ monthlyInvestment, annualReturnRate, years, annualStepUpPercent }),
-    [monthlyInvestment, annualReturnRate, years, annualStepUpPercent]
+    () => calculateSip({ monthlyInvestment, annualReturnRate, years, annualStepUpPercent, initialInvestment }),
+    [monthlyInvestment, annualReturnRate, years, annualStepUpPercent, initialInvestment]
   );
 
   const shareText = `My SIP of ${formatINR(monthlyInvestment)}/month is projected to grow to ${formatINR(result.maturityAmount)} in ${years} years. Check yours:`;
@@ -36,6 +38,21 @@ export default function SipCalculator() {
               value={monthlyInput}
               onChange={(e) => setMonthlyInput(e.target.value)}
               className="tabular w-full bg-transparent text-base font-medium text-ink outline-none"
+            />
+          </div>
+        </label>
+
+        <label className="mt-3 block">
+          <span className="mb-1 block text-xs text-ink-soft">One-time lumpsum investment (optional)</span>
+          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-2.5 py-2 transition focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
+            <span className="text-sm text-ink-soft">₹</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={lumpsumInput}
+              onChange={(e) => setLumpsumInput(e.target.value)}
+              placeholder="0"
+              className="tabular w-full bg-transparent text-sm font-medium text-ink outline-none"
             />
           </div>
         </label>
