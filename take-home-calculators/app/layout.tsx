@@ -1,21 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import Script from "next/script";
+
 import "./globals.css";
 import { SITE_URL } from "@/lib/paths";
 import SiteShell from "@/components/SiteShell";
 
-/**
- * next/font (not a <link> tag) for two Core Web Vitals reasons:
- *  1. Self-hosts the font files at build time — no extra DNS/connection
- *     round-trip to fonts.googleapis.com on the critical path (helps LCP).
- *  2. `display: "swap"` + automatic fallback-metric matching means the
- *     fallback system font is sized to match Fraunces/Inter's metrics,
- *     so when the real font swaps in there's no reflow (helps CLS).
- *
- * Fraunces is used ONLY for display moments (H1s, the big in-hand
- * number) — see globals.css. Inter carries everything else, including
- * tabular rupee figures, which it renders cleanly at small sizes.
- */
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
@@ -52,37 +42,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full antialiased ${fraunces.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`h-full antialiased ${fraunces.variable} ${inter.variable}`}
+    >
       <body className="min-h-full flex flex-col font-sans">
         <SiteShell>{children}</SiteShell>
+
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-DBYZXD16PJ"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-DBYZXD16PJ');
+          `}
+        </Script>
       </body>
-    </html>
-  );
-}
-import Script from "next/script";
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-        strategy="afterInteractive"
-      />
-
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-DBYZXD16PJ');
-        `}
-      </Script>
     </html>
   );
 }
