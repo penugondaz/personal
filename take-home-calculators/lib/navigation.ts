@@ -9,10 +9,12 @@ export interface NavSection {
 }
 
 export const NAV_SECTIONS: NavSection[] = [
- {
+  {
     title: "Tracker",
     links: [
-  { href: "/layoffs", label: "Layoffs Tracker 🔴" },
+      { href: "/layoffs", label: "Layoffs Tracker 🔴" },
+    ],
+  },
   {
     title: "Salary Calculators",
     links: [
