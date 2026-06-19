@@ -39,6 +39,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/advance-tax-calculator", label: "Advance Tax Calculator" },
       { href: "/calculator/capital-gains-calculator", label: "Capital Gains Calculator" },
       { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
+      { href: "/tax-saving", label: "Tax Saving" }
     ],
   },
   {
