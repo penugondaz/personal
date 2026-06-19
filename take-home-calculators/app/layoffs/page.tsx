@@ -16,8 +16,6 @@ interface LayoffRecord {
   percent: number | null;
   industry: string;
   source: string;
-  stage: string;
-  raised_m: number | null;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
