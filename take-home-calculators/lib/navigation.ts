@@ -17,6 +17,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/salary/12-lpa-in-hand", label: "12 LPA In-Hand" },
       { href: "/salary/inhand-to-ctc-calculator", label: "In-Hand to CTC Calculator" },
       { href: "/salary/salary-structure-calculator", label: "Salary Structure Calculator" },
+      { href: "/salary-growth", label: "Salary Growth Projection" },
     ],
   },
   {
@@ -32,14 +33,14 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Tax & Pay Components",
     links: [
+      { href: "/tax-saving", label: "Tax Saving Guide" },
+      { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
       { href: "/calculator/hra-calculator", label: "HRA Calculator" },
+      { href: "/calculator/advance-tax-calculator", label: "Advance Tax Calculator" },
+      { href: "/calculator/capital-gains-calculator", label: "Capital Gains Calculator" },
       { href: "/calculator/salary-hike-calculator", label: "Salary Hike Calculator" },
       { href: "/calculator/leave-encashment-calculator", label: "Leave Encashment Calculator" },
       { href: "/calculator/overtime-calculator", label: "Overtime Calculator" },
-      { href: "/calculator/advance-tax-calculator", label: "Advance Tax Calculator" },
-      { href: "/calculator/capital-gains-calculator", label: "Capital Gains Calculator" },
-      { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
-      { href: "/tax-saving", label: "Tax Saving" }
     ],
   },
   {
@@ -76,7 +77,7 @@ export const NAV_SECTIONS: NavSection[] = [
 
 export const PRIMARY_NAV_LINKS: NavLink[] = [
   { href: "/salary", label: "Salary" },
-  { href: "/calculator/epf-calculator", label: "EPF & VPF" },
+  { href: "/tax-saving", label: "Tax Saving" },
+  { href: "/salary-growth", label: "Salary Growth" },
   { href: "/calculator/emi-calculator", label: "Loans" },
-  { href: "/guides", label: "Guides" },
 ];
