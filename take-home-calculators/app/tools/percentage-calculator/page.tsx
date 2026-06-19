@@ -1,88 +1,70 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
-export default function CharacterCounterPage() {
-  const [text, setText] = useState("");
+type Mode = "ofNumber"|"increase"|"decrease"|"difference"|"isWhat";
 
-  const stats = useMemo(() => {
-    const chars = text.length;
-    const charsNoSpaces = text.replace(/\s/g, "").length;
-    const spaces = text.split("").filter(c => c === " ").length;
-    const letters = text.replace(/[^a-zA-Z]/g, "").length;
-    const digits = text.replace(/[^0-9]/g, "").length;
-    const special = text.replace(/[a-zA-Z0-9\s]/g, "").length;
-    const lines = text === "" ? 0 : text.split("\n").length;
-    const sentences = text === "" ? 0 : (text.match(/[.!?]+/g)||[]).length;
-    return { chars, charsNoSpaces, spaces, letters, digits, special, lines, sentences };
-  }, [text]);
+export default function PercentageCalculatorPage() {
+  const [mode, setMode] = useState<Mode>("ofNumber");
+  const [a, setA] = useState("25");
+  const [b, setB] = useState("200");
+  const [result, setResult] = useState<string|null>(null);
 
-  const LIMIT_OPTIONS = [140, 160, 280, 500, 1000, 2000];
-  const [limit, setLimit] = useState<number|null>(null);
-  const pct = limit ? Math.min(100, (stats.chars / limit) * 100) : 0;
+  const calc = () => {
+    const na = parseFloat(a)||0, nb = parseFloat(b)||0;
+    switch(mode) {
+      case "ofNumber": setResult(`${na}% of ${nb} = ${(na * nb / 100).toFixed(4).replace(/\.?0+$/,"")}`); break;
+      case "increase": setResult(`${nb} increased by ${na}% = ${(nb * (1 + na/100)).toFixed(2)}`); break;
+      case "decrease": setResult(`${nb} decreased by ${na}% = ${(nb * (1 - na/100)).toFixed(2)}`); break;
+      case "difference": {
+        const diff = ((nb - na) / na * 100);
+        setResult(`${na} → ${nb} is ${diff >= 0 ? "+" : ""}${diff.toFixed(2)}% change`);
+        break;
+      }
+      case "isWhat": setResult(`${na} is ${(na / nb * 100).toFixed(4).replace(/\.?0+$/,"")}% of ${nb}`); break;
+    }
+  };
+
+  const MODES: {id:Mode;label:string;desc:string;la:string;lb:string}[] = [
+    {id:"ofNumber",label:"% of Number",desc:"What is X% of Y?",la:"Percentage (%)",lb:"Number"},
+    {id:"increase",label:"% Increase",desc:"Increase Y by X%",la:"Increase by (%)",lb:"Starting value"},
+    {id:"decrease",label:"% Decrease",desc:"Decrease Y by X%",la:"Decrease by (%)",lb:"Starting value"},
+    {id:"difference",label:"% Change",desc:"% change from A to B",la:"From",lb:"To"},
+    {id:"isWhat",label:"X is what % of Y",desc:"A is what % of B?",la:"Value A",lb:"Value B"},
+  ];
+  const current = MODES.find(m => m.id === mode)!;
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft">
-        <Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span>
-        <Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span>
-        <span aria-current="page">Character Counter</span>
-      </nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Character Counter</h1>
-      <p className="mt-4 text-lg text-ink-soft">Count characters, letters, digits, spaces, and special characters in real time. Set a limit for tweets, SMS, bios, and more.</p>
+      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Percentage Calculator</span></nav>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Percentage Calculator</h1>
+      <p className="mt-4 text-lg text-ink-soft">Five percentage calculators in one — find %, calculate increases, decreases, and changes.</p>
 
       <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <textarea
-          value={text}
-          onChange={e => setText(e.target.value)}
-          rows={7}
-          placeholder="Start typing or paste your text here…"
-          className="w-full rounded-lg border border-rule bg-paper px-4 py-3 text-base text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15 resize-none"
-          autoFocus
-        />
-        {/* Limit bar */}
-        {limit && (
-          <div className="mt-3">
-            <div className="flex justify-between text-xs text-ink-soft mb-1">
-              <span>{stats.chars} / {limit}</span>
-              <span>{limit - stats.chars >= 0 ? `${limit - stats.chars} remaining` : `${stats.chars - limit} over limit`}</span>
-            </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-rule">
-              <div className={`h-full rounded-full transition-all ${pct >= 100 ? "bg-deduction" : pct >= 80 ? "bg-accent" : "bg-brand"}`} style={{width:`${Math.min(pct,100)}%`}} />
-            </div>
-          </div>
-        )}
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="text-xs text-ink-soft">Character limit:</span>
-          {LIMIT_OPTIONS.map(l => (
-            <button key={l} onClick={() => setLimit(limit === l ? null : l)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${limit===l?"bg-brand text-white":"border border-rule text-ink-soft hover:border-brand hover:text-brand"}`}>
-              {l}
-            </button>
+        <div className="flex flex-wrap gap-2 mb-5">
+          {MODES.map(m => (
+            <button key={m.id} onClick={()=>{setMode(m.id);setResult(null);}} className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${mode===m.id?"bg-brand text-white":"border border-rule text-ink-soft hover:border-brand hover:text-brand"}`}>{m.label}</button>
           ))}
-          <button onClick={() => setText("")} className="ml-auto rounded-lg border border-rule px-3 py-1 text-xs text-ink-soft hover:border-deduction hover:text-deduction transition">
-            Clear
-          </button>
         </div>
+        <p className="mb-4 text-sm text-ink-soft">{current.desc}</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.la}</span>
+            <input type="text" inputMode="decimal" value={a} onChange={e=>{setA(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
+          </label>
+          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.lb}</span>
+            <input type="text" inputMode="decimal" value={b} onChange={e=>{setB(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
+          </label>
+        </div>
+        <button onClick={calc} className="mt-4 w-full rounded-xl bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark transition">Calculate</button>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          { label: "Characters", value: stats.chars, highlight: true },
-          { label: "No Spaces", value: stats.charsNoSpaces },
-          { label: "Letters", value: stats.letters },
-          { label: "Digits", value: stats.digits },
-          { label: "Spaces", value: stats.spaces },
-          { label: "Special", value: stats.special },
-          { label: "Lines", value: stats.lines },
-          { label: "Sentences", value: stats.sentences },
-        ].map(s => (
-          <div key={s.label} className={`rounded-xl border p-4 ${s.highlight ? "border-brand bg-brand-soft" : "border-rule bg-surface"}`}>
-            <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{s.label}</p>
-            <p className={`tabular mt-1 font-display text-3xl font-semibold ${s.highlight ? "text-brand" : "text-ink"}`}>{s.value.toLocaleString()}</p>
+      {result && (
+        <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
+          <div className="brand-gradient px-6 py-8 text-center">
+            <p className="font-display text-2xl font-semibold text-white sm:text-3xl">{result}</p>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </main>
   );
 }
