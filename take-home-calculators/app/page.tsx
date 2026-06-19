@@ -126,6 +126,30 @@ export default function HomePage() {
         </p>
       </section>
 
+
+      {/* Tools quick pick */}
+      <section className="mx-auto max-w-3xl px-6 py-10">
+        <h2 className="font-display text-xl text-ink">Free Tools</h2>
+        <p className="mt-2 text-sm text-ink-soft">Discount calculator, number converter, word counter, text case converter and more — all free, all in-browser.</p>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { href: "/tools/discount-calculator", icon: "🏷️", label: "Discount" },
+            { href: "/tools/number-converter", icon: "🔢", label: "Number Converter" },
+            { href: "/tools/word-counter", icon: "📝", label: "Word Counter" },
+            { href: "/tools/text-case-converter", icon: "🔤", label: "Case Converter" },
+            { href: "/tools/percentage-calculator", icon: "📊", label: "Percentage" },
+            { href: "/tools/average-calculator", icon: "➗", label: "Average" },
+            { href: "/tools/character-counter", icon: "🔡", label: "Char Counter" },
+            { href: "/tools", icon: "🛠️", label: "All Tools →" },
+          ].map((t) => (
+            <Link key={t.href} href={t.href} className="flex items-center gap-2 rounded-xl border border-rule bg-surface px-4 py-3.5 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card-lg">
+              <span className="text-xl">{t.icon}</span>
+              <span className="text-sm font-medium text-ink">{t.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="font-display text-xl text-ink">All Calculators</h2>
 
@@ -156,16 +180,18 @@ export default function HomePage() {
           <DirectoryCard href="/calculator/nps-calculator" title="NPS" description="Retirement corpus and estimated monthly pension." />
           <DirectoryCard href="/calculator/gratuity-calculator" title="Gratuity" description="Lump-sum payout after 5+ years of service." />
           <DirectoryCard href="/calculator/epf-vs-ppf" title="EPF vs PPF" description="Side-by-side comparison of both retirement options." />
+          <DirectoryCard href="/calculator/nsc-calculator" title="NSC Calculator" description="National Savings Certificate maturity at 7.7%." />
         </div>
 
         <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Investments</h3>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <DirectoryCard href="/calculator/sip-calculator" title="SIP Calculator" description="Project your mutual fund SIP + lumpsum growth." />
+          <DirectoryCard href="/calculator/step-up-sip-calculator" title="Step-Up SIP" description="SIP with annual increase — more realistic returns." />
           <DirectoryCard href="/calculator/lumpsum-calculator" title="Lumpsum Calculator" description="One-time investment returns over time." />
           <DirectoryCard href="/calculator/mutual-fund-calculator" title="Mutual Fund" description="Combined SIP + lumpsum mutual fund returns." />
           <DirectoryCard href="/calculator/swp-calculator" title="SWP Calculator" description="Systematic withdrawal plan from your corpus." />
+          <DirectoryCard href="/calculator/swp-inflation-calculator" title="SWP with Inflation" description="Withdrawal plan with inflation-adjusted payouts." />
           <DirectoryCard href="/calculator/goal-planning-calculator" title="Goal Planning" description="SIP needed to reach your financial goal." />
-          <DirectoryCard href="/calculator/stock-average-calculator" title="Stock Average" description="Weighted average share price across purchases." />
           <DirectoryCard href="/calculator/xirr-calculator" title="XIRR Calculator" description="Annualized returns for irregular cash flows." />
           <DirectoryCard href="/calculator/cagr-xirr-calculator" title="CAGR & XIRR" description="CAGR for lumpsum, XIRR for multiple flows." />
         </div>
@@ -177,6 +203,17 @@ export default function HomePage() {
           <DirectoryCard href="/calculator/rd-calculator" title="Recurring Deposit" description="RD maturity from monthly deposits." />
           <DirectoryCard href="/calculator/compound-interest-calculator" title="Compound Interest" description="CI with flexible compounding and additions." />
           <DirectoryCard href="/calculator/simple-interest-calculator" title="Simple Interest" description="Straightforward P × R × T calculation." />
+        </div>
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Free Tools</h3>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <DirectoryCard href="/tools/discount-calculator" title="Discount Calculator" description="Sale price after % or flat discount." />
+          <DirectoryCard href="/tools/percentage-calculator" title="Percentage Calculator" description="% of, increase, decrease, change — 5 modes." />
+          <DirectoryCard href="/tools/average-calculator" title="Average Calculator" description="Mean, median, mode, std dev for any numbers." />
+          <DirectoryCard href="/tools/number-converter" title="Number Converter" description="12333232 → 1 Crore, 23 Lakh, 33 Thousand, 232." />
+          <DirectoryCard href="/tools/character-counter" title="Character Counter" description="Count characters, letters, digits, spaces." />
+          <DirectoryCard href="/tools/word-counter" title="Word Counter" description="Words, sentences, reading time & top words." />
+          <DirectoryCard href="/tools/text-case-converter" title="Text Case Converter" description="Title, Sentence, camelCase, snake_case & more." />
         </div>
       </section>
 
