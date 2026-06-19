@@ -25,7 +25,7 @@ interface LayoffRecord {
 // Replace with your published Google Sheets CSV URL:
 // File → Share → Publish to web → CSV
 const SHEET_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/pub?output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRsQQlL0piel4Y4xlwSLysGe7VnBShO7SBgia0BXbrh09PdoGa08EOxSq6dTVXtCgvjEKUyRQVIa4yd/pub?gid=0&single=true&output=csv";
 
 const INDUSTRY_COLORS: Record<string, string> = {
   Finance:      "bg-blue-100 text-blue-800",
