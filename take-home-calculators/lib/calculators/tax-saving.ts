@@ -17,7 +17,7 @@ export interface TaxSavingOpportunity {
   maxDeduction: number;
   applicableRegime: "old" | "both";
   category: "investment" | "insurance" | "housing" | "pension" | "other";
-  taxSavedAtSlab: number; // at 30% slab (maximum)
+  taxSavedAtSlab: number;
   priority: "high" | "medium" | "low";
 }
 
@@ -33,11 +33,10 @@ export interface TaxSavingResult {
   marginalSlabNew: number;
   marginalSlabOld: number;
   opportunities: TaxSavingOpportunity[];
-  // Scenario: if all deductions claimed under old regime
   maxPossibleDeductions: number;
   taxAfterAllDeductions: number;
-  maxPossibleSaving: number; // vs new regime (whichever is less)
-  breakEvenDeductions: number; // deductions needed to make old regime better
+  maxPossibleSaving: number;
+  breakEvenDeductions: number;
   recommendedRegime: "new" | "old";
   hraExemptionPotential: number;
   summary: {
@@ -55,10 +54,10 @@ const STANDARD_DEDUCTION_NEW = 75_000;
 const STANDARD_DEDUCTION_OLD = 50_000;
 const SECTION_80C_MAX = 150_000;
 const SECTION_80D_SELF = 25_000;
-const SECTION_80D_PARENTS = 50_000; // senior citizen parents
-const SECTION_80CCD1B_MAX = 50_000; // NPS additional
-const SECTION_80EEA_MAX = 150_000; // affordable housing interest
-const SECTION_24B_MAX = 200_000; // home loan interest
+const SECTION_80D_PARENTS = 50_000;
+const SECTION_80CCD1B_MAX = 50_000;
+const SECTION_80EEA_MAX = 150_000;
+const SECTION_24B_MAX = 200_000;
 const SECTION_87A_NEW_THRESHOLD = 1_200_000;
 const SECTION_87A_NEW_REBATE = 60_000;
 const SECTION_87A_OLD_THRESHOLD = 500_000;
@@ -108,7 +107,6 @@ function applyRebateAndCess(
   if (taxableIncome <= threshold) {
     tax = Math.max(0, tax - Math.min(tax, maxRebate));
   }
-  // Marginal relief
   if (taxableIncome > threshold && taxableIncome <= threshold + maxRebate) {
     const excessIncome = taxableIncome - threshold;
     tax = Math.min(tax, excessIncome);
@@ -131,7 +129,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
   const employerPfAnnual = basicAnnual * 0.12;
   const grossSalaryAnnual = annualCtc - gratuityAnnual - employerPfAnnual;
 
-  // New regime tax
   const taxableNew = Math.max(0, grossSalaryAnnual - STANDARD_DEDUCTION_NEW);
   const slabTaxNew = calcSlabTax(taxableNew, NEW_SLABS);
   const currentTaxNew = applyRebateAndCess(
@@ -139,7 +136,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     SECTION_87A_NEW_THRESHOLD, SECTION_87A_NEW_REBATE
   );
 
-  // Old regime tax (standard deduction only)
   const taxableOld = Math.max(0, grossSalaryAnnual - STANDARD_DEDUCTION_OLD);
   const slabTaxOld = calcSlabTax(taxableOld, OLD_SLABS);
   const currentTaxOld = applyRebateAndCess(
@@ -150,7 +146,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
   const marginalSlabNew = getMarginalRate(taxableNew, NEW_SLABS);
   const marginalSlabOld = getMarginalRate(taxableOld, OLD_SLABS);
 
-  // HRA exemption potential (old regime only)
   const basicMonthly = basicAnnual / 12;
   const hraMonthly = hraAnnual / 12;
   const cityLimitPercent = cityType === "metro" ? 0.5 : 0.4;
@@ -161,7 +156,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     : 0;
   const hraExemptionPotential = Math.round(hraExemptionMonthly * 12);
 
-  // Max possible deductions under old regime
   const maxDeductions =
     SECTION_80C_MAX +
     SECTION_80CCD1B_MAX +
@@ -171,10 +165,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     SECTION_80EEA_MAX +
     hraExemptionPotential;
 
-  const taxableWithAllDeductions = Math.max(
-    0,
-    taxableOld - maxDeductions
-  );
+  const taxableWithAllDeductions = Math.max(0, taxableOld - maxDeductions);
   const slabTaxAllDeductions = calcSlabTax(taxableWithAllDeductions, OLD_SLABS);
   const taxAfterAllDeductions = applyRebateAndCess(
     slabTaxAllDeductions, taxableWithAllDeductions,
@@ -183,8 +174,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
 
   const maxPossibleSaving = Math.max(0, currentTaxNew - taxAfterAllDeductions);
 
-  // Break-even: deductions needed to match new regime tax
-  // Binary search for break-even
   let low = 0, high = 2_000_000, breakEvenDeductions = 0;
   for (let i = 0; i < 50; i++) {
     const mid = (low + high) / 2;
@@ -201,7 +190,12 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     taxAfterAllDeductions < currentTaxNew && maxPossibleSaving > 0
       ? "old" : "new";
 
-  // Build opportunities list
+  // Helper to get typed priority
+  const highOrMedium = (condition: boolean): "high" | "medium" =>
+    condition ? "high" : "medium";
+  const highOrLow = (condition: boolean): "high" | "low" =>
+    condition ? "high" : "low";
+
   const opportunities: TaxSavingOpportunity[] = [
     {
       section: "80C",
@@ -212,7 +206,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       applicableRegime: "old",
       category: "investment",
       taxSavedAtSlab: Math.round(SECTION_80C_MAX * marginalSlabOld * (1 + CESS_RATE)),
-      priority: marginalSlabOld >= 0.2 ? "high" : "medium",
+      priority: highOrMedium(marginalSlabOld >= 0.2),
     },
     {
       section: "80CCD(1B)",
@@ -223,7 +217,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       applicableRegime: "old",
       category: "pension",
       taxSavedAtSlab: Math.round(SECTION_80CCD1B_MAX * marginalSlabOld * (1 + CESS_RATE)),
-      priority: marginalSlabOld >= 0.2 ? "high" : "medium",
+      priority: highOrMedium(marginalSlabOld >= 0.2),
     },
     {
       section: "80D",
@@ -244,8 +238,12 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       maxDeduction: hraExemptionPotential > 0 ? hraExemptionPotential : hraAnnual,
       applicableRegime: "old",
       category: "housing",
-      taxSavedAtSlab: Math.round((hraExemptionPotential > 0 ? hraExemptionPotential : Math.min(hraAnnual, 200_000)) * marginalSlabOld * (1 + CESS_RATE)),
-      priority: hraAnnual > 60_000 ? "high" : "medium",
+      taxSavedAtSlab: Math.round(
+        (hraExemptionPotential > 0 ? hraExemptionPotential : Math.min(hraAnnual, 200_000)) *
+          marginalSlabOld *
+          (1 + CESS_RATE)
+      ),
+      priority: highOrMedium(hraAnnual > 60_000),
     },
     {
       section: "24(b)",
@@ -256,7 +254,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       applicableRegime: "old",
       category: "housing",
       taxSavedAtSlab: Math.round(SECTION_24B_MAX * marginalSlabOld * (1 + CESS_RATE)),
-      priority: marginalSlabOld >= 0.2 ? "high" : "low",
+      priority: highOrLow(marginalSlabOld >= 0.2),
     },
     {
       section: "80EEA",
@@ -273,8 +271,8 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       section: "80G",
       title: "Donations to Charitable Organisations",
       description:
-        "Donations to approved funds, trusts, and institutions are deductible at 50% or 100% of the donated amount, subject to limits. PM Relief Fund, National Defence Fund, and some others offer 100% deduction without limit.",
-      maxDeduction: 0, // unlimited for qualifying donations
+        "Donations to approved funds, trusts, and institutions are deductible at 50% or 100% of the donated amount. PM Relief Fund, National Defence Fund, and some others offer 100% deduction without limit.",
+      maxDeduction: 0,
       applicableRegime: "old",
       category: "other",
       taxSavedAtSlab: 0,
@@ -296,7 +294,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       title: "Education Loan Interest",
       description:
         "Interest on education loans for higher studies is fully deductible under Section 80E for up to 8 years from the year you start repaying, with no upper limit on the deduction amount.",
-      maxDeduction: 0, // no cap
+      maxDeduction: 0,
       applicableRegime: "old",
       category: "other",
       taxSavedAtSlab: 0,
@@ -313,8 +311,7 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
       taxSavedAtSlab: Math.round(150_000 * marginalSlabOld * (1 + CESS_RATE)),
       priority: "low",
     },
-  ].filter(o => {
-    // Filter out irrelevant ones for very low incomes
+  ].filter((o) => {
     if (annualCtc < 500_000 && o.section === "80EEA") return false;
     if (annualCtc < 300_000 && o.section === "24(b)") return false;
     return true;
@@ -327,7 +324,12 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     section80EEA: SECTION_80EEA_MAX,
     hra: hraExemptionPotential,
     section80G: 0,
-    total: SECTION_80C_MAX + (SECTION_80D_SELF + SECTION_80D_PARENTS) + SECTION_80CCD1B_MAX + SECTION_80EEA_MAX + hraExemptionPotential,
+    total:
+      SECTION_80C_MAX +
+      (SECTION_80D_SELF + SECTION_80D_PARENTS) +
+      SECTION_80CCD1B_MAX +
+      SECTION_80EEA_MAX +
+      hraExemptionPotential,
   };
 
   return {
@@ -337,8 +339,10 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
     currentTaxNew,
     currentTaxOld,
     currentTaxOldWithStandardDeduction: currentTaxOld,
-    effectiveTaxRateNew: grossSalaryAnnual > 0 ? (currentTaxNew / grossSalaryAnnual) * 100 : 0,
-    effectiveTaxRateOld: grossSalaryAnnual > 0 ? (currentTaxOld / grossSalaryAnnual) * 100 : 0,
+    effectiveTaxRateNew:
+      grossSalaryAnnual > 0 ? (currentTaxNew / grossSalaryAnnual) * 100 : 0,
+    effectiveTaxRateOld:
+      grossSalaryAnnual > 0 ? (currentTaxOld / grossSalaryAnnual) * 100 : 0,
     marginalSlabNew: marginalSlabNew * 100,
     marginalSlabOld: marginalSlabOld * 100,
     opportunities,
@@ -352,7 +356,6 @@ export function calculateTaxSaving(input: TaxSavingInput): TaxSavingResult {
   };
 }
 
-// LPA values to generate pages for
 export const TAX_SAVING_LPA_VALUES = [
   3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 18, 20, 25, 30, 35, 40, 50, 60,
 ];
