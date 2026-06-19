@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/paths";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
 import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
+import { SALARY_GROWTH_LPA_VALUES, salaryGrowthSlug } from "@/lib/salary-growth-data";
 
 export const dynamic = "force-static";
 
@@ -45,6 +46,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/simple-interest-calculator", priority: 0.75 },
     // Tax Saving
     { route: "/tax-saving", priority: 0.9 },
+    // Salary Growth
+    { route: "/salary-growth", priority: 0.9 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({
@@ -57,10 +60,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes].map(({ route, priority }) => ({
-    url: absoluteUrl(route),
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority,
+  const salaryGrowthRoutes = SALARY_GROWTH_LPA_VALUES.map((lpa) => ({
+    route: `/salary-growth/${salaryGrowthSlug(lpa)}`,
+    priority: 0.75,
   }));
+
+  return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
+    ({ route, priority }) => ({
+      url: absoluteUrl(route),
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority,
+    })
+  );
 }
