@@ -94,8 +94,6 @@ function parseCsv(csv: string): LayoffRecord[] {
       percent:   cols[5] ? parseFloat(cols[5]) || null : null,
       industry:  cols[6] ?? "",
       source:    cols[7] ?? "",
-      stage:     cols[8] ?? "",
-      raised_m:  cols[9] ? parseFloat(cols[9].replace(/[$,]/g, "")) || null : null,
     };
   }).filter(r => r.company);
 }
