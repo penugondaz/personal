@@ -34,6 +34,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/nps-calculator", label: "NPS Calculator" },
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
       { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
+      { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
     ],
   },
   {
@@ -53,11 +54,12 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Investments",
     links: [
       { href: "/calculator/sip-calculator", label: "SIP Calculator" },
+      { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP Calculator" },
       { href: "/calculator/lumpsum-calculator", label: "Lumpsum Calculator" },
       { href: "/calculator/mutual-fund-calculator", label: "Mutual Fund Calculator" },
       { href: "/calculator/swp-calculator", label: "SWP Calculator" },
+      { href: "/calculator/swp-inflation-calculator", label: "SWP with Inflation" },
       { href: "/calculator/goal-planning-calculator", label: "Goal Planning Calculator" },
-      { href: "/calculator/stock-average-calculator", label: "Stock Average Calculator" },
       { href: "/calculator/xirr-calculator", label: "XIRR Calculator" },
       { href: "/calculator/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
     ],
@@ -70,6 +72,19 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/rd-calculator", label: "RD Calculator" },
       { href: "/calculator/compound-interest-calculator", label: "Compound Interest Calculator" },
       { href: "/calculator/simple-interest-calculator", label: "Simple Interest Calculator" },
+    ],
+  },
+  {
+    title: "Free Tools",
+    links: [
+      { href: "/tools", label: "All Tools" },
+      { href: "/tools/discount-calculator", label: "Discount Calculator" },
+      { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
+      { href: "/tools/average-calculator", label: "Average Calculator" },
+      { href: "/tools/number-converter", label: "Number to Words Converter" },
+      { href: "/tools/character-counter", label: "Character Counter" },
+      { href: "/tools/word-counter", label: "Word Counter" },
+      { href: "/tools/text-case-converter", label: "Text Case Converter" },
     ],
   },
   {
@@ -86,4 +101,5 @@ export const PRIMARY_NAV_LINKS: NavLink[] = [
   { href: "/tax-saving", label: "Tax Saving" },
   { href: "/salary-growth", label: "Salary Growth" },
   { href: "/calculator/emi-calculator", label: "Loans" },
+  { href: "/tools", label: "Tools" },
 ];
