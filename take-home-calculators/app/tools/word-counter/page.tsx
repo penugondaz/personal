@@ -1,76 +1,88 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { formatINR } from "@/lib/format";
 
-export default function DiscountCalculatorPage() {
-  const [original, setOriginal] = useState("1000");
-  const [discount, setDiscount] = useState("20");
-  const [mode, setMode] = useState<"percent"|"flat">("percent");
+export default function WordCounterPage() {
+  const [text, setText] = useState("");
 
-  const orig = Math.max(0, Number(original.replace(/[^0-9.]/g,""))||0);
-  const disc = Math.max(0, Number(discount.replace(/[^0-9.]/g,""))||0);
-  const discAmt = mode === "percent" ? Math.round(orig * disc / 100) : Math.min(disc, orig);
-  const finalPrice = Math.max(0, orig - discAmt);
-  const pctOff = orig > 0 ? ((discAmt / orig) * 100).toFixed(2) : "0";
-  const savings = discAmt;
+  const stats = useMemo(() => {
+    const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+    const chars = text.length;
+    const charsNoSpaces = text.replace(/\s/g, "").length;
+    const sentences = text.trim() === "" ? 0 : (text.match(/[^.!?]*[.!?]+/g)||[]).length;
+    const paragraphs = text.trim() === "" ? 0 : text.split(/\n\s*\n/).filter(p => p.trim()).length;
+    const readingTime = Math.ceil(words / 200); // avg 200 wpm
+    const speakingTime = Math.ceil(words / 130); // avg 130 wpm
+    // Top words
+    const wordFreq: Record<string,number> = {};
+    if (text.trim()) {
+      text.toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(w=>w.length>3).forEach(w=>{wordFreq[w]=(wordFreq[w]||0)+1;});
+    }
+    const topWords = Object.entries(wordFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    return { words, chars, charsNoSpaces, sentences, paragraphs, readingTime, speakingTime, topWords };
+  }, [text]);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span aria-current="page">Discount Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Discount Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Calculate the final price after applying a percentage or flat discount. Ideal for shopping, invoicing, and offers.</p>
+      <nav className="mb-6 text-sm text-ink-soft">
+        <Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span>
+        <Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span>
+        <span aria-current="page">Word Counter</span>
+      </nav>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Word Counter</h1>
+      <p className="mt-4 text-lg text-ink-soft">Count words, characters, sentences, and paragraphs — plus estimated reading and speaking time.</p>
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card space-y-4">
-        <div className="flex gap-2">
-          {(["percent","flat"] as const).map(m => (
-            <button key={m} onClick={() => setMode(m)} className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${mode===m?"border-brand bg-brand text-white":"border-rule text-ink-soft hover:border-brand"}`}>
-              {m === "percent" ? "% Discount" : "Flat Amount Off"}
-            </button>
-          ))}
+      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
+        <textarea
+          value={text}
+          onChange={e => setText(e.target.value)}
+          rows={8}
+          placeholder="Paste or type your content here…"
+          className="w-full rounded-lg border border-rule bg-paper px-4 py-3 text-base text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15 resize-none"
+          autoFocus
+        />
+        <div className="mt-2 flex justify-end">
+          <button onClick={() => setText("")} className="rounded-lg border border-rule px-3 py-1 text-xs text-ink-soft hover:border-deduction hover:text-deduction transition">Clear</button>
         </div>
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">Original Price (₹)</span>
-          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
-            <span className="text-ink-soft">₹</span>
-            <input type="text" inputMode="numeric" value={original} onChange={e => setOriginal(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          { label: "Words", value: stats.words.toLocaleString(), highlight: true },
+          { label: "Characters", value: stats.chars.toLocaleString() },
+          { label: "No Spaces", value: stats.charsNoSpaces.toLocaleString() },
+          { label: "Sentences", value: stats.sentences.toLocaleString() },
+          { label: "Paragraphs", value: stats.paragraphs.toLocaleString() },
+          { label: "Reading Time", value: stats.readingTime < 1 ? "<1 min" : `${stats.readingTime} min` },
+          { label: "Speaking Time", value: stats.speakingTime < 1 ? "<1 min" : `${stats.speakingTime} min` },
+          { label: "Avg Word Len", value: stats.words > 0 ? (stats.charsNoSpaces / stats.words).toFixed(1) : "0" },
+        ].map(s => (
+          <div key={s.label} className={`rounded-xl border p-4 ${s.highlight ? "border-brand bg-brand-soft" : "border-rule bg-surface"}`}>
+            <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{s.label}</p>
+            <p className={`tabular mt-1 font-display text-2xl font-semibold ${s.highlight ? "text-brand" : "text-ink"}`}>{s.value}</p>
           </div>
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">{mode === "percent" ? "Discount %" : "Discount Amount (₹)"}</span>
-          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
-            {mode === "flat" && <span className="text-ink-soft">₹</span>}
-            <input type="text" inputMode="decimal" value={discount} onChange={e => setDiscount(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
-            {mode === "percent" && <span className="text-ink-soft">%</span>}
+        ))}
+      </div>
+
+      {stats.topWords.length > 0 && (
+        <div className="mt-6 rounded-xl border border-rule bg-surface p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft mb-3">Top Words (4+ letters)</p>
+          <div className="space-y-2">
+            {stats.topWords.map(([word, count]) => {
+              const maxCount = stats.topWords[0][1];
+              return (
+                <div key={word} className="flex items-center gap-3">
+                  <span className="w-28 text-sm font-medium text-ink truncate">{word}</span>
+                  <div className="flex-1 h-5 bg-rule rounded-full overflow-hidden">
+                    <div className="h-full bg-brand rounded-full transition-all" style={{ width: `${(count / maxCount) * 100}%` }} />
+                  </div>
+                  <span className="tabular w-8 text-right text-sm text-ink-soft">{count}</span>
+                </div>
+              );
+            })}
           </div>
-        </label>
-      </div>
-
-      <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
-        <div className="brand-gradient px-6 py-7 sm:px-8">
-          <p className="text-xs font-medium uppercase tracking-wide text-white/70">Final Price</p>
-          <div className="mt-1 font-display text-5xl font-semibold text-white">{formatINR(finalPrice)}</div>
-          <p className="mt-1 text-sm text-white/70">You save {formatINR(savings)} ({pctOff}% off)</p>
         </div>
-        <div className="grid grid-cols-3 divide-x divide-rule px-6 py-5 sm:px-8">
-          <div className="pr-4"><p className="text-xs text-ink-soft">Original</p><p className="tabular mt-1 font-display text-lg font-semibold text-ink">{formatINR(orig)}</p></div>
-          <div className="px-4"><p className="text-xs text-ink-soft">Discount</p><p className="tabular mt-1 font-display text-lg font-semibold text-deduction">−{formatINR(discAmt)}</p></div>
-          <div className="pl-4"><p className="text-xs text-ink-soft">You Pay</p><p className="tabular mt-1 font-display text-lg font-semibold text-brand">{formatINR(finalPrice)}</p></div>
-        </div>
-      </div>
-
-      {/* Visual bar */}
-      <div className="mt-4 rounded-xl border border-rule bg-surface p-4">
-        <p className="text-xs text-ink-soft mb-2">Savings breakdown</p>
-        <div className="flex h-6 w-full overflow-hidden rounded-full">
-          <div className="bg-brand h-full transition-all" style={{width:`${100 - Number(pctOff)}%`}} />
-          <div className="bg-deduction/30 h-full transition-all" style={{width:`${Number(pctOff)}%`}} />
-        </div>
-        <div className="mt-1.5 flex justify-between text-xs text-ink-soft">
-          <span>You pay {(100 - Number(pctOff)).toFixed(1)}%</span>
-          <span>Save {pctOff}%</span>
-        </div>
-      </div>
+      )}
     </main>
   );
 }
