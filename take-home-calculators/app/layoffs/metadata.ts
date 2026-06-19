@@ -4,7 +4,7 @@
 import type { Metadata } from "next";
 
 export const layoffsMetadata: Metadata = {
-  title: "India Tech Layoffs Tracker 2025 — IT Companies Layoffs Live Data",
+  title: "India Tech Layoffs Tracker 2026 — IT Companies Layoffs Live Data",
   description:
     "Live tracker for tech and IT company layoffs in India and globally. Track companies, headcount, dates, industry, and sources. Updated in real-time. Covering Bengaluru, Hyderabad, Pune, NCR and global IT layoffs.",
   keywords: [
@@ -27,7 +27,7 @@ export const layoffsMetadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "India Tech Layoffs Tracker 2025",
+    title: "India Tech Layoffs Tracker 2026",
     description: "Live tech and IT layoffs tracker for India. Updated as news breaks.",
   },
   alternates: {
