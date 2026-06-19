@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/paths";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
+import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
 
 export const dynamic = "force-static";
 
@@ -42,24 +43,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/rd-calculator", priority: 0.8 },
     { route: "/calculator/compound-interest-calculator", priority: 0.8 },
     { route: "/calculator/simple-interest-calculator", priority: 0.75 },
+    // Tax Saving
     { route: "/tax-saving", priority: 0.9 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({
     route: `/salary/${salarySlug(lpa)}`,
     priority: 0.7,
-    const taxSavingRoutes = TAX_SAVING_LPA_VALUES.map((lpa) => ({
-  route: `/tax-saving/${taxSavingSlug(lpa)}`,
-  priority: 0.75,
-}));
-return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes].map(...);
   }));
 
-  return [...staticRoutes, ...salaryRoutes].map(({ route, priority }) => ({
+  const taxSavingRoutes = TAX_SAVING_LPA_VALUES.map((lpa) => ({
+    route: `/tax-saving/${taxSavingSlug(lpa)}`,
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes].map(({ route, priority }) => ({
     url: absoluteUrl(route),
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority,
   }));
-  
 }
