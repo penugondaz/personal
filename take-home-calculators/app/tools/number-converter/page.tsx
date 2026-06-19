@@ -1,70 +1,113 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 
-type Mode = "ofNumber"|"increase"|"decrease"|"difference"|"isWhat";
+function convertNumber(n: number): { label: string; value: string }[] {
+  if (!isFinite(n) || n < 0) return [];
+  const abs = Math.abs(n);
+  const results: { label: string; value: string }[] = [];
 
-export default function PercentageCalculatorPage() {
-  const [mode, setMode] = useState<Mode>("ofNumber");
-  const [a, setA] = useState("25");
-  const [b, setB] = useState("200");
-  const [result, setResult] = useState<string|null>(null);
+  // Indian system
+  const crore = Math.floor(abs / 1e7);
+  const lakh = Math.floor((abs % 1e7) / 1e5);
+  const thousand = Math.floor((abs % 1e5) / 1e3);
+  const hundred = Math.floor((abs % 1e3) / 100);
+  const remainder = abs % 100;
 
-  const calc = () => {
-    const na = parseFloat(a)||0, nb = parseFloat(b)||0;
-    switch(mode) {
-      case "ofNumber": setResult(`${na}% of ${nb} = ${(na * nb / 100).toFixed(4).replace(/\.?0+$/,"")}`); break;
-      case "increase": setResult(`${nb} increased by ${na}% = ${(nb * (1 + na/100)).toFixed(2)}`); break;
-      case "decrease": setResult(`${nb} decreased by ${na}% = ${(nb * (1 - na/100)).toFixed(2)}`); break;
-      case "difference": {
-        const diff = ((nb - na) / na * 100);
-        setResult(`${na} → ${nb} is ${diff >= 0 ? "+" : ""}${diff.toFixed(2)}% change`);
-        break;
-      }
-      case "isWhat": setResult(`${na} is ${(na / nb * 100).toFixed(4).replace(/\.?0+$/,"")}% of ${nb}`); break;
-    }
-  };
+  // Build breakdown string
+  const parts: string[] = [];
+  if (crore > 0) parts.push(`${crore} Crore`);
+  if (lakh > 0) parts.push(`${lakh} Lakh`);
+  if (thousand > 0) parts.push(`${thousand} Thousand`);
+  if (hundred > 0) parts.push(`${hundred} Hundred`);
+  if (remainder > 0) parts.push(`${remainder}`);
 
-  const MODES: {id:Mode;label:string;desc:string;la:string;lb:string}[] = [
-    {id:"ofNumber",label:"% of Number",desc:"What is X% of Y?",la:"Percentage (%)",lb:"Number"},
-    {id:"increase",label:"% Increase",desc:"Increase Y by X%",la:"Increase by (%)",lb:"Starting value"},
-    {id:"decrease",label:"% Decrease",desc:"Decrease Y by X%",la:"Decrease by (%)",lb:"Starting value"},
-    {id:"difference",label:"% Change",desc:"% change from A to B",la:"From",lb:"To"},
-    {id:"isWhat",label:"X is what % of Y",desc:"A is what % of B?",la:"Value A",lb:"Value B"},
-  ];
-  const current = MODES.find(m => m.id === mode)!;
+  results.push({ label: "Full Breakdown", value: parts.join(", ") || "0" });
+
+  // Quick units
+  if (abs >= 1e9) results.push({ label: "In Crore", value: (abs / 1e7).toFixed(2).replace(/\.?0+$/, "") + " Crore" });
+  if (abs >= 1e7) results.push({ label: "In 10 Lakh / Crore", value: (abs / 1e7).toFixed(4).replace(/\.?0+$/, "") + " Crore" });
+  if (abs >= 1e5) results.push({ label: "In Lakh", value: (abs / 1e5).toFixed(4).replace(/\.?0+$/, "") + " Lakh" });
+  if (abs >= 1e3) results.push({ label: "In Thousand", value: (abs / 1e3).toFixed(4).replace(/\.?0+$/, "") + " Thousand" });
+  if (abs >= 1e6) results.push({ label: "In Million", value: (abs / 1e6).toFixed(4).replace(/\.?0+$/, "") + " Million" });
+  if (abs >= 1e9) results.push({ label: "In Billion", value: (abs / 1e9).toFixed(4).replace(/\.?0+$/, "") + " Billion" });
+
+  results.push({ label: "Formatted (Indian)", value: abs.toLocaleString("en-IN") });
+  results.push({ label: "Formatted (Global)", value: abs.toLocaleString("en-US") });
+
+  return results;
+}
+
+const EXAMPLES = [100000000, 12333232, 150000, 10000000, 1000000000, 50000];
+
+export default function NumberConverterPage() {
+  const [input, setInput] = useState("100000000");
+  const num = useMemo(() => parseFloat(input.replace(/[^0-9.]/g,""))||0, [input]);
+  const results = useMemo(() => convertNumber(num), [num]);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Percentage Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Percentage Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Five percentage calculators in one — find %, calculate increases, decreases, and changes.</p>
+      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Number Converter</span></nav>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Number to Words Converter</h1>
+      <p className="mt-4 text-lg text-ink-soft">Convert any number to Indian system (Lakh, Crore) and international units (Million, Billion) with a full word breakdown.</p>
 
       <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <div className="flex flex-wrap gap-2 mb-5">
-          {MODES.map(m => (
-            <button key={m.id} onClick={()=>{setMode(m.id);setResult(null);}} className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${mode===m.id?"bg-brand text-white":"border border-rule text-ink-soft hover:border-brand hover:text-brand"}`}>{m.label}</button>
+        <label className="block">
+          <span className="mb-1 block text-xs text-ink-soft">Enter a number</span>
+          <input type="text" inputMode="numeric" value={input} onChange={e=>setInput(e.target.value)}
+            className="tabular w-full rounded-lg border border-rule bg-paper px-4 py-4 text-2xl font-bold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" placeholder="e.g. 100000000" />
+        </label>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {EXAMPLES.map(e => (
+            <button key={e} onClick={()=>setInput(String(e))} className="rounded-full border border-rule px-3 py-1 text-xs text-ink-soft hover:border-brand hover:text-brand transition">
+              {e.toLocaleString("en-IN")}
+            </button>
           ))}
         </div>
-        <p className="mb-4 text-sm text-ink-soft">{current.desc}</p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.la}</span>
-            <input type="text" inputMode="decimal" value={a} onChange={e=>{setA(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
-          </label>
-          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.lb}</span>
-            <input type="text" inputMode="decimal" value={b} onChange={e=>{setB(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
-          </label>
-        </div>
-        <button onClick={calc} className="mt-4 w-full rounded-xl bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark transition">Calculate</button>
       </div>
 
-      {result && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
-          <div className="brand-gradient px-6 py-8 text-center">
-            <p className="font-display text-2xl font-semibold text-white sm:text-3xl">{result}</p>
+      {results.length > 0 && (
+        <div className="mt-6 space-y-3">
+          {results[0] && (
+            <div className="overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
+              <div className="brand-gradient px-6 py-6 sm:px-8">
+                <p className="text-xs font-medium uppercase tracking-wide text-white/70">Full Breakdown</p>
+                <p className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl leading-tight">{results[0].value}</p>
+              </div>
+            </div>
+          )}
+          <div className="grid gap-3 sm:grid-cols-2">
+            {results.slice(1).map(r => (
+              <div key={r.label} className="rounded-xl border border-rule bg-surface p-4 shadow-card">
+                <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{r.label}</p>
+                <p className="tabular mt-1 font-display text-xl font-semibold text-ink">{r.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       )}
+
+      <section className="mt-10">
+        <h2 className="font-display text-xl text-ink">Quick Reference</h2>
+        <div className="mt-4 overflow-hidden rounded-xl border border-rule">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-rule bg-paper text-left">
+              <th className="px-4 py-2.5 font-medium text-ink-soft">Number</th>
+              <th className="px-4 py-2.5 font-medium text-ink-soft">Indian System</th>
+              <th className="px-4 py-2.5 font-medium text-ink-soft">International</th>
+            </tr></thead>
+            <tbody>
+              {[[100,"One Hundred","Hundred"],[1000,"One Thousand","Thousand"],[100000,"One Lakh","Hundred Thousand"],[1000000,"Ten Lakh","One Million"],[10000000,"One Crore","Ten Million"],[100000000,"Ten Crore","Hundred Million"],[1000000000,"One Hundred Crore","One Billion"]].map(([n,ind,intl])=>(
+                <tr key={n} className="border-b border-rule last:border-0 hover:bg-paper">
+                  <td className="tabular px-4 py-2.5 font-mono text-ink">{Number(n).toLocaleString("en-IN")}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{ind}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{intl}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   );
 }
