@@ -42,11 +42,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/rd-calculator", priority: 0.8 },
     { route: "/calculator/compound-interest-calculator", priority: 0.8 },
     { route: "/calculator/simple-interest-calculator", priority: 0.75 },
+    { route: "/tax-saving", priority: 0.9 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({
     route: `/salary/${salarySlug(lpa)}`,
     priority: 0.7,
+    const taxSavingRoutes = TAX_SAVING_LPA_VALUES.map((lpa) => ({
+  route: `/tax-saving/${taxSavingSlug(lpa)}`,
+  priority: 0.75,
+}));
+return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes].map(...);
   }));
 
   return [...staticRoutes, ...salaryRoutes].map(({ route, priority }) => ({
@@ -55,4 +61,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority,
   }));
+  
 }
