@@ -522,7 +522,7 @@ export default function LayoffsPage() {
           <div className="mt-4 space-y-5">
             {[
               {
-                q: "Which Indian IT companies have laid off employees in 2025–26?",
+                q: "Which Indian IT companies have laid off employees in 2026–27?",
                 a: "Several major IT and tech companies with India operations have announced layoffs in recent months, including companies in Bengaluru, Hyderabad, and Pune. This tracker covers both Indian-headquartered companies and global firms with significant Indian workforces. Filter by country = India to see the full list.",
               },
               {
