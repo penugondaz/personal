@@ -48,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/tax-saving", priority: 0.9 },
     // Salary Growth
     { route: "/salary-growth", priority: 0.9 },
+    { route: "/layoffs", priority: 0.95 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({
