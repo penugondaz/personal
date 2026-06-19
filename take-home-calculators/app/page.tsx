@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { salarySlug } from "@/lib/salary-data";
+import { salaryGrowthSlug } from "@/lib/salary-growth-data";
+import { taxSavingSlug } from "@/lib/tax-saving-data";
 import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
-import { formatINR } from "@/lib/format";
+import { calculateSalaryGrowth } from "@/lib/calculators/salary-growth";
+import { calculateTaxSaving } from "@/lib/calculators/tax-saving";
+import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
 export const metadata: Metadata = {
@@ -48,8 +52,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Quick pick — in-hand salary */}
       <section className="mx-auto max-w-3xl px-6 py-10">
-        <h2 className="font-display text-xl text-ink">Quick Pick — Common CTC Slabs</h2>
+        <h2 className="font-display text-xl text-ink">Quick Pick — In-Hand Salary by CTC</h2>
         <p className="mt-2 text-sm text-ink-soft">Jump straight to a full breakdown for one of the most-searched CTC values.</p>
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {POPULAR_LPAS.map((lpa) => {
@@ -62,6 +67,53 @@ export default function HomePage() {
             );
           })}
         </div>
+      </section>
+
+      {/* Tax saving quick pick */}
+      <section className="mx-auto max-w-3xl px-6 py-10">
+        <h2 className="font-display text-xl text-ink">Tax Saving — How Much Can You Save?</h2>
+        <p className="mt-2 text-sm text-ink-soft">See your current tax bill and how much you can legally reduce it with 80C, NPS, HRA, and more.</p>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {POPULAR_LPAS.map((lpa) => {
+            const data = calculateTaxSaving(lpa * 100_000);
+            return (
+              <Link key={lpa} href={`/tax-saving/${taxSavingSlug(lpa)}`} className="block rounded-xl border border-rule bg-surface px-4 py-3.5 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card-lg">
+                <span className="font-display text-lg text-ink">{lpa} LPA</span>
+                <p className="tabular mt-1 text-xs text-deduction">Tax: {formatINR(data.currentTaxNew)}</p>
+                <p className="tabular text-xs text-brand">Save: {formatINR(data.maxPossibleSavingOld)}</p>
+              </Link>
+            );
+          })}
+        </div>
+        <p className="mt-3">
+          <Link href="/tax-saving" className="text-sm font-medium text-brand hover:underline underline-offset-2">
+            View all tax saving guides →
+          </Link>
+        </p>
+      </section>
+
+      {/* Salary growth quick pick */}
+      <section className="mx-auto max-w-3xl px-6 py-10">
+        <h2 className="font-display text-xl text-ink">Salary Growth — Where Will You Be in 10 Years?</h2>
+        <p className="mt-2 text-sm text-ink-soft">Project your salary at 8%, 12%, 18%, and 25% annual hike rates.</p>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {POPULAR_LPAS.map((lpa) => {
+            const data = calculateSalaryGrowth(lpa * 100_000);
+            const avg = data.scenarios[1]; // 12% scenario
+            return (
+              <Link key={lpa} href={`/salary-growth/${salaryGrowthSlug(lpa)}`} className="block rounded-xl border border-rule bg-surface px-4 py-3.5 shadow-card transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card-lg">
+                <span className="font-display text-lg text-ink">{lpa} LPA</span>
+                <p className="tabular mt-1 text-xs text-ink-soft">5yr: {formatINRCompact(avg.ctcAt5Years)}</p>
+                <p className="tabular text-xs text-brand">10yr: {formatINRCompact(avg.ctcAt10Years)}</p>
+              </Link>
+            );
+          })}
+        </div>
+        <p className="mt-3">
+          <Link href="/salary-growth" className="text-sm font-medium text-brand hover:underline underline-offset-2">
+            View all salary growth projections →
+          </Link>
+        </p>
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-10">
@@ -83,6 +135,18 @@ export default function HomePage() {
           <DirectoryCard href="/salary/inhand-to-ctc-calculator" title="In-Hand to CTC" description="Reverse: find CTC from your desired take-home." />
           <DirectoryCard href="/salary/salary-structure-calculator" title="Salary Structure" description="Custom basic/HRA percentages → breakup." />
           <DirectoryCard href="/calculator/salary-hike-calculator" title="Salary Hike" description="What a CTC hike means for your real take-home." />
+          <DirectoryCard href="/salary-growth" title="Salary Growth" description="Project your salary in 5 & 10 years at different hike rates." />
+        </div>
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Tax Saving</h3>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <DirectoryCard href="/tax-saving" title="Tax Saving Guide" description="80C, NPS, HRA, home loan — all deductions by salary." />
+          <DirectoryCard href="/calculator/old-vs-new-tax-regime" title="Old vs New Regime" description="Which tax regime saves you more." />
+          <DirectoryCard href="/calculator/hra-calculator" title="HRA Exemption" description="How much of your HRA is actually tax-free." />
+          <DirectoryCard href="/calculator/advance-tax-calculator" title="Advance Tax" description="Quarterly installment schedule for advance tax." />
+          <DirectoryCard href="/calculator/capital-gains-calculator" title="Capital Gains" description="STCG & LTCG tax on equity, debt, and other assets." />
+          <DirectoryCard href="/calculator/leave-encashment-calculator" title="Leave Encashment" description="Encashment amount and tax exemption." />
+          <DirectoryCard href="/calculator/overtime-calculator" title="Overtime Pay" description="Overtime earnings at 1.5x, 2x, or custom rates." />
         </div>
 
         <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Retirement & Savings</h3>
@@ -92,16 +156,6 @@ export default function HomePage() {
           <DirectoryCard href="/calculator/nps-calculator" title="NPS" description="Retirement corpus and estimated monthly pension." />
           <DirectoryCard href="/calculator/gratuity-calculator" title="Gratuity" description="Lump-sum payout after 5+ years of service." />
           <DirectoryCard href="/calculator/epf-vs-ppf" title="EPF vs PPF" description="Side-by-side comparison of both retirement options." />
-        </div>
-
-        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Tax & Pay Components</h3>
-        <div className="mt-3 grid gap-3 sm:grid-cols-3">
-          <DirectoryCard href="/calculator/hra-calculator" title="HRA Exemption" description="How much of your HRA is actually tax-free." />
-          <DirectoryCard href="/calculator/advance-tax-calculator" title="Advance Tax" description="Quarterly installment schedule for advance tax." />
-          <DirectoryCard href="/calculator/capital-gains-calculator" title="Capital Gains" description="STCG & LTCG tax on equity, debt, and other assets." />
-          <DirectoryCard href="/calculator/old-vs-new-tax-regime" title="Old vs New Regime" description="Which tax regime saves you more." />
-          <DirectoryCard href="/calculator/leave-encashment-calculator" title="Leave Encashment" description="Encashment amount and tax exemption." />
-          <DirectoryCard href="/calculator/overtime-calculator" title="Overtime Pay" description="Overtime earnings at 1.5x, 2x, or custom rates." />
         </div>
 
         <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Investments</h3>
