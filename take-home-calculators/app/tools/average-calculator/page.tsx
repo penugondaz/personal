@@ -1,62 +1,18 @@
-"use client";
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/paths";
+import ClientPage from "./ClientPage";
 
-function stats(nums: number[]) {
-  if (!nums.length) return null;
-  const sorted = [...nums].sort((a,b)=>a-b);
-  const mean = nums.reduce((s,n)=>s+n,0)/nums.length;
-  const mid = Math.floor(sorted.length/2);
-  const median = sorted.length%2===0?(sorted[mid-1]+sorted[mid])/2:sorted[mid];
-  const freq: Record<number,number> = {};
-  nums.forEach(n=>{freq[n]=(freq[n]||0)+1;});
-  const maxF = Math.max(...Object.values(freq));
-  const modes = Object.entries(freq).filter(([,f])=>f===maxF).map(([n])=>Number(n));
-  const variance = nums.reduce((s,n)=>s+(n-mean)**2,0)/nums.length;
-  return { mean, median, modes, min: sorted[0], max: sorted[sorted.length-1], sum: nums.reduce((s,n)=>s+n,0), count: nums.length, stddev: Math.sqrt(variance) };
-}
+const title = "Average Calculator — Mean, Median, Mode, Standard Deviation";
+const description = "Calculate mean, median, mode, min, max, sum, and standard deviation for any set of numbers. Enter values separated by commas or new lines.";
 
-export default function AverageCalculatorPage() {
-  const [input, setInput] = useState("10, 20, 30, 40, 50");
-  const nums = useMemo(() => input.split(/[\s,\n]+/).map(Number).filter(n=>!isNaN(n)&&n!==0||input.includes("0")), [input]);
-  const validNums = useMemo(() => input.split(/[\s,\n]+/).map(s=>parseFloat(s)).filter(n=>!isNaN(n)), [input]);
-  const s = useMemo(() => stats(validNums), [validNums]);
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: absoluteUrl("/tools/average-calculator") },
+  openGraph: { title, description, url: absoluteUrl("/tools/average-calculator") },
+  twitter: { card: "summary_large_image", title, description },
+};
 
-  return (
-    <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Average Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Average Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Enter numbers separated by commas or new lines to calculate mean, median, mode, min, max, sum, and standard deviation.</p>
-
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">Enter numbers (comma or newline separated)</span>
-          <textarea value={input} onChange={e=>setInput(e.target.value)} rows={4}
-            className="w-full rounded-lg border border-rule bg-paper px-3 py-3 text-sm font-mono text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15 resize-none"
-            placeholder="10, 20, 30, 40, 50" />
-        </label>
-        {s && <p className="mt-2 text-xs text-ink-soft">{s.count} numbers detected</p>}
-      </div>
-
-      {s && (
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          {[
-            {label:"Mean (Average)",value:s.mean.toFixed(6).replace(/\.?0+$/,""),highlight:true},
-            {label:"Median",value:s.median.toFixed(6).replace(/\.?0+$/,""),highlight:false},
-            {label:"Mode",value:s.modes.join(", "),highlight:false},
-            {label:"Sum",value:s.sum.toLocaleString(),highlight:false},
-            {label:"Count",value:s.count.toString(),highlight:false},
-            {label:"Min",value:s.min.toString(),highlight:false},
-            {label:"Max",value:s.max.toString(),highlight:false},
-            {label:"Std Deviation",value:s.stddev.toFixed(4),highlight:false},
-          ].map(item=>(
-            <div key={item.label} className={`rounded-xl border p-4 ${item.highlight?"border-brand bg-brand-soft":"border-rule bg-surface"}`}>
-              <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{item.label}</p>
-              <p className={`tabular mt-1 font-display text-2xl font-semibold ${item.highlight?"text-brand":"text-ink"}`}>{item.value}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </main>
-  );
+export default function Page() {
+  return <ClientPage />;
 }
