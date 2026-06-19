@@ -1,62 +1,76 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import { formatINR } from "@/lib/format";
 
-function stats(nums: number[]) {
-  if (!nums.length) return null;
-  const sorted = [...nums].sort((a,b)=>a-b);
-  const mean = nums.reduce((s,n)=>s+n,0)/nums.length;
-  const mid = Math.floor(sorted.length/2);
-  const median = sorted.length%2===0?(sorted[mid-1]+sorted[mid])/2:sorted[mid];
-  const freq: Record<number,number> = {};
-  nums.forEach(n=>{freq[n]=(freq[n]||0)+1;});
-  const maxF = Math.max(...Object.values(freq));
-  const modes = Object.entries(freq).filter(([,f])=>f===maxF).map(([n])=>Number(n));
-  const variance = nums.reduce((s,n)=>s+(n-mean)**2,0)/nums.length;
-  return { mean, median, modes, min: sorted[0], max: sorted[sorted.length-1], sum: nums.reduce((s,n)=>s+n,0), count: nums.length, stddev: Math.sqrt(variance) };
-}
+export default function DiscountCalculatorPage() {
+  const [original, setOriginal] = useState("1000");
+  const [discount, setDiscount] = useState("20");
+  const [mode, setMode] = useState<"percent"|"flat">("percent");
 
-export default function AverageCalculatorPage() {
-  const [input, setInput] = useState("10, 20, 30, 40, 50");
-  const nums = useMemo(() => input.split(/[\s,\n]+/).map(Number).filter(n=>!isNaN(n)&&n!==0||input.includes("0")), [input]);
-  const validNums = useMemo(() => input.split(/[\s,\n]+/).map(s=>parseFloat(s)).filter(n=>!isNaN(n)), [input]);
-  const s = useMemo(() => stats(validNums), [validNums]);
+  const orig = Math.max(0, Number(original.replace(/[^0-9.]/g,""))||0);
+  const disc = Math.max(0, Number(discount.replace(/[^0-9.]/g,""))||0);
+  const discAmt = mode === "percent" ? Math.round(orig * disc / 100) : Math.min(disc, orig);
+  const finalPrice = Math.max(0, orig - discAmt);
+  const pctOff = orig > 0 ? ((discAmt / orig) * 100).toFixed(2) : "0";
+  const savings = discAmt;
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Average Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Average Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Enter numbers separated by commas or new lines to calculate mean, median, mode, min, max, sum, and standard deviation.</p>
+      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span aria-current="page">Discount Calculator</span></nav>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Discount Calculator</h1>
+      <p className="mt-4 text-lg text-ink-soft">Calculate the final price after applying a percentage or flat discount. Ideal for shopping, invoicing, and offers.</p>
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">Enter numbers (comma or newline separated)</span>
-          <textarea value={input} onChange={e=>setInput(e.target.value)} rows={4}
-            className="w-full rounded-lg border border-rule bg-paper px-3 py-3 text-sm font-mono text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15 resize-none"
-            placeholder="10, 20, 30, 40, 50" />
-        </label>
-        {s && <p className="mt-2 text-xs text-ink-soft">{s.count} numbers detected</p>}
-      </div>
-
-      {s && (
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          {[
-            {label:"Mean (Average)",value:s.mean.toFixed(6).replace(/\.?0+$/,""),highlight:true},
-            {label:"Median",value:s.median.toFixed(6).replace(/\.?0+$/,""),highlight:false},
-            {label:"Mode",value:s.modes.join(", "),highlight:false},
-            {label:"Sum",value:s.sum.toLocaleString(),highlight:false},
-            {label:"Count",value:s.count.toString(),highlight:false},
-            {label:"Min",value:s.min.toString(),highlight:false},
-            {label:"Max",value:s.max.toString(),highlight:false},
-            {label:"Std Deviation",value:s.stddev.toFixed(4),highlight:false},
-          ].map(item=>(
-            <div key={item.label} className={`rounded-xl border p-4 ${item.highlight?"border-brand bg-brand-soft":"border-rule bg-surface"}`}>
-              <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{item.label}</p>
-              <p className={`tabular mt-1 font-display text-2xl font-semibold ${item.highlight?"text-brand":"text-ink"}`}>{item.value}</p>
-            </div>
+      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card space-y-4">
+        <div className="flex gap-2">
+          {(["percent","flat"] as const).map(m => (
+            <button key={m} onClick={() => setMode(m)} className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${mode===m?"border-brand bg-brand text-white":"border-rule text-ink-soft hover:border-brand"}`}>
+              {m === "percent" ? "% Discount" : "Flat Amount Off"}
+            </button>
           ))}
         </div>
-      )}
+        <label className="block">
+          <span className="mb-1 block text-xs text-ink-soft">Original Price (₹)</span>
+          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
+            <span className="text-ink-soft">₹</span>
+            <input type="text" inputMode="numeric" value={original} onChange={e => setOriginal(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
+          </div>
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-xs text-ink-soft">{mode === "percent" ? "Discount %" : "Discount Amount (₹)"}</span>
+          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
+            {mode === "flat" && <span className="text-ink-soft">₹</span>}
+            <input type="text" inputMode="decimal" value={discount} onChange={e => setDiscount(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
+            {mode === "percent" && <span className="text-ink-soft">%</span>}
+          </div>
+        </label>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
+        <div className="brand-gradient px-6 py-7 sm:px-8">
+          <p className="text-xs font-medium uppercase tracking-wide text-white/70">Final Price</p>
+          <div className="mt-1 font-display text-5xl font-semibold text-white">{formatINR(finalPrice)}</div>
+          <p className="mt-1 text-sm text-white/70">You save {formatINR(savings)} ({pctOff}% off)</p>
+        </div>
+        <div className="grid grid-cols-3 divide-x divide-rule px-6 py-5 sm:px-8">
+          <div className="pr-4"><p className="text-xs text-ink-soft">Original</p><p className="tabular mt-1 font-display text-lg font-semibold text-ink">{formatINR(orig)}</p></div>
+          <div className="px-4"><p className="text-xs text-ink-soft">Discount</p><p className="tabular mt-1 font-display text-lg font-semibold text-deduction">−{formatINR(discAmt)}</p></div>
+          <div className="pl-4"><p className="text-xs text-ink-soft">You Pay</p><p className="tabular mt-1 font-display text-lg font-semibold text-brand">{formatINR(finalPrice)}</p></div>
+        </div>
+      </div>
+
+      {/* Visual bar */}
+      <div className="mt-4 rounded-xl border border-rule bg-surface p-4">
+        <p className="text-xs text-ink-soft mb-2">Savings breakdown</p>
+        <div className="flex h-6 w-full overflow-hidden rounded-full">
+          <div className="bg-brand h-full transition-all" style={{width:`${100 - Number(pctOff)}%`}} />
+          <div className="bg-deduction/30 h-full transition-all" style={{width:`${Number(pctOff)}%`}} />
+        </div>
+        <div className="mt-1.5 flex justify-between text-xs text-ink-soft">
+          <span>You pay {(100 - Number(pctOff)).toFixed(1)}%</span>
+          <span>Save {pctOff}%</span>
+        </div>
+      </div>
     </main>
   );
 }
