@@ -398,7 +398,7 @@ export default function HomePage() {
               <DirectoryCard href="/calculator/swp-calculator" emoji="🔄" title="SWP Calculator" description="Systematic withdrawal plan." />
               <DirectoryCard href="/calculator/swp-inflation-calculator" emoji="📉" title="SWP + Inflation" description="Withdrawal plan with inflation-adjusted payouts." />
               <DirectoryCard href="/calculator/goal-planning-calculator" emoji="🎯" title="Goal Planning" description="SIP needed to reach your financial goal." />
-              <DirectoryCard href="/calculator/xirr-calculator" emoji="📐" title="XIRR Calculator" description="Annualized returns for irregular cash flows." />
+              <DirectoryCard href="/calculator/lic-xirr-calculator/" emoji="🛡️" title="LIC XIRR Calculator" description="Real annualized return (XIRR) on your LIC policy" />
               <DirectoryCard href="/calculator/cagr-xirr-calculator" emoji="📏" title="CAGR & XIRR" description="CAGR for lumpsum, XIRR for multiple flows." />
             </div>
           </div>
