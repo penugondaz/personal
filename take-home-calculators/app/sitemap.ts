@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/goal-planning-calculator", priority: 0.8 },
     { route: "/calculator/stock-average-calculator", priority: 0.7 },
     { route: "/calculator/xirr-calculator", priority: 0.75 },
+    { route: "/calculator/lic-xirr-calculator", priority: 0.85 },
     { route: "/calculator/cagr-xirr-calculator", priority: 0.8 },
     // Loans & Deposits
     { route: "/calculator/emi-calculator", priority: 0.8 },
