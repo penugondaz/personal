@@ -1,112 +1,101 @@
-"use client";
-import { useState, useMemo } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import NumberConverter from "@/components/NumberConverter";
+import { absoluteUrl } from "@/lib/paths";
 
-function convertNumber(n: number): { label: string; value: string }[] {
-  if (!isFinite(n) || n < 0) return [];
-  const abs = Math.abs(n);
-  const results: { label: string; value: string }[] = [];
+const title = "Number to Words Converter — Lakh, Crore, Million, Billion";
+const description =
+  "Convert any number to Indian system (Lakh, Crore) and international units (Million, Billion) with a full word breakdown. Example: 12333232 = 1 Crore, 23 Lakh, 33 Thousand, 232.";
 
-  // Indian system
-  const crore = Math.floor(abs / 1e7);
-  const lakh = Math.floor((abs % 1e7) / 1e5);
-  const thousand = Math.floor((abs % 1e5) / 1e3);
-  const hundred = Math.floor((abs % 1e3) / 100);
-  const remainder = abs % 100;
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: absoluteUrl("/tools/number-converter") },
+  openGraph: { title, description, url: absoluteUrl("/tools/number-converter") },
+};
 
-  // Build breakdown string
-  const parts: string[] = [];
-  if (crore > 0) parts.push(`${crore} Crore`);
-  if (lakh > 0) parts.push(`${lakh} Lakh`);
-  if (thousand > 0) parts.push(`${thousand} Thousand`);
-  if (hundred > 0) parts.push(`${hundred} Hundred`);
-  if (remainder > 0) parts.push(`${remainder}`);
-
-  results.push({ label: "Full Breakdown", value: parts.join(", ") || "0" });
-
-  // Quick units
-  if (abs >= 1e9) results.push({ label: "In Crore", value: (abs / 1e7).toFixed(2).replace(/\.?0+$/, "") + " Crore" });
-  if (abs >= 1e7) results.push({ label: "In 10 Lakh / Crore", value: (abs / 1e7).toFixed(4).replace(/\.?0+$/, "") + " Crore" });
-  if (abs >= 1e5) results.push({ label: "In Lakh", value: (abs / 1e5).toFixed(4).replace(/\.?0+$/, "") + " Lakh" });
-  if (abs >= 1e3) results.push({ label: "In Thousand", value: (abs / 1e3).toFixed(4).replace(/\.?0+$/, "") + " Thousand" });
-  if (abs >= 1e6) results.push({ label: "In Million", value: (abs / 1e6).toFixed(4).replace(/\.?0+$/, "") + " Million" });
-  if (abs >= 1e9) results.push({ label: "In Billion", value: (abs / 1e9).toFixed(4).replace(/\.?0+$/, "") + " Billion" });
-
-  results.push({ label: "Formatted (Indian)", value: abs.toLocaleString("en-IN") });
-  results.push({ label: "Formatted (Global)", value: abs.toLocaleString("en-US") });
-
-  return results;
-}
-
-const EXAMPLES = [100000000, 12333232, 150000, 10000000, 1000000000, 50000];
+const faqs = [
+  {
+    question: "How many lakhs make a crore?",
+    answer: "100 lakhs make 1 crore. 1 lakh = 1,00,000 and 1 crore = 1,00,00,000.",
+  },
+  {
+    question: "How many crores make a billion?",
+    answer:
+      "100 crores make 1 billion. 1 crore = 10 million, so 1 billion = 100 crores = 1,000 lakhs.",
+  },
+  {
+    question: "How do I read 12333232 in Indian system?",
+    answer:
+      "12333232 = 1 Crore, 23 Lakh, 33 Thousand, 2 Hundred and 32. In the Indian number system, you group from the right as: 32 (units), 2 (hundreds), 33 (thousands), 23 (lakhs), 1 (crore).",
+  },
+  {
+    question: "What is 100000000 in Indian words?",
+    answer:
+      "100000000 = 10 Crore (Ten Crore). In international system this is 100 Million or 0.1 Billion.",
+  },
+];
 
 export default function NumberConverterPage() {
-  const [input, setInput] = useState("100000000");
-  const num = useMemo(() => parseFloat(input.replace(/[^0-9.]/g,""))||0, [input]);
-  const results = useMemo(() => convertNumber(num), [num]);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Number Converter</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Number to Words Converter</h1>
-      <p className="mt-4 text-lg text-ink-soft">Convert any number to Indian system (Lakh, Crore) and international units (Million, Billion) with a full word breakdown.</p>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">Enter a number</span>
-          <input type="text" inputMode="numeric" value={input} onChange={e=>setInput(e.target.value)}
-            className="tabular w-full rounded-lg border border-rule bg-paper px-4 py-4 text-2xl font-bold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" placeholder="e.g. 100000000" />
-        </label>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {EXAMPLES.map(e => (
-            <button key={e} onClick={()=>setInput(String(e))} className="rounded-full border border-rule px-3 py-1 text-xs text-ink-soft hover:border-brand hover:text-brand transition">
-              {e.toLocaleString("en-IN")}
-            </button>
-          ))}
-        </div>
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <Link href="/tools" className="hover:text-brand">Tools</Link>
+        <span className="mx-1.5">/</span>
+        <span aria-current="page">Number Converter</span>
+      </nav>
+
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Number to Words Converter</h1>
+      <p className="mt-4 text-lg text-ink-soft">
+        Convert any number to Indian system (Lakh, Crore) and international units (Million, Billion)
+        with a full word breakdown. Try: 12333232 = 1 Crore, 23 Lakh, 33 Thousand, 232.
+      </p>
+
+      <div className="mt-10">
+        <NumberConverter />
       </div>
 
-      {results.length > 0 && (
-        <div className="mt-6 space-y-3">
-          {results[0] && (
-            <div className="overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
-              <div className="brand-gradient px-6 py-6 sm:px-8">
-                <p className="text-xs font-medium uppercase tracking-wide text-white/70">Full Breakdown</p>
-                <p className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl leading-tight">{results[0].value}</p>
-              </div>
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
+        <div className="mt-4 space-y-5">
+          {faqs.map((faq) => (
+            <div key={faq.question} className="border-b border-rule pb-4">
+              <h3 className="font-medium text-ink">{faq.question}</h3>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
-          )}
-          <div className="grid gap-3 sm:grid-cols-2">
-            {results.slice(1).map(r => (
-              <div key={r.label} className="rounded-xl border border-rule bg-surface p-4 shadow-card">
-                <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{r.label}</p>
-                <p className="tabular mt-1 font-display text-xl font-semibold text-ink">{r.value}</p>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
-      )}
+      </section>
 
-      <section className="mt-10">
-        <h2 className="font-display text-xl text-ink">Quick Reference</h2>
-        <div className="mt-4 overflow-hidden rounded-xl border border-rule">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-rule bg-paper text-left">
-              <th className="px-4 py-2.5 font-medium text-ink-soft">Number</th>
-              <th className="px-4 py-2.5 font-medium text-ink-soft">Indian System</th>
-              <th className="px-4 py-2.5 font-medium text-ink-soft">International</th>
-            </tr></thead>
-            <tbody>
-              {[[100,"One Hundred","Hundred"],[1000,"One Thousand","Thousand"],[100000,"One Lakh","Hundred Thousand"],[1000000,"Ten Lakh","One Million"],[10000000,"One Crore","Ten Million"],[100000000,"Ten Crore","Hundred Million"],[1000000000,"One Hundred Crore","One Billion"]].map(([n,ind,intl])=>(
-                <tr key={n} className="border-b border-rule last:border-0 hover:bg-paper">
-                  <td className="tabular px-4 py-2.5 font-mono text-ink">{Number(n).toLocaleString("en-IN")}</td>
-                  <td className="px-4 py-2.5 text-ink-soft">{ind}</td>
-                  <td className="px-4 py-2.5 text-ink-soft">{intl}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Related Tools</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[
+            { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
+            { href: "/tools/discount-calculator", label: "Discount Calculator" },
+            { href: "/tools", label: "All Tools" },
+          ].map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
