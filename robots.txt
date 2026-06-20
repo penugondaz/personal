@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://salarytools.in/personal/sitemap.xml
+Sitemap: https://salarytools.in/sitemap.xml
