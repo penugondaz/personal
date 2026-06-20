@@ -53,6 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/salary-growth", priority: 0.9 },
     // Layoffs Tracker
     { route: "/layoffs", priority: 0.95 },
+    { route: "/calculator/layoff-risk-calculator", priority: 0.95 },
     // Free Tools
     { route: "/tools", priority: 0.85 },
     { route: "/tools/discount-calculator", priority: 0.75 },
