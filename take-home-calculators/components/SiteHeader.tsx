@@ -1,28 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PRIMARY_NAV_LINKS } from "@/lib/navigation";
 
-/**
- * Logo mark: a rounded-square rupee glyph in the brand gradient. Built
- * as inline SVG (not an image asset) so it costs zero network requests
- * and never causes an LCP image-load delay — the header renders
- * instantly on first paint.
- */
-function LogoMark() {
-  return (
-    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true" className="shrink-0">
-      <rect width="34" height="34" rx="10" fill="var(--brand)" />
-      <path
-        d="M11 10h12M11 10c4.5 0 7 1.6 7 4.4S15.5 18.8 11 18.8h-.3L20 24"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="M11 14.4h12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
+const LOGO_URL =
+  "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/logo.png";
 
 export default function SiteHeader({
   onMenuToggle,
@@ -34,14 +15,19 @@ export default function SiteHeader({
   return (
     <header className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
-          <LogoMark />
-          <span className="font-display text-lg font-semibold text-ink sm:text-xl">
-            Salary Tools
-          </span>
+        {/* Logo — full horizontal lockup, text already in the image */}
+        <Link href="/" className="flex items-center" aria-label="Salary Tools — Home">
+          <Image
+            src={LOGO_URL}
+            alt="Salary Tools"
+            width={160}
+            height={44}
+            className="h-9 w-auto object-contain"
+            priority
+          />
         </Link>
 
-        {/* Desktop main menu */}
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {PRIMARY_NAV_LINKS.map((link) => (
             <Link
