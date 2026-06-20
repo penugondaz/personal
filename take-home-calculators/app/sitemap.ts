@@ -21,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/nps-calculator", priority: 0.8 },
     { route: "/calculator/gratuity-calculator", priority: 0.8 },
     { route: "/calculator/epf-vs-ppf", priority: 0.75 },
+    { route: "/calculator/nsc-calculator", priority: 0.8 },
     // Tax & Pay
     { route: "/calculator/hra-calculator", priority: 0.8 },
     { route: "/calculator/salary-hike-calculator", priority: 0.75 },
@@ -31,9 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/old-vs-new-tax-regime", priority: 0.85 },
     // Investments
     { route: "/calculator/sip-calculator", priority: 0.8 },
+    { route: "/calculator/step-up-sip-calculator", priority: 0.8 },
     { route: "/calculator/lumpsum-calculator", priority: 0.8 },
     { route: "/calculator/mutual-fund-calculator", priority: 0.8 },
     { route: "/calculator/swp-calculator", priority: 0.75 },
+    { route: "/calculator/swp-inflation-calculator", priority: 0.75 },
     { route: "/calculator/goal-planning-calculator", priority: 0.8 },
     { route: "/calculator/stock-average-calculator", priority: 0.7 },
     { route: "/calculator/xirr-calculator", priority: 0.75 },
@@ -48,7 +51,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/tax-saving", priority: 0.9 },
     // Salary Growth
     { route: "/salary-growth", priority: 0.9 },
+    // Layoffs Tracker
     { route: "/layoffs", priority: 0.95 },
+    // Free Tools
+    { route: "/tools", priority: 0.85 },
+    { route: "/tools/discount-calculator", priority: 0.75 },
+    { route: "/tools/percentage-calculator", priority: 0.75 },
+    { route: "/tools/average-calculator", priority: 0.75 },
+    { route: "/tools/number-converter", priority: 0.75 },
+    { route: "/tools/character-counter", priority: 0.75 },
+    { route: "/tools/word-counter", priority: 0.75 },
+    { route: "/tools/text-case-converter", priority: 0.75 },
   ];
 
   const salaryRoutes = SALARY_LPA_VALUES.map((lpa) => ({
