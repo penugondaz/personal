@@ -1,5 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { NAV_SECTIONS } from "@/lib/navigation";
+
+const LOGO_URL =
+  "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/logo.png";
 
 export default function SiteFooter() {
   return (
@@ -8,21 +12,16 @@ export default function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* About */}
           <div>
-            <div className="flex items-center gap-2.5">
-              <svg width="28" height="28" viewBox="0 0 34 34" aria-hidden="true">
-                <rect width="34" height="34" rx="10" fill="var(--accent)" />
-                <path
-                  d="M11 10h12M11 10c4.5 0 7 1.6 7 4.4S15.5 18.8 11 18.8h-.3L20 24"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-                <path d="M11 14.4h12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-              <span className="font-display text-base font-semibold">Salary Tools</span>
-            </div>
+            {/* Logo — white/light version via CSS brightness invert on dark bg */}
+            <Link href="/" aria-label="Salary Tools — Home">
+              <Image
+                src={LOGO_URL}
+                alt="Salary Tools"
+                width={140}
+                height={40}
+                className="h-8 w-auto object-contain brightness-0 invert"
+              />
+            </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
               Free, fast salary, tax, EPF, and PPF calculators built for India&apos;s actual tax
               rules and payroll structures. Every calculation runs entirely in your browser —
@@ -50,21 +49,14 @@ export default function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Salary Tools. Figures are estimates based on
-            current FY 2025-26 tax rules and common salary structures — actual amounts depend on
-            your specific employer policies. This site does not provide financial, tax, or legal
-            advice.
+            © {new Date().getFullYear()} Salary Tools. Figures are estimates based on current
+            FY 2025-26 tax rules and common salary structures — actual amounts depend on your
+            specific employer policies. This site does not provide financial, tax, or legal advice.
           </p>
           <div className="flex gap-4 whitespace-nowrap">
-            <Link href="/salary" className="hover:text-white">
-              Salary
-            </Link>
-            <Link href="/epf-calculator" className="hover:text-white">
-              EPF
-            </Link>
-            <Link href="/ppf-calculator" className="hover:text-white">
-              PPF
-            </Link>
+            <Link href="/salary" className="hover:text-white">Salary</Link>
+            <Link href="/calculator/epf-calculator" className="hover:text-white">EPF</Link>
+            <Link href="/calculator/ppf-calculator" className="hover:text-white">PPF</Link>
           </div>
         </div>
       </div>
