@@ -1,46 +1,18 @@
-# Builds and deploys the take-home-calculators Next.js app to GitHub Pages.
-#
-# Repo layout assumption: this workflow file lives at the REPO ROOT
-# (penugondaz/personal/.github/workflows/deploy-take-home-calculators.yml),
-# and the app source lives in the subfolder `take-home-calculators/`.
-#
-# DEPLOYMENT TARGET:
-#   https://salarytools.in
-#
-# With the custom domain configured, the site is served at the domain
-# root — no basePath prefix is needed. The CNAME file in public/
-# tells GitHub Pages to keep using the custom domain across deploys.
-#
-# IMPORTANT — one-time GitHub Pages setup (Settings > Pages):
-#   Source: "GitHub Actions" (not "Deploy from a branch")
-
-name: Deploy take-home-calculators to GitHub Pages
+name: Deploy Take Home Calculators
 
 on:
   push:
     branches: [main]
     paths:
       - "take-home-calculators/**"
-      - ".github/workflows/deploy-take-home-calculators.yml"
-  workflow_dispatch: {}
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages-take-home-calculators"
-  cancel-in-progress: true
+  repository_dispatch:
+    types: [sanity-deploy]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: take-home-calculators
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -51,29 +23,21 @@ jobs:
           cache-dependency-path: take-home-calculators/package-lock.json
 
       - name: Install dependencies
+        working-directory: take-home-calculators
         run: npm ci
 
-      - name: Build static export
+      - name: Build
+        working-directory: take-home-calculators
         env:
-          NODE_ENV: production
-          NEXT_PUBLIC_BASE_PATH: ""
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+          NEXT_PUBLIC_BASE_PATH: /personal
         run: npm run build
 
-      - name: Add .nojekyll
-        run: touch out/.nojekyll
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ${{ github.workspace }}/take-home-calculators/out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: take-home-calculators/out
+          destination_dir: .
