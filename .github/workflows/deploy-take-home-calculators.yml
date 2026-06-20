@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: take-home-calculators/package-lock.json
 
       - name: Install dependencies
         working-directory: take-home-calculators
@@ -32,7 +30,7 @@ jobs:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
           SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
-          NEXT_PUBLIC_BASE_PATH: /personal
+          NEXT_PUBLIC_BASE_PATH: ""
         run: npm run build
 
       - name: Deploy to GitHub Pages
@@ -41,3 +39,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: take-home-calculators/out
           destination_dir: .
+          cname: salarytools.in
