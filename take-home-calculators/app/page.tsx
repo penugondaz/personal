@@ -140,7 +140,7 @@ export default function HomePage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-soft via-paper to-paper" />
-        <div className="mx-auto max-w-5xl px-6 pb-10 pt-14 sm:pt-20">
+        <div className="mx-auto max-w-5xl px-6 pb-10 pt-6 sm:pt-6">
           <div className="text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-surface px-3 py-1 text-xs font-medium text-brand">
               {(() => {
