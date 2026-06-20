@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "take-home-calculators/**"
+      - ".github/workflows/deploy-take-home-calculators.yml"
+  workflow_dispatch:
   repository_dispatch:
     types: [sanity-deploy]
 
@@ -33,10 +35,13 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: ""
         run: npm run build
 
+      - name: Add CNAME
+        run: echo "salarytools.in" > take-home-calculators/out/CNAME
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: take-home-calculators/out
           destination_dir: .
-          cname: salarytools.in
+          keep_files: false
