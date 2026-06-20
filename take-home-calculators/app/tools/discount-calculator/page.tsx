@@ -1,76 +1,93 @@
-"use client";
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { formatINR } from "@/lib/format";
+import DiscountCalculator from "@/components/DiscountCalculator";
+import { absoluteUrl } from "@/lib/paths";
+
+const title = "Discount Calculator — Calculate Sale Price After % or Flat Discount";
+const description =
+  "Instantly calculate the final price after applying a percentage or flat discount. See how much you save and exactly what you pay.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: absoluteUrl("/tools/discount-calculator") },
+  openGraph: { title, description, url: absoluteUrl("/tools/discount-calculator") },
+};
+
+const faqs = [
+  {
+    question: "How do I calculate a percentage discount?",
+    answer:
+      "Multiply the original price by the discount percentage and divide by 100 to get the discount amount. Subtract that from the original price. For example, 20% off ₹1,000 = ₹200 discount, so you pay ₹800.",
+  },
+  {
+    question: "What is the difference between % discount and flat discount?",
+    answer:
+      "A percentage discount scales with the price — 20% off a ₹500 item is ₹100, but 20% off a ₹5,000 item is ₹1,000. A flat discount is a fixed amount deducted regardless of price — ₹200 off means ₹200 off whether the item costs ₹500 or ₹5,000.",
+  },
+];
 
 export default function DiscountCalculatorPage() {
-  const [original, setOriginal] = useState("1000");
-  const [discount, setDiscount] = useState("20");
-  const [mode, setMode] = useState<"percent"|"flat">("percent");
-
-  const orig = Math.max(0, Number(original.replace(/[^0-9.]/g,""))||0);
-  const disc = Math.max(0, Number(discount.replace(/[^0-9.]/g,""))||0);
-  const discAmt = mode === "percent" ? Math.round(orig * disc / 100) : Math.min(disc, orig);
-  const finalPrice = Math.max(0, orig - discAmt);
-  const pctOff = orig > 0 ? ((discAmt / orig) * 100).toFixed(2) : "0";
-  const savings = discAmt;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span aria-current="page">Discount Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Discount Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Calculate the final price after applying a percentage or flat discount. Ideal for shopping, invoicing, and offers.</p>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card space-y-4">
-        <div className="flex gap-2">
-          {(["percent","flat"] as const).map(m => (
-            <button key={m} onClick={() => setMode(m)} className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${mode===m?"border-brand bg-brand text-white":"border-rule text-ink-soft hover:border-brand"}`}>
-              {m === "percent" ? "% Discount" : "Flat Amount Off"}
-            </button>
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <Link href="/tools" className="hover:text-brand">Tools</Link>
+        <span className="mx-1.5">/</span>
+        <span aria-current="page">Discount Calculator</span>
+      </nav>
+
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Discount Calculator</h1>
+      <p className="mt-4 text-lg text-ink-soft">
+        Calculate the final price after a percentage or flat discount. Instantly see your savings,
+        the amount deducted, and what you actually pay.
+      </p>
+
+      <div className="mt-10">
+        <DiscountCalculator />
+      </div>
+
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
+        <div className="mt-4 space-y-5">
+          {faqs.map((faq) => (
+            <div key={faq.question} className="border-b border-rule pb-4">
+              <h3 className="font-medium text-ink">{faq.question}</h3>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
+            </div>
           ))}
         </div>
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">Original Price (₹)</span>
-          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
-            <span className="text-ink-soft">₹</span>
-            <input type="text" inputMode="numeric" value={original} onChange={e => setOriginal(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
-          </div>
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-xs text-ink-soft">{mode === "percent" ? "Discount %" : "Discount Amount (₹)"}</span>
-          <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
-            {mode === "flat" && <span className="text-ink-soft">₹</span>}
-            <input type="text" inputMode="decimal" value={discount} onChange={e => setDiscount(e.target.value)} className="tabular w-full bg-transparent text-xl font-semibold text-ink outline-none" />
-            {mode === "percent" && <span className="text-ink-soft">%</span>}
-          </div>
-        </label>
-      </div>
+      </section>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
-        <div className="brand-gradient px-6 py-7 sm:px-8">
-          <p className="text-xs font-medium uppercase tracking-wide text-white/70">Final Price</p>
-          <div className="mt-1 font-display text-5xl font-semibold text-white">{formatINR(finalPrice)}</div>
-          <p className="mt-1 text-sm text-white/70">You save {formatINR(savings)} ({pctOff}% off)</p>
-        </div>
-        <div className="grid grid-cols-3 divide-x divide-rule px-6 py-5 sm:px-8">
-          <div className="pr-4"><p className="text-xs text-ink-soft">Original</p><p className="tabular mt-1 font-display text-lg font-semibold text-ink">{formatINR(orig)}</p></div>
-          <div className="px-4"><p className="text-xs text-ink-soft">Discount</p><p className="tabular mt-1 font-display text-lg font-semibold text-deduction">−{formatINR(discAmt)}</p></div>
-          <div className="pl-4"><p className="text-xs text-ink-soft">You Pay</p><p className="tabular mt-1 font-display text-lg font-semibold text-brand">{formatINR(finalPrice)}</p></div>
-        </div>
-      </div>
-
-      {/* Visual bar */}
-      <div className="mt-4 rounded-xl border border-rule bg-surface p-4">
-        <p className="text-xs text-ink-soft mb-2">Savings breakdown</p>
-        <div className="flex h-6 w-full overflow-hidden rounded-full">
-          <div className="bg-brand h-full transition-all" style={{width:`${100 - Number(pctOff)}%`}} />
-          <div className="bg-deduction/30 h-full transition-all" style={{width:`${Number(pctOff)}%`}} />
-        </div>
-        <div className="mt-1.5 flex justify-between text-xs text-ink-soft">
-          <span>You pay {(100 - Number(pctOff)).toFixed(1)}%</span>
-          <span>Save {pctOff}%</span>
-        </div>
-      </div>
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Related Tools</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[
+            { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
+            { href: "/tools/average-calculator", label: "Average Calculator" },
+            { href: "/tools", label: "All Tools" },
+          ].map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
