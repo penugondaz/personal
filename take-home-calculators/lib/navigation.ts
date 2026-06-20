@@ -13,6 +13,7 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Tracker",
     links: [
       { href: "/layoffs", label: "Layoffs Tracker 🔴" },
+      { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator" },
     ],
   },
   {
