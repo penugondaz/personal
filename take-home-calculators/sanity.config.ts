@@ -1,34 +1,7 @@
-import { defineConfig } from "sanity";
-import { structureTool } from "sanity/structure";
-import { visionTool }    from "@sanity/vision";
-import { schemaTypes }   from "./schemas";
+// Sanity project configuration
+// Studio is hosted at: https://c5v8ecsd.sanity.studio
+// (Sanity's free hosted studio — no embedding needed)
 
-export default defineConfig({
-  name:    "salarytools",
-  title:   "SalaryTools CMS",
-  projectId: "c5v8ecsd",
-  dataset:   "production",
-
-  plugins: [
-    structureTool({
-      structure: (S) =>
-        S.list()
-          .title("Content")
-          .items([
-            S.listItem().title("Site Settings").child(
-              S.document().schemaType("siteSettings").documentId("siteSettings")
-            ),
-            S.listItem().title("Homepage Sections").child(
-              S.document().schemaType("homepageSections").documentId("homepageSections")
-            ),
-            S.divider(),
-            S.listItem().title("All Pages (Meta & FAQs)").child(
-              S.documentTypeList("pageMeta").title("Pages")
-            ),
-          ]),
-    }),
-    visionTool(),
-  ],
-
-  schema: { types: schemaTypes },
-});
+export const sanityProjectId = "c5v8ecsd";
+export const sanityDataset   = "production";
+export const sanityApiVersion = "2024-01-01";
