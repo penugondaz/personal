@@ -62,6 +62,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/swp-inflation-calculator", label: "SWP with Inflation" },
       { href: "/calculator/goal-planning-calculator", label: "Goal Planning Calculator" },
       { href: "/calculator/xirr-calculator", label: "XIRR Calculator" },
+      { href: "/calculator/lic-xirr-calculator", label: "LIC XIRR Calculator" },
       { href: "/calculator/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
     ],
   },
