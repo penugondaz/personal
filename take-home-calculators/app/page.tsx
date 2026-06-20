@@ -12,7 +12,7 @@ import { absoluteUrl } from "@/lib/paths";
 export const metadata: Metadata = {
   title: "Salary Tools India — In-Hand Salary, Tax, EPF & Investment Calculators",
   description:
-    "Free salary, CTC, income tax, EPF, SIP, and investment calculators for India. See exactly what lands in your bank account. FY 2025-26 tax rules.",
+    "Free salary, CTC, income tax, EPF, SIP, and investment calculators for India. See exactly what lands in your bank account. FY 2026-27 tax rules.",
   alternates: { canonical: absoluteUrl("/") },
 };
 
@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "How accurate is this calculator?",
     answer:
-      "It models the most common salary structure used by Indian private-sector employers (basic ~40% of CTC, HRA ~50% of basic, statutory PF and tax rules for FY 2025-26). Use it as a close estimate, not an exact figure from your specific offer letter.",
+      "It models the most common salary structure used by Indian private-sector employers (basic ~40% of CTC, HRA ~50% of basic, statutory PF and tax rules for FY 2026-27). Use it as a close estimate, not an exact figure from your specific offer letter.",
   },
   {
     question: "Does this use the old or new tax regime?",
@@ -143,7 +143,15 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl px-6 pb-10 pt-14 sm:pt-20">
           <div className="text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-surface px-3 py-1 text-xs font-medium text-brand">
-              FY 2025-26 tax rules · Updated June 2026
+              {(() => {
+                const now = new Date();
+                const yr = now.getFullYear();
+                const mo = now.getMonth() + 1; // 1-based
+                const fyStart = mo >= 4 ? yr : yr - 1;
+                const fyEnd = String(fyStart + 1).slice(-2);
+                const month = now.toLocaleString("en-IN", { month: "long" });
+                return `FY ${fyStart}-${fyEnd} tax rules · Updated ${month} ${yr}`;
+              })()}
             </span>
             <h1 className="mt-5 font-display text-4xl font-semibold text-ink sm:text-5xl">
               India&apos;s Salary & Finance<br className="hidden sm:block" /> Calculator Suite
