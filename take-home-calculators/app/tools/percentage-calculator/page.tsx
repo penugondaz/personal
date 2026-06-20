@@ -1,70 +1,98 @@
-"use client";
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import PercentageCalculator from "@/components/PercentageCalculator";
+import { absoluteUrl } from "@/lib/paths";
 
-type Mode = "ofNumber"|"increase"|"decrease"|"difference"|"isWhat";
+const title = "Percentage Calculator — % of Number, Increase, Decrease, Change";
+const description =
+  "Free percentage calculator with 5 modes: find % of a number, calculate % increase or decrease, find % change between two values, and find what % one number is of another.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: absoluteUrl("/tools/percentage-calculator") },
+  openGraph: { title, description, url: absoluteUrl("/tools/percentage-calculator") },
+};
+
+const faqs = [
+  {
+    question: "How do I calculate what percentage one number is of another?",
+    answer:
+      "Divide the first number by the second and multiply by 100. For example, 25 is what % of 200? → (25 ÷ 200) × 100 = 12.5%.",
+  },
+  {
+    question: "How do I calculate percentage increase?",
+    answer:
+      "Subtract the original value from the new value, divide by the original value, and multiply by 100. For example, from ₹800 to ₹1,000 → (200 ÷ 800) × 100 = 25% increase.",
+  },
+  {
+    question: "How do I calculate percentage decrease?",
+    answer:
+      "Subtract the new value from the original, divide by the original, and multiply by 100. For example, from ₹1,000 to ₹750 → (250 ÷ 1,000) × 100 = 25% decrease.",
+  },
+];
 
 export default function PercentageCalculatorPage() {
-  const [mode, setMode] = useState<Mode>("ofNumber");
-  const [a, setA] = useState("25");
-  const [b, setB] = useState("200");
-  const [result, setResult] = useState<string|null>(null);
-
-  const calc = () => {
-    const na = parseFloat(a)||0, nb = parseFloat(b)||0;
-    switch(mode) {
-      case "ofNumber": setResult(`${na}% of ${nb} = ${(na * nb / 100).toFixed(4).replace(/\.?0+$/,"")}`); break;
-      case "increase": setResult(`${nb} increased by ${na}% = ${(nb * (1 + na/100)).toFixed(2)}`); break;
-      case "decrease": setResult(`${nb} decreased by ${na}% = ${(nb * (1 - na/100)).toFixed(2)}`); break;
-      case "difference": {
-        const diff = ((nb - na) / na * 100);
-        setResult(`${na} → ${nb} is ${diff >= 0 ? "+" : ""}${diff.toFixed(2)}% change`);
-        break;
-      }
-      case "isWhat": setResult(`${na} is ${(na / nb * 100).toFixed(4).replace(/\.?0+$/,"")}% of ${nb}`); break;
-    }
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
   };
-
-  const MODES: {id:Mode;label:string;desc:string;la:string;lb:string}[] = [
-    {id:"ofNumber",label:"% of Number",desc:"What is X% of Y?",la:"Percentage (%)",lb:"Number"},
-    {id:"increase",label:"% Increase",desc:"Increase Y by X%",la:"Increase by (%)",lb:"Starting value"},
-    {id:"decrease",label:"% Decrease",desc:"Decrease Y by X%",la:"Decrease by (%)",lb:"Starting value"},
-    {id:"difference",label:"% Change",desc:"% change from A to B",la:"From",lb:"To"},
-    {id:"isWhat",label:"X is what % of Y",desc:"A is what % of B?",la:"Value A",lb:"Value B"},
-  ];
-  const current = MODES.find(m => m.id === mode)!;
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft"><Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span><Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span><span>Percentage Calculator</span></nav>
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">Percentage Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">Five percentage calculators in one — find %, calculate increases, decreases, and changes.</p>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <div className="flex flex-wrap gap-2 mb-5">
-          {MODES.map(m => (
-            <button key={m.id} onClick={()=>{setMode(m.id);setResult(null);}} className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${mode===m.id?"bg-brand text-white":"border border-rule text-ink-soft hover:border-brand hover:text-brand"}`}>{m.label}</button>
-          ))}
-        </div>
-        <p className="mb-4 text-sm text-ink-soft">{current.desc}</p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.la}</span>
-            <input type="text" inputMode="decimal" value={a} onChange={e=>{setA(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
-          </label>
-          <label className="block"><span className="mb-1 block text-xs text-ink-soft">{current.lb}</span>
-            <input type="text" inputMode="decimal" value={b} onChange={e=>{setB(e.target.value);setResult(null);}} className="tabular w-full rounded-lg border border-rule bg-paper px-3 py-3 text-xl font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15" />
-          </label>
-        </div>
-        <button onClick={calc} className="mt-4 w-full rounded-xl bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark transition">Calculate</button>
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <Link href="/tools" className="hover:text-brand">Tools</Link>
+        <span className="mx-1.5">/</span>
+        <span aria-current="page">Percentage Calculator</span>
+      </nav>
+
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Percentage Calculator</h1>
+      <p className="mt-4 text-lg text-ink-soft">
+        Five percentage calculators in one — find % of a number, calculate increases, decreases,
+        % change between two values, and more.
+      </p>
+
+      <div className="mt-10">
+        <PercentageCalculator />
       </div>
 
-      {result && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-rule bg-surface shadow-card-lg">
-          <div className="brand-gradient px-6 py-8 text-center">
-            <p className="font-display text-2xl font-semibold text-white sm:text-3xl">{result}</p>
-          </div>
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
+        <div className="mt-4 space-y-5">
+          {faqs.map((faq) => (
+            <div key={faq.question} className="border-b border-rule pb-4">
+              <h3 className="font-medium text-ink">{faq.question}</h3>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
+            </div>
+          ))}
         </div>
-      )}
+      </section>
+
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Related Tools</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[
+            { href: "/tools/discount-calculator", label: "Discount Calculator" },
+            { href: "/tools/average-calculator", label: "Average Calculator" },
+            { href: "/tools", label: "All Tools" },
+          ].map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
