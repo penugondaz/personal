@@ -29,6 +29,22 @@ export const metadata: Metadata = {
   },
   description:
     "Salary Tools — Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India. Accurate, fast, and easy to use.",
+  openGraph: {
+    images: [
+      {
+        url: "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/meta%20image.png",
+        width: 1200,
+        height: 630,
+        alt: "Salary Tools — India Salary & Tax Calculators",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [
+      "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/meta%20image.png",
+    ],
+  },
 };
 
 export const viewport: Viewport = {
