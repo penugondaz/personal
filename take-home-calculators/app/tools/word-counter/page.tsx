@@ -1,88 +1,98 @@
-"use client";
-import { useState, useMemo } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import WordCounter from "@/components/WordCounter";
+import { absoluteUrl } from "@/lib/paths";
+
+const title = "Word Counter — Count Words, Characters, Sentences, Reading Time";
+const description =
+  "Count words, characters, sentences, and paragraphs instantly. Get estimated reading and speaking time, plus top word frequency analysis.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: absoluteUrl("/tools/word-counter") },
+  openGraph: { title, description, url: absoluteUrl("/tools/word-counter") },
+};
+
+const faqs = [
+  {
+    question: "How is reading time calculated?",
+    answer:
+      "Reading time is estimated at 200 words per minute — the average silent reading speed for adults. A 1,000-word article takes approximately 5 minutes to read.",
+  },
+  {
+    question: "How is speaking time calculated?",
+    answer:
+      "Speaking time is estimated at 130 words per minute — close to the average conversational pace. For presentations, 120–150 wpm is a comfortable rate for the audience.",
+  },
+  {
+    question: "What counts as a paragraph?",
+    answer:
+      "This tool counts paragraphs as blocks of text separated by a blank line (double newline). Single line breaks within a paragraph are not counted as paragraph separators.",
+  },
+];
 
 export default function WordCounterPage() {
-  const [text, setText] = useState("");
-
-  const stats = useMemo(() => {
-    const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-    const chars = text.length;
-    const charsNoSpaces = text.replace(/\s/g, "").length;
-    const sentences = text.trim() === "" ? 0 : (text.match(/[^.!?]*[.!?]+/g)||[]).length;
-    const paragraphs = text.trim() === "" ? 0 : text.split(/\n\s*\n/).filter(p => p.trim()).length;
-    const readingTime = Math.ceil(words / 200); // avg 200 wpm
-    const speakingTime = Math.ceil(words / 130); // avg 130 wpm
-    // Top words
-    const wordFreq: Record<string,number> = {};
-    if (text.trim()) {
-      text.toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(w=>w.length>3).forEach(w=>{wordFreq[w]=(wordFreq[w]||0)+1;});
-    }
-    const topWords = Object.entries(wordFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
-    return { words, chars, charsNoSpaces, sentences, paragraphs, readingTime, speakingTime, topWords };
-  }, [text]);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <nav className="mb-6 text-sm text-ink-soft">
-        <Link href="/" className="hover:text-brand">Home</Link><span className="mx-1.5">/</span>
-        <Link href="/tools" className="hover:text-brand">Tools</Link><span className="mx-1.5">/</span>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <Link href="/tools" className="hover:text-brand">Tools</Link>
+        <span className="mx-1.5">/</span>
         <span aria-current="page">Word Counter</span>
       </nav>
+
       <h1 className="font-display text-3xl text-ink sm:text-4xl">Word Counter</h1>
-      <p className="mt-4 text-lg text-ink-soft">Count words, characters, sentences, and paragraphs — plus estimated reading and speaking time.</p>
+      <p className="mt-4 text-lg text-ink-soft">
+        Count words, characters, sentences, and paragraphs instantly. See estimated reading and
+        speaking time, plus which words appear most often.
+      </p>
 
-      <div className="mt-8 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <textarea
-          value={text}
-          onChange={e => setText(e.target.value)}
-          rows={8}
-          placeholder="Paste or type your content here…"
-          className="w-full rounded-lg border border-rule bg-paper px-4 py-3 text-base text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/15 resize-none"
-          autoFocus
-        />
-        <div className="mt-2 flex justify-end">
-          <button onClick={() => setText("")} className="rounded-lg border border-rule px-3 py-1 text-xs text-ink-soft hover:border-deduction hover:text-deduction transition">Clear</button>
-        </div>
+      <div className="mt-10">
+        <WordCounter />
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          { label: "Words", value: stats.words.toLocaleString(), highlight: true },
-          { label: "Characters", value: stats.chars.toLocaleString() },
-          { label: "No Spaces", value: stats.charsNoSpaces.toLocaleString() },
-          { label: "Sentences", value: stats.sentences.toLocaleString() },
-          { label: "Paragraphs", value: stats.paragraphs.toLocaleString() },
-          { label: "Reading Time", value: stats.readingTime < 1 ? "<1 min" : `${stats.readingTime} min` },
-          { label: "Speaking Time", value: stats.speakingTime < 1 ? "<1 min" : `${stats.speakingTime} min` },
-          { label: "Avg Word Len", value: stats.words > 0 ? (stats.charsNoSpaces / stats.words).toFixed(1) : "0" },
-        ].map(s => (
-          <div key={s.label} className={`rounded-xl border p-4 ${s.highlight ? "border-brand bg-brand-soft" : "border-rule bg-surface"}`}>
-            <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">{s.label}</p>
-            <p className={`tabular mt-1 font-display text-2xl font-semibold ${s.highlight ? "text-brand" : "text-ink"}`}>{s.value}</p>
-          </div>
-        ))}
-      </div>
-
-      {stats.topWords.length > 0 && (
-        <div className="mt-6 rounded-xl border border-rule bg-surface p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft mb-3">Top Words (4+ letters)</p>
-          <div className="space-y-2">
-            {stats.topWords.map(([word, count]) => {
-              const maxCount = stats.topWords[0][1];
-              return (
-                <div key={word} className="flex items-center gap-3">
-                  <span className="w-28 text-sm font-medium text-ink truncate">{word}</span>
-                  <div className="flex-1 h-5 bg-rule rounded-full overflow-hidden">
-                    <div className="h-full bg-brand rounded-full transition-all" style={{ width: `${(count / maxCount) * 100}%` }} />
-                  </div>
-                  <span className="tabular w-8 text-right text-sm text-ink-soft">{count}</span>
-                </div>
-              );
-            })}
-          </div>
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
+        <div className="mt-4 space-y-5">
+          {faqs.map((faq) => (
+            <div key={faq.question} className="border-b border-rule pb-4">
+              <h3 className="font-medium text-ink">{faq.question}</h3>
+              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
+            </div>
+          ))}
         </div>
-      )}
+      </section>
+
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Related Tools</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[
+            { href: "/tools/character-counter", label: "Character Counter" },
+            { href: "/tools/text-case-converter", label: "Text Case Converter" },
+            { href: "/tools", label: "All Tools" },
+          ].map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
