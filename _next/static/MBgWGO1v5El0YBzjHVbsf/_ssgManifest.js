@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fsalary-growth\u002F[slug]","\u002Fsalary\u002F[slug]","\u002Ftax-saving\u002F[slug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
