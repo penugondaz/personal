@@ -4,6 +4,7 @@ import Script from "next/script";
 
 import "./globals.css";
 import { SITE_URL } from "@/lib/paths";
+import { getSiteSettings } from "@/sanity.client";
 import SiteShell from "@/components/SiteShell";
 
 const fraunces = Fraunces({
@@ -21,31 +22,31 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "Salary Tools — Salary, Tax, EPF & Payroll Calculators India",
-    template: "%s | Salary Tools",
-  },
-  description:
-    "Salary Tools — Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India. Accurate, fast, and easy to use.",
-  openGraph: {
-    images: [
-      {
-        url: "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/meta%20image.png",
-        width: 1200,
-        height: 630,
-        alt: "Salary Tools — India Salary & Tax Calculators",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: [
-      "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/meta%20image.png",
-    ],
-  },
-};
+// Fetch site settings from Sanity at build time
+// Falls back to hardcoded defaults if Sanity fields are blank
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getSiteSettings();
+
+  const siteName  = cms?.siteName        ?? "Salary Tools";
+  const siteDesc  = cms?.siteDescription ?? "Salary Tools — Free in-hand salary, CTC, income tax, EPF, PPF, gratuity, and payroll calculators for India. Accurate, fast, and easy to use.";
+  const ogImage   = cms?.ogImage         ?? "https://raw.githubusercontent.com/penugondaz/personal/refs/heads/main/images/meta%20image.png";
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: `${siteName} — Salary, Tax, EPF & Payroll Calculators India`,
+      template: `%s | ${siteName}`,
+    },
+    description: siteDesc,
+    openGraph: {
+      images: [{ url: ogImage, width: 1200, height: 630, alt: siteName }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [ogImage],
+    },
+  };
+}
 
 export const viewport: Viewport = {
   colorScheme: "light",
@@ -69,7 +70,6 @@ export default function RootLayout({
           src="https://www.googletagmanager.com/gtag/js?id=G-DBYZXD16PJ"
           strategy="afterInteractive"
         />
-
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
