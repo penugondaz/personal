@@ -116,6 +116,46 @@ export default function HomePage() {
         </p>
       </section>
 
+
+      {/* Layoff Risk Calculator widget */}
+      <section className="mx-auto max-w-3xl px-6 py-10">
+        <div className="overflow-hidden rounded-2xl border border-deduction/30 bg-surface shadow-card-lg">
+          <div className="bg-deduction px-6 py-5 sm:px-8">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <p className="font-display text-lg font-semibold text-white">Layoff Risk Calculator</p>
+                <p className="text-sm text-white/80">Know your risk score before layoffs happen</p>
+              </div>
+            </div>
+          </div>
+          <div className="px-6 py-5 sm:px-8">
+            <p className="text-sm text-ink-soft">
+              Get a personalised Layoff Risk Score (0–100) based on your company health, department,
+              performance, AI automation exposure, and industry outlook.
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+              {[
+                { icon: "🏢", label: "Company health" },
+                { icon: "👥", label: "Dept risk" },
+                { icon: "🤖", label: "AI risk for your role" },
+                { icon: "🎯", label: "Your profile" },
+              ].map(f => (
+                <div key={f.label} className="flex items-center gap-1.5 rounded-lg bg-paper px-2.5 py-2">
+                  <span>{f.icon}</span><span className="text-ink-soft">{f.label}</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/calculator/layoff-risk-calculator"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-deduction px-5 py-3 text-sm font-semibold text-white hover:opacity-90 transition"
+            >
+              Calculate My Layoff Risk →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="font-display text-xl text-ink">Why Your In-Hand Pay Is Lower Than Your CTC</h2>
         <p className="mt-3 text-ink-soft">
@@ -153,7 +193,14 @@ export default function HomePage() {
       <section className="mx-auto max-w-3xl px-6 py-10">
         <h2 className="font-display text-xl text-ink">All Calculators</h2>
 
-        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Salary</h3>
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Tracker & Risk</h3>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <DirectoryCard href="/layoffs" title="Layoffs Tracker 🔴" description="Real-time India tech layoffs — company, headcount, date, source." />
+          <DirectoryCard href="/calculator/layoff-risk-calculator" title="Layoff Risk Calculator" description="Your personal layoff risk score (0–100) based on 13 signals." />
+        </div>
+
+                <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-ink-soft">Salary</h3>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <DirectoryCard href="/salary" title="In-Hand Salary" description="Full CTC → take-home breakdown for any salary." />
           <DirectoryCard href="/salary/inhand-to-ctc-calculator" title="In-Hand to CTC" description="Reverse: find CTC from your desired take-home." />
