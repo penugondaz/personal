@@ -46,8 +46,53 @@ export default async function SalaryLpaPage({ params }: { params: Promise<{ slug
     6
   );
 
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": absoluteUrl("/") },
+          { "@type": "ListItem", "position": 2, "name": "Salary Calculators", "item": absoluteUrl("/salary") },
+          { "@type": "ListItem", "position": 3, "name": `${lpa} LPA In-Hand Salary`, "item": absoluteUrl(`/salary/${slug}`) },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `What is the in-hand salary for ${lpa} LPA?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `The in-hand salary for ${lpa} LPA CTC is approximately ${formatINR(result.inHandMonthly)} per month (${formatINR(result.inHandAnnual)} per year) under the new tax regime, after PF and income tax deductions. This assumes a standard salary structure with basic salary at 40% of CTC.`,
+            },
+          },
+          {
+            "@type": "Question",
+            "name": `How much tax do I pay on ${lpa} LPA?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "On a " + lpa + " LPA CTC, the estimated income tax under the new regime is " + formatINR(regimeComparison.new.totalTaxPayable) + " per year. Under the old regime with standard deductions, it may be " + formatINR(regimeComparison.old.totalTaxPayable) + " per year.",
+            },
+          },
+          {
+            "@type": "Question",
+            "name": `What is the PF deduction on ${lpa} LPA?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `On a ${lpa} LPA salary, the employee PF deduction is typically ${formatINR(result.employeePfMonthly)} per month (12% of basic salary). Your employer also contributes ${formatINR(result.employerPfMonthly)} per month to your EPF account.`,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">
           Home
