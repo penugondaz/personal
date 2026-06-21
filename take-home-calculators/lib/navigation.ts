@@ -10,10 +10,10 @@ export interface NavSection {
 
 export const NAV_SECTIONS: NavSection[] = [
   {
-    title: "Trackers",
+    title: "Tracker",
     links: [
-      { href: "/layoffs", label: "Layoffs Tracker ✂️" },
-      { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator 🚨" },
+      { href: "/layoffs", label: "Layoffs Tracker 🔴" },
+      { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator" },
     ],
   },
   {
@@ -36,6 +36,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
       { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
       { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
+      { href: "/calculator/fire-calculator", label: "FIRE Calculator 🔥" },
     ],
   },
   {
