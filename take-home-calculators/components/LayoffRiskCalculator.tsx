@@ -116,7 +116,7 @@ function ScoreGauge({ score, band }: { score: number; band: RiskBand }) {
   const ny = +(cy + nl * Math.sin(needleRad)).toFixed(2);
 
   return (
-    <svg viewBox="0 0 220 145" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
+    <svg viewBox="0 0 220 150" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
       {/* Background track */}
       <path d={`M ${bgS.x} ${bgS.y} A ${r} ${r} 0 1 1 ${bgE.x} ${bgE.y}`}
         fill="none" stroke="#e5e7eb" strokeWidth="14" strokeLinecap="butt" />
@@ -138,12 +138,12 @@ function ScoreGauge({ score, band }: { score: number; band: RiskBand }) {
       <circle cx={cx} cy={cy} r="7" fill="#1a1a2e" />
       <circle cx={cx} cy={cy} r="3.5" fill="white" />
 
-      {/* Score */}
-      <text x={cx} y={cy + 8} textAnchor="middle" fontSize="28" fontWeight="700" fill={band.color}>{score}</text>
+      {/* Score — below centre pivot, clear of needle */}
+      <text x={cx} y={cy + 28} textAnchor="middle" fontSize="26" fontWeight="700" fill={band.color}>{score}</text>
 
-      {/* Labels */}
-      <text x={bgS.x - 4} y={bgS.y + 4} textAnchor="end" fontSize="9" fill="#6b7280">Safe</text>
-      <text x={bgE.x + 4} y={bgE.y + 4} textAnchor="start" fontSize="9" fill="#6b7280">Critical</text>
+      {/* Labels — placed outside the arc ends, below the gauge */}
+      <text x="18" y="138" textAnchor="middle" fontSize="9" fill="#6b7280">Safe</text>
+      <text x="202" y="138" textAnchor="middle" fontSize="9" fill="#6b7280">Critical</text>
     </svg>
   );
 }
