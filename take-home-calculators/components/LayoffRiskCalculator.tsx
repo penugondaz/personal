@@ -67,68 +67,83 @@ function Radio({ label, options, value, onChange }: {
 // ─── Score Gauge ──────────────────────────────────────────────────────────────
 
 function ScoreGauge({ score, band }: { score: number; band: RiskBand }) {
-  // Semi-circle gauge: arc from 180° (left) to 0° (right), top half only
-  // This ensures no arc segment ever goes below the centre line
-  const cx = 110, cy = 100, r = 72;
+  const cx = 110, cy = 110, r = 80;
 
-  const toXY = (deg: number) => {
+  // Convert degrees (standard math: 0=right, 90=down) to SVG path point
+  const pt = (deg: number) => {
     const rad = (deg * Math.PI) / 180;
-    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+    return { x: +(cx + r * Math.cos(rad)).toFixed(2), y: +(cy + r * Math.sin(rad)).toFixed(2) };
   };
 
-  // Arc sweeps from 180° to 0° counter-clockwise (top half only)
-  // We divide 180° into 5 equal segments of 36° each
-  const arcPath = (startDeg: number, endDeg: number) => {
-    const s = toXY(startDeg);
-    const e = toXY(endDeg);
-    // sweep-flag=0 means counter-clockwise
-    return `M ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${r} ${r} 0 0 0 ${e.x.toFixed(2)} ${e.y.toFixed(2)}`;
+  // Draw arc from startDeg to endDeg going CLOCKWISE (sweep-flag=1)
+  // Gauge: left end = 210° (below-left), right end = 330° (below-right)
+  // So the arc sweeps across the top from 210° → 270° would be wrong
+  // Correct: start=210°, end=330° going clockwise through the TOP (via 270° = straight up)
+  // But clockwise from 210→330 goes DOWN through 270 bottom. We need counter-clockwise.
+  // Let's use: start=210, end=330, sweep=0 (CCW) with large-arc=1
+  const arcSeg = (startDeg: number, endDeg: number, color: string) => {
+    const s = pt(startDeg);
+    const e = pt(endDeg);
+    return (
+      <path
+        key={startDeg}
+        d={`M ${s.x} ${s.y} A ${r} ${r} 0 0 1 ${e.x} ${e.y}`}
+        fill="none" stroke={color} strokeWidth="14" strokeLinecap="butt"
+      />
+    );
   };
 
-  // 180° → 0° split into 5 bands (each 36°)
-  // 180→144 green, 144→108 lime, 108→72 amber, 72→36 orange, 36→0 red
-  const segments = [
-    { from: 180, to: 144, color: "#16a34a" },
-    { from: 144, to: 108, color: "#65a30d" },
-    { from: 108, to:  72, color: "#d97706" },
-    { from:  72, to:  36, color: "#ea580c" },
-    { from:  36, to:   0, color: "#dc2626" },
+  // 5 segments: 210°→246°→282°→318°→354°→30°
+  // Total sweep = 180° split into 5×36° bands
+  // Start=210° end=30° going clockwise (sweep=1), so:
+  // Seg1: 210→246, Seg2: 246→282, Seg3: 282→318, Seg4: 318→354, Seg5: 354→30
+  const segs = [
+    { s: 210, e: 246, c: "#16a34a" },
+    { s: 246, e: 282, c: "#65a30d" },
+    { s: 282, e: 318, c: "#d97706" },
+    { s: 318, e: 354, c: "#ea580c" },
+    { s: 354, e: 390, c: "#dc2626" }, // 390 = 30 mod 360
   ];
 
-  // Needle: score 0→100 maps to 180°→0°
-  const needleDeg = 180 - (score / 100) * 180;
+  // Background track: 210° → 30° clockwise (large arc)
+  const bgS = pt(210), bgE = pt(30);
+
+  // Needle: score 0→100 maps to 210°→30° (clockwise 180°)
+  const needleDeg = 210 + (score / 100) * 180;
   const needleRad = (needleDeg * Math.PI) / 180;
-  const needleLen = r - 10;
-  const nx = cx + needleLen * Math.cos(needleRad);
-  const ny = cy + needleLen * Math.sin(needleRad);
+  const nl = r - 14;
+  const nx = +(cx + nl * Math.cos(needleRad)).toFixed(2);
+  const ny = +(cy + nl * Math.sin(needleRad)).toFixed(2);
 
   return (
-    <svg viewBox="0 0 220 130" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
+    <svg viewBox="0 0 220 145" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
       {/* Background track */}
-      <path d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
-        fill="none" stroke="var(--rule)" strokeWidth="12" />
+      <path d={`M ${bgS.x} ${bgS.y} A ${r} ${r} 0 1 1 ${bgE.x} ${bgE.y}`}
+        fill="none" stroke="#e5e7eb" strokeWidth="14" strokeLinecap="butt" />
 
       {/* Coloured segments */}
-      {segments.map(s => (
-        <path key={s.from} d={arcPath(s.from, s.to)}
-          fill="none" stroke={s.color} strokeWidth="12" strokeLinecap="butt" />
-      ))}
+      {segs.map(sg => {
+        const s = pt(sg.s);
+        const eD = sg.e > 360 ? sg.e - 360 : sg.e;
+        const e = pt(eD);
+        return (
+          <path key={sg.s}
+            d={`M ${s.x} ${s.y} A ${r} ${r} 0 0 1 ${e.x} ${e.y}`}
+            fill="none" stroke={sg.c} strokeWidth="14" strokeLinecap="butt" />
+        );
+      })}
 
       {/* Needle */}
-      <line x1={cx} y1={cy} x2={nx.toFixed(2)} y2={ny.toFixed(2)}
-        stroke="var(--ink)" strokeWidth="3" strokeLinecap="round" />
-      <circle cx={cx} cy={cy} r="6" fill="var(--ink)" />
-      <circle cx={cx} cy={cy} r="3" fill="white" />
+      <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="#1a1a2e" strokeWidth="3" strokeLinecap="round" />
+      <circle cx={cx} cy={cy} r="7" fill="#1a1a2e" />
+      <circle cx={cx} cy={cy} r="3.5" fill="white" />
 
-      {/* Score — centred below arc, above baseline */}
-      <text x={cx} y={cy + 22} textAnchor="middle" fontSize="30"
-        fontWeight="700" fill={band.color}>{score}</text>
+      {/* Score */}
+      <text x={cx} y={cy + 8} textAnchor="middle" fontSize="28" fontWeight="700" fill={band.color}>{score}</text>
 
-      {/* Labels at arc endpoints */}
-      <text x={cx - r - 2} y={cy + 14} textAnchor="end"
-        fontSize="8" fill="var(--ink-soft)">Safe</text>
-      <text x={cx + r + 2} y={cy + 14} textAnchor="start"
-        fontSize="8" fill="var(--ink-soft)">Critical</text>
+      {/* Labels */}
+      <text x={bgS.x - 4} y={bgS.y + 4} textAnchor="end" fontSize="9" fill="#6b7280">Safe</text>
+      <text x={bgE.x + 4} y={bgE.y + 4} textAnchor="start" fontSize="9" fill="#6b7280">Critical</text>
     </svg>
   );
 }
