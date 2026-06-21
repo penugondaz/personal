@@ -10,9 +10,9 @@ import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
 export const metadata: Metadata = {
-  title: "Salary Tools India — In-Hand Salary, Tax, EPF & Investment Calculators",
+  title: "Salary Tools India | Free Salary, Tax, EPF, LIC, SIP & Retirement Calculators",
   description:
-    "Free salary, CTC, income tax, EPF, SIP, and investment calculators for India. See exactly what lands in your bank account. FY 2025-26 tax rules.",
+    "Free salary, tax, EPF, LIC, SIP, retirement and investment calculators for India. Calculate in-hand salary, income tax, gratuity, PF returns, LIC XIRR, retirement corpus and more.",
   alternates: { canonical: absoluteUrl("/") },
 };
 
