@@ -59,30 +59,37 @@ function calcPpf(annualDeposit: number, years: number) {
 // ─── Mini bar chart ───────────────────────────────────────────────────────────
 
 function BarChart({ data }: { data: { year: number; epf: number; ppf: number }[] }) {
-  const max = Math.max(...data.map(d => Math.max(d.epf, d.ppf)));
-  const show = data.filter((_, i) => data.length <= 15 || i % 2 === 1 || i === data.length - 1);
+  const max = Math.max(...data.flatMap(d => [d.epf, d.ppf]), 1);
+  const show = data.length <= 15 ? data : data.filter((_, i) => i % 2 === 0 || i === data.length - 1);
+
   return (
     <div className="mt-4">
-      <div className="flex items-end gap-1 h-36">
-        {show.map(d => (
-          <div key={d.year} className="flex-1 flex items-end gap-px group relative">
-            <div className="flex-1 rounded-t-sm bg-brand transition-all"
-              style={{ height: `${(d.epf / max) * 100}%` }} />
-            <div className="flex-1 rounded-t-sm bg-accent/70 transition-all"
-              style={{ height: `${(d.ppf / max) * 100}%` }} />
-            <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-10 pointer-events-none">
-              <div className="bg-ink text-white text-[10px] rounded px-2 py-1 whitespace-nowrap">
+      <div className="relative flex items-end gap-1" style={{ height: "140px" }}>
+        {show.map(d => {
+          const epfH = Math.max(2, (d.epf / max) * 130);
+          const ppfH = Math.max(2, (d.ppf / max) * 130);
+          return (
+            <div key={d.year} className="group relative flex flex-1 items-end gap-px" style={{ height: "130px" }}>
+              <div className="flex-1 rounded-t-sm bg-brand"
+                style={{ height: `${epfH}px` }} />
+              <div className="flex-1 rounded-t-sm bg-accent/70"
+                style={{ height: `${ppfH}px` }} />
+              {/* Tooltip */}
+              <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 rounded bg-ink px-2 py-1 text-[10px] text-white whitespace-nowrap group-hover:block">
                 <div>EPF: {formatINRCompact(d.epf)}</div>
                 <div>PPF: {formatINRCompact(d.ppf)}</div>
               </div>
             </div>
-            <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[8px] text-ink-soft whitespace-nowrap">
-              {d.year}y
-            </span>
-          </div>
+          );
+        })}
+      </div>
+      {/* X axis labels */}
+      <div className="flex gap-1 mt-1">
+        {show.map(d => (
+          <div key={d.year} className="flex-1 text-center text-[8px] text-ink-soft">{d.year}y</div>
         ))}
       </div>
-      <div className="mt-6 flex gap-4 text-xs text-ink-soft">
+      <div className="mt-3 flex gap-4 text-xs text-ink-soft">
         <span className="flex items-center gap-1.5"><span className="inline-block h-2.5 w-3 rounded-sm bg-brand" />EPF</span>
         <span className="flex items-center gap-1.5"><span className="inline-block h-2.5 w-3 rounded-sm bg-accent/70" />PPF</span>
       </div>
