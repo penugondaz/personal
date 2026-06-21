@@ -67,42 +67,68 @@ function Radio({ label, options, value, onChange }: {
 // ─── Score Gauge ──────────────────────────────────────────────────────────────
 
 function ScoreGauge({ score, band }: { score: number; band: RiskBand }) {
-  // Gauge spans from -135° (left/Safe) to +135° (right/Critical)
-  // cx=110, cy=110 gives more room below for labels
-  const cx = 110, cy = 105, r = 75;
+  // Semi-circle gauge: arc from 180° (left) to 0° (right), top half only
+  // This ensures no arc segment ever goes below the centre line
+  const cx = 110, cy = 100, r = 72;
+
   const toXY = (deg: number) => {
     const rad = (deg * Math.PI) / 180;
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
-  const arcPath = (start: number, end: number) => {
-    const s = toXY(start), e = toXY(end);
-    const large = end - start > 180 ? 1 : 0;
-    return `M ${s.x} ${s.y} A ${r} ${r} 0 ${large} 1 ${e.x} ${e.y}`;
+
+  // Arc sweeps from 180° to 0° counter-clockwise (top half only)
+  // We divide 180° into 5 equal segments of 36° each
+  const arcPath = (startDeg: number, endDeg: number) => {
+    const s = toXY(startDeg);
+    const e = toXY(endDeg);
+    // sweep-flag=0 means counter-clockwise
+    return `M ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${r} ${r} 0 0 0 ${e.x.toFixed(2)} ${e.y.toFixed(2)}`;
   };
-  const needleDeg = -135 + (score / 100) * 270;
+
+  // 180° → 0° split into 5 bands (each 36°)
+  // 180→144 green, 144→108 lime, 108→72 amber, 72→36 orange, 36→0 red
+  const segments = [
+    { from: 180, to: 144, color: "#16a34a" },
+    { from: 144, to: 108, color: "#65a30d" },
+    { from: 108, to:  72, color: "#d97706" },
+    { from:  72, to:  36, color: "#ea580c" },
+    { from:  36, to:   0, color: "#dc2626" },
+  ];
+
+  // Needle: score 0→100 maps to 180°→0°
+  const needleDeg = 180 - (score / 100) * 180;
   const needleRad = (needleDeg * Math.PI) / 180;
-  const nx = cx + 60 * Math.cos(needleRad);
-  const ny = cy + 60 * Math.sin(needleRad);
+  const needleLen = r - 10;
+  const nx = cx + needleLen * Math.cos(needleRad);
+  const ny = cy + needleLen * Math.sin(needleRad);
 
   return (
-    <svg viewBox="0 0 220 160" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
-      {/* Coloured arc segments */}
-      <path d={arcPath(-135, -81)} fill="none" stroke="#16a34a" strokeWidth="11" strokeLinecap="round" />
-      <path d={arcPath(-79,  -27)} fill="none" stroke="#65a30d" strokeWidth="11" strokeLinecap="round" />
-      <path d={arcPath(-25,   29)} fill="none" stroke="#d97706" strokeWidth="11" strokeLinecap="round" />
-      <path d={arcPath( 31,   85)} fill="none" stroke="#ea580c" strokeWidth="11" strokeLinecap="round" />
-      <path d={arcPath( 87,  135)} fill="none" stroke="#dc2626" strokeWidth="11" strokeLinecap="round" />
+    <svg viewBox="0 0 220 130" className="w-full max-w-[280px] mx-auto" aria-label={`Risk score: ${score}`}>
+      {/* Background track */}
+      <path d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
+        fill="none" stroke="var(--rule)" strokeWidth="12" />
+
+      {/* Coloured segments */}
+      {segments.map(s => (
+        <path key={s.from} d={arcPath(s.from, s.to)}
+          fill="none" stroke={s.color} strokeWidth="12" strokeLinecap="butt" />
+      ))}
 
       {/* Needle */}
-      <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="var(--ink)" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx={cx} cy={cy} r="5" fill="var(--ink)" />
+      <line x1={cx} y1={cy} x2={nx.toFixed(2)} y2={ny.toFixed(2)}
+        stroke="var(--ink)" strokeWidth="3" strokeLinecap="round" />
+      <circle cx={cx} cy={cy} r="6" fill="var(--ink)" />
+      <circle cx={cx} cy={cy} r="3" fill="white" />
 
-      {/* Score number — sits above needle pivot, well inside the arc */}
-      <text x={cx} y={cy - 18} textAnchor="middle" fontSize="32" fontWeight="700" fill={band.color}>{score}</text>
+      {/* Score — centred below arc, above baseline */}
+      <text x={cx} y={cy + 22} textAnchor="middle" fontSize="30"
+        fontWeight="700" fill={band.color}>{score}</text>
 
-      {/* Safe / Critical labels at the very bottom corners */}
-      <text x="12"  y="158" fontSize="8" fill="var(--ink-soft)" textAnchor="start">Safe</text>
-      <text x="208" y="158" fontSize="8" fill="var(--ink-soft)" textAnchor="end">Critical</text>
+      {/* Labels at arc endpoints */}
+      <text x={cx - r - 2} y={cy + 14} textAnchor="end"
+        fontSize="8" fill="var(--ink-soft)">Safe</text>
+      <text x={cx + r + 2} y={cy + 14} textAnchor="start"
+        fontSize="8" fill="var(--ink-soft)">Critical</text>
     </svg>
   );
 }
