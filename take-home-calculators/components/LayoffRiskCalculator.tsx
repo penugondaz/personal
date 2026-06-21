@@ -138,12 +138,12 @@ function ScoreGauge({ score, band }: { score: number; band: RiskBand }) {
       <circle cx={cx} cy={cy} r="7" fill="#1a1a2e" />
       <circle cx={cx} cy={cy} r="3.5" fill="white" />
 
-      {/* Score — below centre pivot, clear of needle */}
-      <text x={cx} y={cy + 28} textAnchor="middle" fontSize="26" fontWeight="700" fill={band.color}>{score}</text>
+      {/* Score — well below pivot */}
+      <text x={cx} y={cy + 35} textAnchor="middle" fontSize="26" fontWeight="700" fill={band.color}>{score}</text>
 
-      {/* Labels — placed outside the arc ends, below the gauge */}
-      <text x="18" y="138" textAnchor="middle" fontSize="9" fill="#6b7280">Safe</text>
-      <text x="202" y="138" textAnchor="middle" fontSize="9" fill="#6b7280">Critical</text>
+      {/* Labels — bottom corners, clear of arc ends */}
+      <text x="10" y="148" textAnchor="start" fontSize="9" fill="#6b7280">Safe</text>
+      <text x="210" y="148" textAnchor="end" fontSize="9" fill="#6b7280">Critical</text>
     </svg>
   );
 }
