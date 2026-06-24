@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { route: string; priority: number }[] = [
     { route: "/", priority: 1 },
+    { route: "/hi", priority: 0.9 },
     { route: "/salary", priority: 0.9 },
     { route: "/guides", priority: 0.6 },
     { route: "/guides/lpa-full-form", priority: 0.8 },
