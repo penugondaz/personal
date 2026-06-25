@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TAX_SAVING_LPA_VALUES, taxSavingSlug, parseTaxSavingSlug } from "@/lib/tax-saving-data";
+import { taxSavingSlug, parseTaxSavingSlug } from "@/lib/tax-saving-data";
+import { HI_TAX_SAVING_LPA_VALUES } from "@/lib/hi-salary-data";
 import { calculateTaxSaving } from "@/lib/calculators/tax-saving";
 import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, webPageSchema, buildJsonLd } from "@/lib/schema";
 
 export function generateStaticParams() {
-  return TAX_SAVING_LPA_VALUES.map((lpa) => ({ slug: taxSavingSlug(lpa) }));
+  return HI_TAX_SAVING_LPA_VALUES.map((lpa) => ({ slug: taxSavingSlug(lpa) }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -40,7 +41,7 @@ export default async function HindiTaxSavingPage({ params }: { params: Promise<{
 
   const data = calculateTaxSaving(lpa * 100_000);
 
-  const relatedLpas = TAX_SAVING_LPA_VALUES.filter(
+  const relatedLpas = HI_TAX_SAVING_LPA_VALUES.filter(
     (v) => Math.abs(v - lpa) > 0 && Math.abs(v - lpa) <= 3
   ).slice(0, 6);
 
