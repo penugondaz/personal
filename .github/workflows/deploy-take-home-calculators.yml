@@ -10,7 +10,6 @@ on:
   repository_dispatch:
     types: [sanity-deploy]
 
-# Cancel any in-progress run when a new commit is pushed
 concurrency:
   group: deploy-salarytools
   cancel-in-progress: true
@@ -35,12 +34,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Cache Next.js build
+      - name: Cache Next.js build output
+        id: nextjs-cache
         uses: actions/cache@v4
         with:
           path: take-home-calculators/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('take-home-calculators/package-lock.json') }}-${{ hashFiles('take-home-calculators/**/*.ts', 'take-home-calculators/**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('take-home-calculators/package-lock.json') }}-${{ hashFiles('take-home-calculators/**/*.ts', 'take-home-calculators/**/*.tsx', 'take-home-calculators/**/*.css') }}
           restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('take-home-calculators/package-lock.json') }}-
             ${{ runner.os }}-nextjs-
 
       - name: Install dependencies
@@ -50,9 +51,6 @@ jobs:
       - name: Build
         working-directory: take-home-calculators
         env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
-          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
           NEXT_PUBLIC_BASE_PATH: ""
         run: npm run build
 
