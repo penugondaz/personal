@@ -25,17 +25,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: take-home-calculators/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('take-home-calculators/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: "npm"
+          cache-dependency-path: take-home-calculators/package-lock.json
 
       - name: Cache Next.js build output
-        id: nextjs-cache
         uses: actions/cache@v4
         with:
           path: take-home-calculators/.next/cache
@@ -46,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: take-home-calculators
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
       - name: Build
         working-directory: take-home-calculators
