@@ -30,34 +30,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: take-home-calculators/package-lock.json
 
       - name: Install dependencies
-        working-directory: take-home-calculators
-        run: npm install --legacy-peer-deps
+        run: cd take-home-calculators && npm install --legacy-peer-deps
 
       - name: Build static export
-        working-directory: take-home-calculators
         env:
           NODE_ENV: production
           NEXT_PUBLIC_BASE_PATH: ""
           NODE_OPTIONS: "--max-old-space-size=4096"
           NEXT_PRIVATE_WORKER_COUNT: "1"
-        run: npm run build
+        run: cd take-home-calculators && npm run build
 
-      - name: Write CNAME
-        working-directory: take-home-calculators
-        run: echo "salarytools.in" > out/CNAME
-
-      - name: Add .nojekyll
-        working-directory: take-home-calculators
-        run: touch out/.nojekyll
+      - name: Write CNAME and nojekyll
+        run: |
+          echo "salarytools.in" > take-home-calculators/out/CNAME
+          touch take-home-calculators/out/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ github.workspace }}/take-home-calculators/out
+          path: take-home-calculators/out
 
   deploy:
     needs: build
