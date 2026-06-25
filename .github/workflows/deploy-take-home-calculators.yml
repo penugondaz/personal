@@ -1,4 +1,4 @@
-name: Deploy Take Home Calculators
+name: Deploy take-home-calculators to GitHub Pages
 
 on:
   push:
@@ -6,19 +6,27 @@ on:
     paths:
       - "take-home-calculators/**"
       - ".github/workflows/deploy-take-home-calculators.yml"
-  workflow_dispatch:
+  workflow_dispatch: {}
   repository_dispatch:
     types: [sanity-deploy]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
-  group: deploy-salarytools
+  group: "pages-take-home-calculators"
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: take-home-calculators
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -28,33 +36,34 @@ jobs:
           cache: "npm"
           cache-dependency-path: take-home-calculators/package-lock.json
 
-      - name: Cache Next.js build output
-        uses: actions/cache@v4
-        with:
-          path: take-home-calculators/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('take-home-calculators/package-lock.json') }}-${{ hashFiles('take-home-calculators/**/*.ts', 'take-home-calculators/**/*.tsx', 'take-home-calculators/**/*.css') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('take-home-calculators/package-lock.json') }}-
-            ${{ runner.os }}-nextjs-
-
       - name: Install dependencies
-        working-directory: take-home-calculators
         run: npm install --legacy-peer-deps
 
-      - name: Build
-        working-directory: take-home-calculators
+      - name: Build static export
         env:
+          NODE_ENV: production
           NEXT_PUBLIC_BASE_PATH: ""
           NODE_OPTIONS: "--max-old-space-size=4096"
         run: npm run build
 
-      - name: Add CNAME
-        run: echo "salarytools.in" > take-home-calculators/out/CNAME
+      - name: Write CNAME
+        run: echo "salarytools.in" > out/CNAME
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Add .nojekyll
+        run: touch out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: take-home-calculators/out
-          destination_dir: .
-          keep_files: false
+          path: ${{ github.workspace }}/take-home-calculators/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
