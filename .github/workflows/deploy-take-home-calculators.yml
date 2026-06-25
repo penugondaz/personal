@@ -10,6 +10,11 @@ on:
   repository_dispatch:
     types: [sanity-deploy]
 
+# Cancel any in-progress run when a new commit is pushed
+concurrency:
+  group: deploy-salarytools
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
