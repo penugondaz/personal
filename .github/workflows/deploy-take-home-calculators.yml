@@ -1,24 +1,69 @@
+name: Deploy take-home-calculators to GitHub Pages
 
-Run npm run build
-  
-> take-home-calculators@0.1.0 build
-> next build
-⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
-⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-▲ Next.js 16.2.9 (Turbopack)
-  Creating an optimized production build ...
-⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
-✓ Compiled successfully in 5.2s
-  Running TypeScript ...
-  Finished TypeScript in 7.1s ...
-  Collecting page data using 3 workers ...
-  Generating static pages using 3 workers (0/266) ...
-⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
-⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
-⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
-  Generating static pages using 3 workers (66/266) 
-  Generating static pages using 3 workers (132/266) 
+on:
+  push:
+    branches: [main]
+    paths:
+      - "take-home-calculators/**"
+      - ".github/workflows/deploy-take-home-calculators.yml"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [sanity-deploy]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-take-home-calculators"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: take-home-calculators
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: take-home-calculators/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --include=optional
+
+      - name: Build static export
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_BASE_PATH: ""
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: npm run build
+
+      - name: Write CNAME
+        run: echo "salarytools.in" > out/CNAME
+
+      - name: Add .nojekyll
+        run: touch out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ github.workspace }}/take-home-calculators/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
