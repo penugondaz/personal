@@ -37,13 +37,14 @@ jobs:
           cache-dependency-path: take-home-calculators/package-lock.json
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps --include=optional
+        run: npm install --legacy-peer-deps
 
       - name: Build static export
         env:
           NODE_ENV: production
           NEXT_PUBLIC_BASE_PATH: ""
           NODE_OPTIONS: "--max-old-space-size=4096"
+          NEXT_PRIVATE_WORKER_COUNT: "1"
         run: npm run build
 
       - name: Write CNAME
