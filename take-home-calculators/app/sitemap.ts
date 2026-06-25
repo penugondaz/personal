@@ -9,7 +9,6 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { route: string; priority: number }[] = [
     { route: "/", priority: 1 },
-    { route: "/hi", priority: 0.9 },
     { route: "/salary", priority: 0.9 },
     { route: "/guides", priority: 0.6 },
     { route: "/guides/lpa-full-form", priority: 0.8 },
@@ -84,12 +83,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
 
-  const HI_LPA = [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20,22,25,30,35,40,50];
-  const hindiSalaryPages = HI_LPA.map((lpa) => ({ route: `/hi/salary/${salarySlug(lpa)}`, priority: 0.7 }));
-  const hindiTaxSavingPages = HI_LPA.slice(0,20).map((lpa) => ({ route: `/hi/tax-saving/${taxSavingSlug(lpa)}`, priority: 0.7 }));
-  const hindiSalaryGrowthPages = HI_LPA.slice(0,20).map((lpa) => ({ route: `/hi/salary-growth/${salaryGrowthSlug(lpa)}`, priority: 0.7 }));
 
-  return [...staticRoutes, ...hindiSalaryPages, ...hindiTaxSavingPages, ...hindiSalaryGrowthPages, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
+  return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
     ({ route, priority }) => ({
       url: absoluteUrl(route),
       lastModified: new Date(),
