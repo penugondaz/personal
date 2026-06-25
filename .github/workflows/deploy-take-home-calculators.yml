@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Install swc for linux
+        run: npm install --no-save @next/swc-linux-x64-gnu@16.2.9 @next/swc-linux-x64-musl@16.2.9
+
       - name: Build static export
         env:
           NODE_ENV: production
