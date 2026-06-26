@@ -1,6 +1,8 @@
 // take-home-calculators/app/layoffs/page.tsx
 "use client";
 
+export const dynamic = "force-static";
+
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
