@@ -1,25 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+// Fonts loaded via CSS in globals.css
 import Script from "next/script";
 
 import "./globals.css";
 import { SITE_URL } from "@/lib/paths";
 import SiteShell from "@/components/SiteShell";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
-});
+const fraunces = { variable: "--font-fraunces" };
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
+const inter = { variable: "--font-inter" };
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
