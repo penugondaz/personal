@@ -384,6 +384,7 @@ export default function HomePage() {
               <DirectoryCard href="/calculator/nps-calculator" emoji="🏛️" title="NPS" description="Retirement corpus and estimated monthly pension." />
               <DirectoryCard href="/calculator/gratuity-calculator" emoji="🎁" title="Gratuity" description="Lump-sum payout after 5+ years of service." />
               <DirectoryCard href="/calculator/nsc-calculator" emoji="📜" title="NSC Calculator" description="National Savings Certificate at 7.7%." />
+              <DirectoryCard href="/calculator/pm-surya-ghar-calculator" emoji="🌞" title="PM Surya Ghar" description="Solar subsidy & savings calculator." />
               <DirectoryCard href="/calculator/fire-calculator" emoji="🔥" title="FIRE Calculator" description="When can you retire early? Calculate your FIRE number." />
             </div>
           </div>
