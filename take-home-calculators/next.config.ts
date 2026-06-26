@@ -17,7 +17,6 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   productionBrowserSourceMaps: false,
-  turbopack: false,
 };
 
 export default nextConfig;
