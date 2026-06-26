@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/gratuity-calculator", priority: 0.8 },
     { route: "/calculator/nsc-calculator", priority: 0.8 },
     { route: "/calculator/fire-calculator", priority: 0.9 },
+    { route: "/calculator/pm-surya-ghar-calculator", priority: 0.9 },
     // Tax & Pay
     { route: "/calculator/hra-calculator", priority: 0.8 },
     { route: "/calculator/salary-hike-calculator", priority: 0.75 },
