@@ -382,7 +382,6 @@ export default function HomePage() {
               <DirectoryCard href="/calculator/ppf-calculator" emoji="📗" title="PPF" description="Year-by-year PPF growth at 7.1% interest." />
               <DirectoryCard href="/calculator/nps-calculator" emoji="🏛️" title="NPS" description="Retirement corpus and estimated monthly pension." />
               <DirectoryCard href="/calculator/gratuity-calculator" emoji="🎁" title="Gratuity" description="Lump-sum payout after 5+ years of service." />
-              <DirectoryCard href="/calculator/epf-vs-ppf" emoji="⚖️" title="EPF vs PPF" description="Side-by-side comparison of both." />
               <DirectoryCard href="/calculator/nsc-calculator" emoji="📜" title="NSC Calculator" description="National Savings Certificate at 7.7%." />
               <DirectoryCard href="/calculator/fire-calculator" emoji="🔥" title="FIRE Calculator" description="When can you retire early? Calculate your FIRE number." />
             </div>
