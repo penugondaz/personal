@@ -1,4 +1,12 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap");
+
+
+:root {
+  --font-fraunces: "Fraunces", Georgia, serif;
+  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+}
+
 
 /*
  * Design system: "Ledger, Modernized"
