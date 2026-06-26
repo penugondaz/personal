@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/salary/salary-structure-calculator", priority: 0.8 },
     // Retirement & Savings
     { route: "/calculator/epf-calculator", priority: 0.85 },
+    { route: "/calculator/epf-vs-ppf", priority: 0.75 },
     { route: "/calculator/ppf-calculator", priority: 0.85 },
     { route: "/calculator/nps-calculator", priority: 0.8 },
     { route: "/calculator/gratuity-calculator", priority: 0.8 },
