@@ -34,7 +34,6 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/ppf-calculator", label: "PPF Calculator" },
       { href: "/calculator/nps-calculator", label: "NPS Calculator" },
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
-      { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
       { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
       { href: "/calculator/fire-calculator", label: "FIRE Calculator 🔥" },
     ],
