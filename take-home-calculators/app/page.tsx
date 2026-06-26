@@ -378,6 +378,7 @@ export default function HomePage() {
           <div>
             <SectionHeader label="🏦 Retirement & Savings" />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <DirectoryCard href="/calculator/epf-vs-ppf" emoji="⚖️" title="EPF vs PPF" description="Side-by-side comparison calculator." />
               <DirectoryCard href="/calculator/epf-calculator" emoji="🏦" title="EPF & VPF" description="Monthly PF contribution and long-term maturity." />
               <DirectoryCard href="/calculator/ppf-calculator" emoji="📗" title="PPF" description="Year-by-year PPF growth at 7.1% interest." />
               <DirectoryCard href="/calculator/nps-calculator" emoji="🏛️" title="NPS" description="Retirement corpus and estimated monthly pension." />
