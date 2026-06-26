@@ -1,140 +1,318 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import EpfVsPpfCalculator from "@/components/EpfVsPpfCalculator";
-import { EPF_INTEREST_RATE_FY2025_26 } from "@/lib/calculators/epf";
-import { PPF_INTEREST_RATE, PPF_MAX_ANNUAL_DEPOSIT } from "@/lib/calculators/ppf";
+"use client";
+
+import { useState, useMemo } from "react";
+import {
+  calculatePfBreakup,
+  projectEpfMaturity,
+  EPF_INTEREST_RATE_FY2025_26,
+} from "@/lib/calculators/epf";
+import {
+  projectPpfMaturity,
+  PPF_INTEREST_RATE,
+  PPF_MAX_ANNUAL_DEPOSIT,
+} from "@/lib/calculators/ppf";
 import { formatINR } from "@/lib/format";
-import { absoluteUrl } from "@/lib/paths";
 
-const title = "EPF vs PPF Calculator — Compare Returns Side by Side";
-const description =
-  "Compare EPF and PPF returns with a detailed calculator. See year-by-year corpus growth, total interest earned, and which option builds more wealth over your investment horizon.";
+export default function EpfVsPpfCalculator() {
+  const [basicSalary, setBasicSalary] = useState(30000);
+  const [years, setYears] = useState(20);
+  const [ppfAnnual, setPpfAnnual] = useState(50000);
+  const [activeTab, setActiveTab] = useState<"summary" | "yearly">("summary");
 
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: absoluteUrl("/calculator/epf-vs-ppf") },
-  openGraph: { title, description, url: absoluteUrl("/calculator/epf-vs-ppf") },
-};
+  const epf = useMemo(() => {
+    const pf = calculatePfBreakup(basicSalary);
+    const result = projectEpfMaturity(
+      pf.employeeContribution,
+      pf.employerEpfContribution,
+      years
+    );
+    return {
+      monthlyEmployee: pf.employeeContribution,
+      monthlyEmployer: pf.employerEpfContribution,
+      monthlyTotal: pf.employeeContribution + pf.employerEpfContribution,
+      annualContribution: (pf.employeeContribution + pf.employerEpfContribution) * 12,
+      totalContribution: result.totalContribution,
+      totalInterest: result.totalInterest,
+      maturity: result.maturityAmount,
+      rate: EPF_INTEREST_RATE_FY2025_26 * 100,
+    };
+  }, [basicSalary, years]);
 
-const comparisonRows: { feature: string; epf: string; ppf: string }[] = [
-  { feature: "Who can open one",   epf: "Salaried employees only",                        ppf: "Any resident Indian (including self-employed)" },
-  { feature: "Interest rate",      epf: `${(EPF_INTEREST_RATE_FY2025_26*100).toFixed(2)}% p.a.`, ppf: `${(PPF_INTEREST_RATE*100).toFixed(1)}% p.a.` },
-  { feature: "Contribution",       epf: "12% of Basic+DA (mandatory, employer-matched)",  ppf: `Voluntary, up to ${formatINR(PPF_MAX_ANNUAL_DEPOSIT)}/year` },
-  { feature: "Employer match",     epf: "Yes — employer adds 3.67% EPF + 8.33% EPS",     ppf: "No" },
-  { feature: "Lock-in",            epf: "Until retirement / resignation",                  ppf: "15 years minimum" },
-  { feature: "Tax treatment",      epf: "EEE (taxable if contribution > ₹2.5L/yr)",       ppf: "Fully EEE — no threshold" },
-  { feature: "Partial withdrawal", epf: "Allowed for specific reasons (medical, home…)",  ppf: "From 7th year onward" },
-  { feature: "Loan facility",      epf: "Not available",                                   ppf: "Available years 3–6" },
-];
+  const ppf = useMemo(() => {
+    const clamped = Math.min(ppfAnnual, PPF_MAX_ANNUAL_DEPOSIT);
+    const effectiveYears = Math.min(years, 15);
+    const result = projectPpfMaturity(clamped, effectiveYears);
+    return {
+      annualDeposit: clamped,
+      monthlyDeposit: Math.round(clamped / 12),
+      effectiveYears,
+      totalContribution: result.totalInvestment,
+      totalInterest: result.totalInterest,
+      maturity: result.maturityAmount,
+      yearlyBreakdown: result.yearlyBreakdown,
+      rate: PPF_INTEREST_RATE * 100,
+    };
+  }, [ppfAnnual, years]);
 
-const faqs = [
-  { question: "Which is better — EPF or PPF?", answer: "EPF typically wins on returns because it earns a higher interest rate (8.25% vs 7.1%) and includes an employer contribution of 3.67% which effectively boosts your effective return. However, PPF is available to everyone including the self-employed, has fully tax-free interest with no threshold, and offers a loan facility. Most salaried employees should maximise EPF/VPF first, then use PPF if they want an additional tax-free savings vehicle." },
-  { question: "Does EPF include employer contribution in this calculator?", answer: "Yes — the EPF corpus in this calculator includes both your 12% employee contribution and the employer's 3.67% EPF contribution (the remaining 8.33% goes to EPS, not your EPF account). This is why EPF typically builds a larger corpus than PPF for the same basic salary." },
-  { question: "What is VPF and should I use it?", answer: "VPF (Voluntary Provident Fund) lets you contribute more than the mandatory 12% to your EPF account, earning the same 8.25% rate. Since the interest is tax-free up to ₹2.5 lakh annual contribution, VPF is one of the best fixed-income options available and generally beats PPF on rate alone." },
-  { question: "Is PPF interest truly tax-free?", answer: "Yes — PPF has EEE (Exempt-Exempt-Exempt) status. Your deposits qualify for Section 80C deduction, interest earned is fully tax-free with no upper limit, and the maturity amount is tax-free. Unlike EPF, there is no threshold beyond which PPF interest becomes taxable." },
-  { question: "Can I have both EPF and PPF?", answer: "Absolutely — and many financial planners recommend it. EPF is compulsory for salaried employees, so you have it automatically. PPF can be opened separately at a post office or bank and used as an additional tax-free savings vehicle, particularly useful for goals beyond EPF (which is locked until retirement/resignation)." },
-];
+  const winner = epf.maturity > ppf.maturity ? "epf" : "ppf";
+  const diff = Math.abs(epf.maturity - ppf.maturity);
 
-export default function EpfVsPpfPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map(f => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
-  };
+  // Build year-by-year EPF table
+  const epfYearly = useMemo(() => {
+    const pf = calculatePfBreakup(basicSalary);
+    const monthly = pf.employeeContribution + pf.employerEpfContribution;
+    const rate = EPF_INTEREST_RATE_FY2025_26 / 12;
+    let balance = 0;
+    const rows = [];
+    for (let y = 1; y <= years; y++) {
+      const openingBalance = balance;
+      const yearlyDeposit = monthly * 12;
+      let yearInterest = 0;
+      for (let m = 0; m < 12; m++) {
+        balance += monthly;
+        yearInterest += balance * rate;
+      }
+      balance += yearInterest;
+      rows.push({
+        year: y,
+        deposit: yearlyDeposit,
+        interest: Math.round(yearInterest),
+        closing: Math.round(balance),
+      });
+    }
+    return rows;
+  }, [basicSalary, years]);
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
-      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-brand">Home</Link>
-        <span className="mx-1.5">/</span>
-        <span aria-current="page">EPF vs PPF</span>
-      </nav>
-
-      <h1 className="font-display text-3xl text-ink sm:text-4xl">EPF vs PPF Calculator</h1>
-      <p className="mt-4 text-lg text-ink-soft">
-        Compare EPF and PPF returns side by side — see year-by-year corpus growth, total interest
-        earned, and which builds more wealth over your investment horizon.
-      </p>
-
-      <div className="mt-8">
-        <EpfVsPpfCalculator />
+    <div className="space-y-8">
+      {/* Inputs */}
+      <div className="rounded-xl border border-rule bg-surface p-5">
+        <h2 className="font-display text-lg font-semibold text-ink mb-4">Calculator Inputs</h2>
+        <div className="grid gap-5 sm:grid-cols-3">
+          <div>
+            <label className="block text-sm font-medium text-ink mb-1">
+              Basic Salary (Monthly)
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-2 text-ink-soft text-sm">₹</span>
+              <input type="number" value={basicSalary} min={5000} max={500000}
+                onChange={e => setBasicSalary(Number(e.target.value))}
+                className="w-full rounded-lg border border-rule bg-paper pl-7 pr-3 py-2 text-sm text-ink focus:border-brand focus:outline-none" />
+            </div>
+            <p className="text-xs text-ink-soft mt-1">EPF = 12% of this amount</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-ink mb-1">
+              PPF Annual Deposit
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-2 text-ink-soft text-sm">₹</span>
+              <input type="number" value={ppfAnnual} min={500} max={150000}
+                onChange={e => setPpfAnnual(Number(e.target.value))}
+                className="w-full rounded-lg border border-rule bg-paper pl-7 pr-3 py-2 text-sm text-ink focus:border-brand focus:outline-none" />
+            </div>
+            <p className="text-xs text-ink-soft mt-1">Max ₹1,50,000/year</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-ink mb-1">
+              Investment Period: <span className="text-brand font-semibold">{years} years</span>
+            </label>
+            <input type="range" min={5} max={35} value={years}
+              onChange={e => setYears(Number(e.target.value))}
+              className="w-full accent-brand mt-2" />
+            <div className="flex justify-between text-xs text-ink-soft mt-1">
+              <span>5 yrs</span><span>35 yrs</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <section className="mt-14">
-        <h2 className="font-display text-2xl text-ink">Feature Comparison</h2>
-        <div className="mt-4 overflow-hidden rounded-lg border border-rule">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-rule bg-paper text-left">
-              <th className="px-4 py-2.5 font-medium text-ink-soft">Feature</th>
-              <th className="px-4 py-2.5 font-medium text-brand">EPF</th>
-              <th className="px-4 py-2.5 font-medium text-orange-600">PPF</th>
-            </tr></thead>
-            <tbody>
-              {comparisonRows.map(row => (
-                <tr key={row.feature} className="border-b border-rule last:border-0 hover:bg-paper">
-                  <td className="px-4 py-2.5 font-medium text-ink">{row.feature}</td>
-                  <td className="px-4 py-2.5 text-ink-soft">{row.epf}</td>
-                  <td className="px-4 py-2.5 text-ink-soft">{row.ppf}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      {/* Winner banner */}
+      <div className={`rounded-xl border p-4 text-sm font-medium ${
+        winner === "epf"
+          ? "border-brand/30 bg-brand-soft text-brand"
+          : "border-orange-200 bg-orange-50 text-orange-700"
+      }`}>
+        {winner === "epf" ? "🏆 EPF" : "🏆 PPF"} builds{" "}
+        <strong>{formatINR(diff)}</strong> more over {years} years.
+        {winner === "epf" && " This is mainly because EPF includes an employer contribution of 3.67%."}
+        {winner === "ppf" && ppf.effectiveYears < years && ` Note: PPF runs for ${ppf.effectiveYears} years (15-year lock-in applies).`}
+      </div>
 
-      <section className="mt-10">
-        <h2 className="font-display text-2xl text-ink">Which Should You Prioritise?</h2>
-        <p className="mt-3 text-ink-soft">
-          If you are salaried, EPF is automatic — your 12% and your employer&apos;s 3.67% flow in
-          every month. The EPF rate ({(EPF_INTEREST_RATE_FY2025_26*100).toFixed(2)}%) is also higher
-          than PPF ({(PPF_INTEREST_RATE*100).toFixed(1)}%), so EPF already forms the core of
-          retirement savings for most salaried people.
-        </p>
-        <p className="mt-3 text-ink-soft">
-          The real decision is whether to supplement with <strong>VPF</strong> (more EPF at the same
-          8.25% rate) or <strong>PPF</strong> (slightly lower rate but fully tax-free beyond any
-          threshold, accessible after 15 years, and available as a loan in years 3–6).
-        </p>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
-        <div className="mt-4 space-y-5">
-          {faqs.map(faq => (
-            <div key={faq.question} className="border-b border-rule pb-4">
-              <h3 className="font-medium text-ink">{faq.question}</h3>
-              <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
+      {/* Side by side results */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* EPF Card */}
+        <div className="rounded-xl border border-brand/20 bg-brand-soft p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-display text-lg font-semibold text-brand">EPF</h3>
+            <span className="text-xs font-medium bg-brand/10 text-brand px-2 py-0.5 rounded-full">
+              {epf.rate.toFixed(2)}% p.a.
+            </span>
+          </div>
+          <div className="space-y-2 text-sm">
+            {[
+              { label: "Your monthly contribution", value: formatINR(epf.monthlyEmployee) },
+              { label: "Employer's contribution", value: formatINR(epf.monthlyEmployer) },
+              { label: "Total monthly PF", value: formatINR(epf.monthlyTotal) },
+              { label: "Total invested", value: formatINR(epf.totalContribution) },
+              { label: "Total interest earned", value: formatINR(epf.totalInterest) },
+            ].map(row => (
+              <div key={row.label} className="flex justify-between">
+                <span className="text-ink-soft">{row.label}</span>
+                <span className="tabular font-medium text-ink">{row.value}</span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-brand/20 pt-3">
+            <div className="flex justify-between">
+              <span className="font-semibold text-ink">Maturity corpus</span>
+              <span className="tabular font-display text-xl font-bold text-brand">
+                {formatINR(epf.maturity)}
+              </span>
             </div>
+          </div>
+        </div>
+
+        {/* PPF Card */}
+        <div className="rounded-xl border border-orange-200 bg-orange-50 p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-display text-lg font-semibold text-orange-700">PPF</h3>
+            <span className="text-xs font-medium bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">
+              {ppf.rate.toFixed(1)}% p.a.
+            </span>
+          </div>
+          <div className="space-y-2 text-sm">
+            {[
+              { label: "Annual deposit", value: formatINR(ppf.annualDeposit) },
+              { label: "Monthly equivalent", value: formatINR(ppf.monthlyDeposit) },
+              { label: "Lock-in period", value: `${ppf.effectiveYears} years` },
+              { label: "Total invested", value: formatINR(ppf.totalContribution) },
+              { label: "Total interest earned", value: formatINR(ppf.totalInterest) },
+            ].map(row => (
+              <div key={row.label} className="flex justify-between">
+                <span className="text-ink-soft">{row.label}</span>
+                <span className="tabular font-medium text-ink">{row.value}</span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-orange-200 pt-3">
+            <div className="flex justify-between">
+              <span className="font-semibold text-ink">Maturity corpus</span>
+              <span className="tabular font-display text-xl font-bold text-orange-700">
+                {formatINR(ppf.maturity)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bar chart comparison */}
+      <div className="rounded-xl border border-rule bg-surface p-5">
+        <h3 className="font-semibold text-ink mb-4">Corpus Comparison</h3>
+        <div className="space-y-3">
+          {[
+            { label: "EPF Corpus", value: epf.maturity, color: "bg-brand", textColor: "text-brand" },
+            { label: "PPF Corpus", value: ppf.maturity, color: "bg-orange-400", textColor: "text-orange-600" },
+          ].map(item => {
+            const max = Math.max(epf.maturity, ppf.maturity);
+            const pct = Math.round((item.value / max) * 100);
+            return (
+              <div key={item.label}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-ink-soft">{item.label}</span>
+                  <span className={`tabular font-semibold ${item.textColor}`}>{formatINR(item.value)}</span>
+                </div>
+                <div className="h-5 w-full rounded-full bg-paper overflow-hidden">
+                  <div className={`h-5 rounded-full ${item.color} transition-all duration-500`}
+                    style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Tabs: Summary vs Yearly breakdown */}
+      <div>
+        <div className="flex gap-2 mb-4">
+          {(["summary", "yearly"] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                activeTab === tab
+                  ? "bg-brand text-white"
+                  : "border border-rule text-ink-soft hover:border-brand hover:text-brand"
+              }`}>
+              {tab === "summary" ? "Feature Comparison" : "Year-by-Year Breakdown"}
+            </button>
           ))}
         </div>
-      </section>
 
-      <section className="mt-12">
-        <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
-        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[
-            { href: "/calculator/epf-calculator",        label: "EPF & VPF Calculator" },
-            { href: "/calculator/ppf-calculator",        label: "PPF Calculator" },
-            { href: "/calculator/nps-calculator",        label: "NPS Calculator" },
-            { href: "/calculator/fire-calculator",       label: "FIRE Calculator" },
-            { href: "/tax-saving",                       label: "Tax Saving Guide" },
-            { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Regime" },
-          ].map(l => (
-            <li key={l.href}>
-              <Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+        {activeTab === "summary" && (
+          <div className="overflow-hidden rounded-lg border border-rule">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-rule bg-paper text-left">
+                  <th className="px-4 py-2.5 font-medium text-ink-soft">Feature</th>
+                  <th className="px-4 py-2.5 font-medium text-brand">EPF</th>
+                  <th className="px-4 py-2.5 font-medium text-orange-600">PPF</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: "Who can use", epf: "Salaried employees only", ppf: "Any Indian resident" },
+                  { feature: "Interest rate", epf: `${epf.rate.toFixed(2)}% p.a.`, ppf: `${ppf.rate.toFixed(1)}% p.a.` },
+                  { feature: "Employer match", epf: "Yes — 3.67% EPF + 8.33% EPS", ppf: "No" },
+                  { feature: "Contribution", epf: "12% of basic (mandatory)", ppf: "Voluntary, up to ₹1.5L/yr" },
+                  { feature: "Lock-in", epf: "Until retirement/resignation", ppf: "15 years minimum" },
+                  { feature: "Tax treatment", epf: "EEE (taxable >₹2.5L/yr)", ppf: "Fully EEE — no threshold" },
+                  { feature: "Loan facility", epf: "Not available", ppf: "Years 3–6" },
+                  { feature: "Partial withdrawal", epf: "Allowed for specific needs", ppf: "From 7th year onward" },
+                ].map(row => (
+                  <tr key={row.feature} className="border-b border-rule last:border-0 hover:bg-paper">
+                    <td className="px-4 py-2.5 font-medium text-ink">{row.feature}</td>
+                    <td className="px-4 py-2.5 text-ink-soft">{row.epf}</td>
+                    <td className="px-4 py-2.5 text-ink-soft">{row.ppf}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeTab === "yearly" && (
+          <div className="overflow-x-auto rounded-lg border border-rule">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-rule bg-paper text-left">
+                  <th className="px-4 py-2.5 font-medium text-ink-soft">Year</th>
+                  <th className="px-4 py-2.5 text-right font-medium text-brand">EPF Balance</th>
+                  <th className="px-4 py-2.5 text-right font-medium text-brand">EPF Interest</th>
+                  <th className="px-4 py-2.5 text-right font-medium text-orange-600">PPF Balance</th>
+                  <th className="px-4 py-2.5 text-right font-medium text-orange-600">PPF Interest</th>
+                </tr>
+              </thead>
+              <tbody>
+                {epfYearly.map((epfRow, i) => {
+                  const ppfRow = ppf.yearlyBreakdown[i];
+                  return (
+                    <tr key={epfRow.year} className="border-b border-rule last:border-0 hover:bg-paper">
+                      <td className="px-4 py-2 font-medium text-ink">Year {epfRow.year}</td>
+                      <td className="tabular px-4 py-2 text-right text-brand">{formatINR(epfRow.closing)}</td>
+                      <td className="tabular px-4 py-2 text-right text-ink-soft">{formatINR(epfRow.interest)}</td>
+                      <td className="tabular px-4 py-2 text-right text-orange-600">
+                        {ppfRow ? formatINR(ppfRow.closingBalance) : "—"}
+                      </td>
+                      <td className="tabular px-4 py-2 text-right text-ink-soft">
+                        {ppfRow ? formatINR(ppfRow.interestEarned) : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
