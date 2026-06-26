@@ -31,6 +31,7 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Retirement & Savings",
     links: [
       { href: "/calculator/epf-calculator", label: "EPF & VPF Calculator" },
+      { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
       { href: "/calculator/ppf-calculator", label: "PPF Calculator" },
       { href: "/calculator/nps-calculator", label: "NPS Calculator" },
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
