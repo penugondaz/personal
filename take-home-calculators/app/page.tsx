@@ -6,6 +6,8 @@ import { taxSavingSlug } from "@/lib/tax-saving-data";
 import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
 import { calculateSalaryGrowth } from "@/lib/calculators/salary-growth";
 import { calculateTaxSaving } from "@/lib/calculators/tax-saving";
+import { calculateIncomeTax, getCurrentFY } from "@/lib/calculators/income-tax";
+import { INCOME_TAX_LPA_VALUES, incomeTaxSlug } from "@/lib/income-tax-data";
 import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
@@ -154,10 +156,10 @@ export default function HomePage() {
               })()}
             </span>
             <h1 className="mt-5 font-display text-4xl font-semibold text-ink sm:text-5xl">
-              India&apos;s Salary & Finance<br className="hidden sm:block" /> Calculator Suite
+              Know Your Salary,<br className="hidden sm:block" /> Save More Tax
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-base text-ink-soft sm:text-lg">
-              Salary, tax, EPF, investments, and layoff risk — everything you need to understand your money. Free, private, no signup.
+              India&apos;s most detailed salary, income tax, EPF and investment calculators — new vs old regime, slab breakdown, deductions. Free, private, no signup.
             </p>
           </div>
 
@@ -177,8 +179,11 @@ export default function HomePage() {
 
           {/* ── Primary CTA strip ── */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/calculator/income-tax-calculator" className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-card-lg transition hover:opacity-90">
+              🧾 Income Tax Calculator <ArrowIcon />
+            </Link>
             <Link href="/salary" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-card-lg transition hover:opacity-90">
-              Calculate In-Hand Salary <ArrowIcon />
+              💰 In-Hand Salary <ArrowIcon />
             </Link>
             <Link href="/calculator/layoff-risk-calculator" className="inline-flex items-center gap-2 rounded-full border border-deduction/40 bg-deduction/8 px-6 py-3 text-sm font-semibold text-deduction transition hover:bg-deduction hover:text-white">
               ⚠ Check Layoff Risk
@@ -239,6 +244,83 @@ export default function HomePage() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      {/* ── Income Tax Quick-Pick Widget ────────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 py-6">
+        <div className="overflow-hidden rounded-2xl border border-brand/20 bg-gradient-to-br from-brand-soft to-paper shadow-card">
+          <div className="px-6 py-5 border-b border-brand/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🧾</span>
+                  <h2 className="font-display text-xl font-semibold text-ink">Income Tax Calculator {(() => { const now = new Date(); const yr = now.getFullYear(); const fyStart = now.getMonth() + 1 >= 4 ? yr : yr - 1; return `FY ${fyStart}-${String(fyStart+1).slice(-2)}`; })()}</h2>
+                </div>
+                <p className="mt-1 text-sm text-ink-soft">New vs Old Regime · Slab breakdown · Add deductions · Auto-updated every FY</p>
+              </div>
+              <Link href="/calculator/income-tax-calculator" className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-brand px-4 py-2 text-sm font-medium text-brand hover:bg-brand hover:text-white transition">
+                Full Calculator <ArrowIcon />
+              </Link>
+            </div>
+          </div>
+
+          {/* Popular salary tax grid */}
+          <div className="p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft mb-3">Income Tax by Salary — {(() => { const now = new Date(); const yr = now.getFullYear(); const fyStart = now.getMonth() + 1 >= 4 ? yr : yr - 1; return `FY ${fyStart}-${String(fyStart+1).slice(-2)}`; })()}</p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              {[6, 8, 10, 12, 15, 20, 25, 30].map(lpa => {
+                const gross = Math.round(lpa * 100_000 * 0.85); // approx gross
+                const tax = calculateIncomeTax(gross, "new");
+                const taxFree = tax.totalTaxPayable === 0;
+                return (
+                  <Link key={lpa} href={`/calculator/income-tax-calculator/${incomeTaxSlug(lpa)}`}
+                    className="group rounded-xl border border-rule bg-surface px-4 py-3 hover:border-brand hover:-translate-y-0.5 transition shadow-card">
+                    <p className="font-display text-base font-semibold text-ink">{lpa} LPA</p>
+                    <p className={`tabular text-sm font-semibold mt-0.5 ${taxFree ? "text-brand" : "text-deduction"}`}>
+                      {taxFree ? "Zero Tax ✓" : formatINR(tax.totalTaxPayable)}
+                    </p>
+                    <p className="text-[10px] text-ink-soft mt-0.5">
+                      {taxFree ? "u/s 87A rebate" : `${((tax.totalTaxPayable / gross) * 100).toFixed(1)}% effective`}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Key highlights */}
+            <div className="mt-4 grid gap-2 sm:grid-cols-3">
+              {[
+                { icon: "🎯", label: "Zero tax up to", value: "₹12.75 LPA", sub: "New regime + std deduction" },
+                { icon: "📋", label: "Standard deduction", value: "₹75,000", sub: "New regime · ₹50,000 old" },
+                { icon: "🎁", label: "87A rebate", value: "₹60,000", sub: "Taxable income ≤ ₹12L" },
+              ].map(item => (
+                <div key={item.label} className="flex items-center gap-3 rounded-lg border border-rule bg-paper px-3 py-2.5">
+                  <span className="text-xl shrink-0">{item.icon}</span>
+                  <div>
+                    <p className="text-xs text-ink-soft">{item.label}</p>
+                    <p className="font-semibold text-ink text-sm">{item.value}</p>
+                    <p className="text-[10px] text-ink-soft">{item.sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link href="/calculator/income-tax-calculator"
+                className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+                Calculate My Tax <ArrowIcon />
+              </Link>
+              <Link href="/calculator/old-vs-new-tax-regime"
+                className="inline-flex items-center gap-2 rounded-full border border-rule px-5 py-2.5 text-sm font-medium text-ink hover:border-brand hover:text-brand transition">
+                Old vs New Regime
+              </Link>
+              <Link href="/tax-saving"
+                className="inline-flex items-center gap-2 rounded-full border border-rule px-5 py-2.5 text-sm font-medium text-ink hover:border-brand hover:text-brand transition">
+                Tax Saving Guide
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
