@@ -1,4 +1,19 @@
-export const FISCAL_YEAR_LABEL = "FY 2025-26 (AY 2026-27)";
+// Auto-updates based on current date
+// Indian FY: April 1 to March 31
+export function getCurrentFY(): { fy: string; ay: string; fyLabel: string; fyShort: string } {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1-12
+  const fyStart = month >= 4 ? year : year - 1;
+  const fyEnd = fyStart + 1;
+  return {
+    fy: `${fyStart}-${String(fyEnd).slice(2)}`,
+    ay: `${fyEnd}-${String(fyEnd + 1).slice(2)}`,
+    fyLabel: `FY ${fyStart}-${String(fyEnd).slice(2)} (AY ${fyEnd}-${String(fyEnd + 1).slice(2)})`,
+    fyShort: `FY${fyStart}-${String(fyEnd).slice(2)}`,
+  };
+}
+export const FISCAL_YEAR_LABEL = getCurrentFY().fyLabel;
 
 export type TaxRegime = "new" | "old";
 
