@@ -43,6 +43,7 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Tax & Pay Components",
     links: [
       { href: "/tax-saving", label: "Tax Saving Guide" },
+      { href: "/calculator/income-tax-calculator", label: "Income Tax Calculator" },
       { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
       { href: "/calculator/hra-calculator", label: "HRA Calculator" },
       { href: "/calculator/advance-tax-calculator", label: "Advance Tax Calculator" },
