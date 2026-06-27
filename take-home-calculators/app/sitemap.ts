@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/paths";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
 import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
+import { INCOME_TAX_LPA_VALUES, incomeTaxSlug } from "@/lib/income-tax-data";
 import { SALARY_GROWTH_LPA_VALUES, salaryGrowthSlug } from "@/lib/salary-growth-data";
 
 export const dynamic = "force-static";
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/nsc-calculator", priority: 0.8 },
     { route: "/calculator/fire-calculator", priority: 0.9 },
     { route: "/calculator/pm-surya-ghar-calculator", priority: 0.9 },
+    { route: "/calculator/income-tax-calculator", priority: 0.95 },
     // Tax & Pay
     { route: "/calculator/hra-calculator", priority: 0.8 },
     { route: "/calculator/salary-hike-calculator", priority: 0.75 },
@@ -85,7 +87,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 
 
-  return [...staticRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
+  const incomeTaxRoutes = INCOME_TAX_LPA_VALUES.map(lpa => ({
+    route: `/calculator/income-tax-calculator/${incomeTaxSlug(lpa)}`,
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...incomeTaxRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
     ({ route, priority }) => ({
       url: absoluteUrl(route),
       lastModified: new Date(),
