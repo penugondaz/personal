@@ -365,6 +365,7 @@ export default function HomePage() {
             <SectionHeader label="🧾 Tax Saving" />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <DirectoryCard href="/tax-saving" emoji="🧾" title="Tax Saving Guide" description="80C, NPS, HRA, home loan — all deductions by salary." />
+              <DirectoryCard href="/calculator/income-tax-calculator" emoji="🧾" title="Income Tax Calculator" description="New vs old regime, slab breakdown, deductions." />
               <DirectoryCard href="/calculator/old-vs-new-tax-regime" emoji="⚖️" title="Old vs New Regime" description="Which tax regime saves you more." />
               <DirectoryCard href="/calculator/hra-calculator" emoji="🏡" title="HRA Exemption" description="How much of your HRA is actually tax-free." />
               <DirectoryCard href="/calculator/advance-tax-calculator" emoji="📅" title="Advance Tax" description="Quarterly installment schedule." />
