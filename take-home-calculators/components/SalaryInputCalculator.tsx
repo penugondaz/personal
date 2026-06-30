@@ -21,6 +21,8 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
   const [ptState, setPtState] = useState<ProfessionalTaxState>("none");
   const [gender, setGender] = useState<Gender>("male");
   const [pfMode, setPfMode] = useState<PfWageCeilingMode>("uncapped_actual_basic");
+  const [basicPercent, setBasicPercent] = useState(40);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [view, setView] = useState<ViewMode>("summary");
 
   const annualCtc = Math.max(0, Number(ctcInput.replace(/[^0-9.]/g, "")) || 0);
@@ -33,8 +35,9 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
         professionalTaxState: ptState,
         gender,
         pfWageCeilingMode: pfMode,
+        basicPercentOfCtc: basicPercent / 100,
       }),
-    [annualCtc, regime, ptState, gender, pfMode]
+    [annualCtc, regime, ptState, gender, pfMode, basicPercent]
   );
 
   const regimeComparison = useMemo(() => compareRegimes(result.grossSalaryAnnual), [result.grossSalaryAnnual]);
@@ -102,6 +105,48 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
             ]}
           />
         </div>
+
+        {/* Advanced — Basic % override */}
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((o) => !o)}
+          className="no-print mt-4 flex items-center gap-1.5 text-sm font-medium text-brand hover:underline"
+        >
+          <span>{showAdvanced ? "▼" : "▶"}</span>
+          {showAdvanced ? "Hide" : "Adjust"} Basic salary % (advanced)
+        </button>
+
+        {showAdvanced && (
+          <div className="mt-3 rounded-xl border border-rule bg-paper p-4">
+            <div className="flex items-center justify-between">
+              <label htmlFor="basic-percent" className="text-sm font-medium text-ink">
+                Basic salary: <span className="tabular text-brand font-semibold">{basicPercent}%</span> of CTC
+              </label>
+            </div>
+            <input
+              id="basic-percent"
+              type="range"
+              min={25}
+              max={60}
+              step={1}
+              value={basicPercent}
+              onChange={(e) => setBasicPercent(Number(e.target.value))}
+              className="mt-2 w-full accent-brand"
+            />
+            <div className="mt-1 flex justify-between text-xs text-ink-soft">
+              <span>25%</span>
+              <span>60%</span>
+            </div>
+            <p className="mt-3 text-xs text-ink-soft leading-relaxed">
+              <strong className="text-ink">Why this matters:</strong> Under the Code on Wages 2019
+              (being rolled out by employers through 2025–2026), Basic + other guaranteed components
+              must together be at least 50% of total remuneration for statutory purposes — but the
+              exact Basic % still varies by company. We default to 40% (a common industry figure),
+              but your actual offer letter or payslip may show a different Basic %. Check your CTC
+              breakup and adjust the slider above for an accurate result.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* View switcher */}
