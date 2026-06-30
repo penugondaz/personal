@@ -113,7 +113,7 @@ export default function PmSuryaGharPage() {
 
       {/* Hero */}
       <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-surface px-3 py-1 text-xs font-medium text-brand">
-        🌞 Updated for FY 2025-26
+        🌞 Updated for FY 2026-27
       </div>
       <h1 className="font-display text-3xl text-ink sm:text-4xl">
         PM Surya Ghar Muft Bijli Yojana Calculator
