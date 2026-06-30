@@ -336,6 +336,14 @@ export default async function TaxSavingPage({ params }: { params: Promise<{ slug
           </li>
           <li>
             <Link
+              href={`/salary-growth/${lpa}-lpa`}
+              className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
+            >
+              {lpa} LPA Growth Projection
+            </Link>
+          </li>
+          <li>
+            <Link
               href="/calculator/old-vs-new-tax-regime"
               className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand"
             >
