@@ -3,6 +3,7 @@ import { absoluteUrl } from "@/lib/paths";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
 import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
 import { INCOME_TAX_LPA_VALUES, incomeTaxSlug } from "@/lib/income-tax-data";
+import { INHAND_MONTHLY_VALUES, inhandSlug } from "@/lib/inhand-to-ctc-data";
 import { SALARY_GROWTH_LPA_VALUES, salaryGrowthSlug } from "@/lib/salary-growth-data";
 
 export const dynamic = "force-static";
@@ -92,7 +93,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...incomeTaxRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
+  const inhandRoutes = INHAND_MONTHLY_VALUES.map(monthly => ({
+    route: `/salary/${inhandSlug(monthly)}`,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...incomeTaxRoutes, ...inhandRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
     ({ route, priority }) => ({
       url: absoluteUrl(route),
       lastModified: new Date(),
