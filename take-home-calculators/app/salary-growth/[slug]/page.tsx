@@ -243,6 +243,45 @@ export default async function SalaryGrowthPage({ params }: { params: Promise<{ s
         </p>
       </section>
 
+      {/* Switch vs Stay insight */}
+      <section className="mt-12">
+        <h2 className="font-display text-2xl text-ink">Switching Jobs vs. Staying — Which Grows Faster?</h2>
+        <p className="mt-3 text-ink-soft">
+          Annual increments (8–18%) are only part of the picture. Job switches in India typically
+          bring <strong className="text-ink">25–40% salary jumps</strong> — far more than even an
+          &quot;exceptional&quot; internal hike. Here&apos;s how staying vs. switching compares over 5 years
+          from {lpa} LPA:
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border border-rule bg-surface p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">Stay & Get Annual Hikes</p>
+            <p className="mt-2 text-sm text-ink-soft">12% average hike, compounded yearly</p>
+            <p className="tabular mt-3 font-display text-2xl font-bold text-ink">
+              {formatINRCompact(data.scenarios[1].ctcAt5Years)}
+            </p>
+            <p className="text-xs text-ink-soft mt-1">after 5 years at this company</p>
+          </div>
+          <div className="rounded-xl border border-brand/30 bg-brand-soft p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand">Switch Once (Year 3) + Hikes</p>
+            <p className="mt-2 text-sm text-ink-soft">~30% jump at switch, then 10% hikes</p>
+            <p className="tabular mt-3 font-display text-2xl font-bold text-brand">
+              {formatINRCompact(Math.round(annualCtc * Math.pow(1.12, 2) * 1.30 * Math.pow(1.10, 2)))}
+            </p>
+            <p className="text-xs text-ink-soft mt-1">after 5 years, with one switch</p>
+          </div>
+        </div>
+        <div className="mt-4 rounded-xl border border-rule bg-paper p-4">
+          <p className="text-sm text-ink-soft">
+            <strong className="text-ink">The trade-off:</strong> switching jobs accelerates pay growth
+            but resets your tenure (affecting gratuity eligibility), may mean a steeper learning curve,
+            and isn&apos;t guaranteed every time. Staying offers stability, deeper expertise, and
+            sometimes better non-cash benefits (ESOPs, deferred bonuses). Most people who switch jobs
+            every 2-3 years in their first decade end up earning meaningfully more than those who stay
+            put — but it depends heavily on performance, market conditions, and the specific roles available.
+          </p>
+        </div>
+      </section>
+
       {/* Comparison table — all 4 scenarios side by side */}
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Side-by-Side: All 4 Scenarios</h2>
