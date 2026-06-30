@@ -392,6 +392,34 @@ function SalaryLpaContent({ lpa, slug }: { lpa: number; slug: string }) {
         </p>
       </section>
 
+      <section className="mt-10">
+        <h2 className="font-display text-2xl text-ink">Go Deeper on {lpa} LPA</h2>
+        <p className="mt-3 text-ink-soft">
+          See how to reduce your tax, project your salary growth, and run your own calculation
+          with custom inputs.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <Link href={`/tax-saving/${lpa}-lpa`}
+            className="group rounded-xl border border-rule bg-surface p-4 hover:border-brand hover:-translate-y-0.5 transition shadow-card">
+            <span className="text-xl">🧾</span>
+            <p className="mt-2 font-semibold text-ink">Tax Saving Guide</p>
+            <p className="mt-1 text-xs text-ink-soft">See how much tax you can save at {lpa} LPA with 80C, NPS, HRA</p>
+          </Link>
+          <Link href={`/salary-growth/${lpa}-lpa`}
+            className="group rounded-xl border border-rule bg-surface p-4 hover:border-brand hover:-translate-y-0.5 transition shadow-card">
+            <span className="text-xl">📈</span>
+            <p className="mt-2 font-semibold text-ink">Salary Growth Projection</p>
+            <p className="mt-1 text-xs text-ink-soft">See what {lpa} LPA grows to in 5 and 10 years</p>
+          </Link>
+          <Link href="/calculator/income-tax-calculator"
+            className="group rounded-xl border border-rule bg-surface p-4 hover:border-brand hover:-translate-y-0.5 transition shadow-card">
+            <span className="text-xl">🔢</span>
+            <p className="mt-2 font-semibold text-ink">Custom Tax Calculator</p>
+            <p className="mt-1 text-xs text-ink-soft">Add your own deductions and compare both regimes</p>
+          </Link>
+        </div>
+      </section>
+
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Frequently Asked Questions</h2>
         <div className="mt-4 space-y-5">
