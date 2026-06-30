@@ -4,7 +4,7 @@ import PmSuryaGharCalculator from "@/components/PmSuryaGharCalculator";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
-const TITLE = "PM Surya Ghar Muft Bijli Yojana Calculator 2025 — Subsidy & Savings Calculator";
+const TITLE = "PM Surya Ghar Muft Bijli Yojana Calculator 2026 — Subsidy & Savings Calculator";
 const DESCRIPTION = "Calculate your PM Surya Ghar subsidy amount, rooftop solar system size, monthly electricity savings, and payback period. Central government gives up to ₹78,000 subsidy on 1-3 kW solar systems.";
 const URL = "/calculator/pm-surya-ghar-calculator";
 
