@@ -11,6 +11,7 @@ import { compareRegimes } from "@/lib/calculators/income-tax";
 import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, salaryPageSchema, buildJsonLd } from "@/lib/schema";
+import { CITIES, NATIONAL_AVG_LPA_BY_EXPERIENCE } from "@/lib/city-cost-data";
 
 export function generateStaticParams() {
   const lpaParams = SALARY_LPA_VALUES.map((lpa) => ({ slug: salarySlug(lpa) }));
@@ -276,6 +277,20 @@ function SalaryLpaContent({ lpa, slug }: { lpa: number; slug: string }) {
         tax deductions.
       </p>
 
+      {/* National average context */}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {Object.entries(NATIONAL_AVG_LPA_BY_EXPERIENCE).map(([exp, avgLpa]) => {
+          const isAbove = lpa > avgLpa;
+          const diffPercent = Math.round((Math.abs(lpa - avgLpa) / avgLpa) * 100);
+          return (
+            <span key={exp}
+              className={`text-xs px-2.5 py-1 rounded-full border ${isAbove ? "border-brand/30 bg-brand-soft text-brand" : "border-rule bg-paper text-ink-soft"}`}>
+              {isAbove ? "↑" : "↓"} {diffPercent}% vs {exp} avg ({avgLpa} LPA)
+            </span>
+          );
+        })}
+      </div>
+
       <div className="mt-10">
         <SalaryInputCalculator initialAnnualCtc={annualCtc} />
       </div>
@@ -418,6 +433,51 @@ function SalaryLpaContent({ lpa, slug }: { lpa: number; slug: string }) {
             <p className="mt-1 text-xs text-ink-soft">Add your own deductions and compare both regimes</p>
           </Link>
         </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="font-display text-2xl text-ink">What {lpa} LPA Feels Like By City</h2>
+        <p className="mt-3 text-ink-soft">
+          The same {formatINR(result.inHandMonthly)}/month goes much further in some cities than
+          others. Here&apos;s how typical rent and cost of living compare:
+        </p>
+        <div className="mt-4 overflow-hidden rounded-lg border border-rule">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-rule bg-paper text-left">
+                <th className="px-4 py-2.5 font-medium text-ink-soft">City</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">Avg 1BHK Rent</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">Rent as % of In-Hand</th>
+                <th className="px-4 py-2.5 text-right font-medium text-ink-soft">Cost Index</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CITIES.map((city) => {
+                const rentPercent = Math.round((city.avgRent1BHK / result.inHandMonthly) * 100);
+                return (
+                  <tr key={city.name} className="border-b border-rule last:border-0 hover:bg-paper">
+                    <td className="px-4 py-2.5 font-medium text-ink">
+                      {city.name}
+                      {city.isMetroForHRA && (
+                        <span className="ml-1.5 text-[10px] text-brand bg-brand-soft px-1.5 py-0.5 rounded-full">50% HRA</span>
+                      )}
+                    </td>
+                    <td className="tabular px-4 py-2.5 text-right text-ink-soft">{formatINR(city.avgRent1BHK)}</td>
+                    <td className={`tabular px-4 py-2.5 text-right font-medium ${rentPercent > 40 ? "text-deduction" : rentPercent > 25 ? "text-orange-600" : "text-brand"}`}>
+                      {rentPercent}%
+                    </td>
+                    <td className="tabular px-4 py-2.5 text-right text-ink-soft">{city.costIndex}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-ink-soft">
+          Cost index: 100 = national average. Cities with &quot;50% HRA&quot; (Mumbai, Delhi, Chennai,
+          Kolkata) give you a higher HRA tax exemption limit than other cities (40%) — relevant if you
+          choose the old tax regime.
+        </p>
       </section>
 
       <section className="mt-12">
