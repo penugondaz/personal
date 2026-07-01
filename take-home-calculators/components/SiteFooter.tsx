@@ -59,17 +59,21 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} SalaryTools. Figures are estimates based on current
-            FY 2025-26 tax rules and common salary structures — actual amounts depend on your
-            specific employer policies. This site does not provide financial, tax, or legal advice.
-          </p>
-          <div className="flex gap-4 whitespace-nowrap">
-            <Link href="/salary" className="hover:text-white">Salary</Link>
-            <Link href="/calculator/epf-calculator" className="hover:text-white">EPF</Link>
-            <Link href="/calculator/ppf-calculator" className="hover:text-white">PPF</Link>
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/50 mb-4">
+            <Link href="/about" className="hover:text-white">About Us</Link>
+            <Link href="/contact" className="hover:text-white">Contact</Link>
+            <Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
+            <Link href="/disclaimer" className="hover:text-white">Disclaimer</Link>
+            <Link href="/terms-of-use" className="hover:text-white">Terms of Use</Link>
+            <Link href="/cookie-policy" className="hover:text-white">Cookie Policy</Link>
           </div>
+          <p className="text-xs text-white/40">
+            © {new Date().getFullYear()} SalaryTools India. Built by Praveen Penugonda &amp; Venkatesh Babu Gorantla, Hyderabad.
+            Figures are estimates only — actual amounts depend on your employer&apos;s salary structure and applicable tax rules.
+            This site does not provide financial, tax, or legal advice. See our{" "}
+            <Link href="/disclaimer" className="hover:text-white underline">disclaimer</Link>.
+          </p>
         </div>
       </div>
     </footer>
