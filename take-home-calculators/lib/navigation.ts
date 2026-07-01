@@ -94,8 +94,8 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Guides",
     links: [
-      { href: "/guides", label: "All Guides" },
-      { href: "/guides/lpa-full-form", label: "LPA Full Form" },
+      { href: "/blog", label: "Blog" },
+      { href: "/blog/lpa-full-form", label: "LPA Full Form" },
     ],
   },
 ];
