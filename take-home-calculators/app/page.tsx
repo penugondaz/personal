@@ -7,6 +7,7 @@ import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
 import { calculateSalaryGrowth } from "@/lib/calculators/salary-growth";
 import { calculateTaxSaving } from "@/lib/calculators/tax-saving";
 import { calculateIncomeTax, getCurrentFY } from "@/lib/calculators/income-tax";
+import { getAllBlogPosts, formatBlogDate } from "@/lib/blog-loader";
 import { INCOME_TAX_LPA_VALUES, incomeTaxSlug } from "@/lib/income-tax-data";
 import { formatINR, formatINRCompact } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
@@ -538,6 +539,44 @@ export default function HomePage() {
               <h3 className="font-medium text-ink">{faq.question}</h3>
               <p className="mt-1.5 text-sm text-ink-soft">{faq.answer}</p>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── From the Blog ─────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 py-8">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-display text-xl font-semibold text-ink">From the Blog</h2>
+          <Link href="/blog"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:underline underline-offset-2">
+            Read more <ArrowIcon className="text-brand" />
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {getAllBlogPosts().slice(0, 5).map(post => (
+            <Link key={post.slug} href={`/blog/${post.slug}`}
+              className="group flex flex-col rounded-xl border border-rule bg-surface p-4 shadow-card hover:border-brand hover:-translate-y-0.5 transition">
+              {post.frontmatter.ogImage && (
+                <img src={post.frontmatter.ogImage} alt={post.frontmatter.title}
+                  className="w-full h-32 object-contain bg-paper rounded-lg mb-3 border border-rule" />
+              )}
+              <div className="flex items-center gap-2 mb-2">
+                {post.frontmatter.category && (
+                  <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[10px] font-semibold text-brand">
+                    {post.frontmatter.category}
+                  </span>
+                )}
+                <span className="text-[10px] text-ink-soft">{formatBlogDate(post.frontmatter.date)}</span>
+              </div>
+              <p className="text-sm font-semibold text-ink group-hover:text-brand transition line-clamp-2">
+                {post.frontmatter.title}
+              </p>
+              {post.frontmatter.description && (
+                <p className="mt-1 text-xs text-ink-soft line-clamp-2 leading-relaxed">
+                  {post.frontmatter.description}
+                </p>
+              )}
+            </Link>
           ))}
         </div>
       </section>
