@@ -1,8 +1,9 @@
-const isProd = process.env.NODE_ENV === "production";
+import createMDX from "@next/mdx";
+import type { NextConfig } from "next";
+
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   basePath,
@@ -17,6 +18,14 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   productionBrowserSourceMaps: false,
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
+export default withMDX(nextConfig);
