@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, buildJsonLd } from "@/lib/schema";
+import { getAllBlogPosts, formatBlogDate } from "@/lib/blog-loader";
 
 export const metadata: Metadata = {
   title: "Blog — Salary, Tax & Finance Articles | SalaryTools India",
@@ -35,11 +36,20 @@ const jsonLd = buildJsonLd(
 );
 
 // All articles — add new ones here
-const ARTICLES = [
+
+function categoryEmoji(category?: string): string {
+  const map: Record<string, string> = {
+    "Guide": "📖", "How-to": "🛠️", "Listicle": "📋", "News": "📰",
+  };
+  return map[category || ""] || "📝";
+}
+
+const TSX_ARTICLES = [
   {
+    slug: "lpa-full-form",
     href: "/blog/lpa-full-form",
     title: "LPA Full Form — What Does LPA Mean in Salary?",
-    description: "LPA stands for Lakh Per Annum. Learn what it means, how it differs from in-hand salary, and see LPA to monthly salary conversions for popular packages.",
+    description: "LPA full form is Lakh Per Annum — salary expressed in lakhs (₹1,00,000) per year. Learn what LPA means, how it differs from in-hand salary, and see LPA to monthly salary conversions.",
     date: "2026-07-01",
     readTime: "4 min read",
     category: "Guide",
@@ -49,15 +59,29 @@ const ARTICLES = [
 
 const CATEGORIES = ["All", "Guide", "How-to", "Listicle", "News"];
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-IN", {
-    day: "numeric", month: "long", year: "numeric",
-  });
-}
-
 export default function BlogPage() {
-  const featured = ARTICLES[0];
-  const rest = ARTICLES.slice(1);
+  // Load MDX articles dynamically from content/blog/
+  const mdxPosts = getAllBlogPosts().map(post => ({
+    slug: post.slug,
+    href: `/blog/${post.slug}`,
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    date: post.frontmatter.date,
+    readTime: post.frontmatter.readTime || "5 min read",
+    category: post.frontmatter.category || "Guide",
+    emoji: categoryEmoji(post.frontmatter.category),
+  }));
+
+  // Merge MDX posts + TSX articles, sorted by date descending
+  const ALL_ARTICLES = [...mdxPosts, ...TSX_ARTICLES]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    // Deduplicate by slug (MDX takes priority over TSX)
+    .filter((article, index, self) =>
+      index === self.findIndex(a => a.slug === article.slug)
+    );
+
+  const featured = ALL_ARTICLES[0];
+  const rest = ALL_ARTICLES.slice(1);
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
@@ -106,7 +130,7 @@ export default function BlogPage() {
               <span className="rounded-full bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand">
                 {featured.category}
               </span>
-              <span className="text-xs text-ink-soft">{formatDate(featured.date)}</span>
+              <span className="text-xs text-ink-soft">{formatBlogDate(featured.date)}</span>
               <span className="text-xs text-ink-soft">·</span>
               <span className="text-xs text-ink-soft">{featured.readTime}</span>
             </div>
@@ -145,7 +169,7 @@ export default function BlogPage() {
       )}
 
       {/* Empty state for future articles */}
-      {ARTICLES.length === 1 && (
+      {ALL_ARTICLES.length === 0 && (
         <div className="mt-4 rounded-xl border border-dashed border-rule p-8 text-center text-ink-soft">
           <p className="text-lg">More articles coming soon.</p>
           <p className="mt-1 text-sm">We&apos;re working on guides for income tax, EPF withdrawal, HRA exemption, and more.</p>
