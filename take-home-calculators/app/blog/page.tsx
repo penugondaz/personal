@@ -127,7 +127,7 @@ export default function BlogPage() {
           {featured.ogImage ? (
             <div className="sm:w-72 sm:shrink-0 overflow-hidden">
               <img src={featured.ogImage} alt={featured.title}
-                className="h-48 w-full object-cover sm:h-full" />
+                className="h-48 w-full object-contain sm:h-full bg-paper" />
             </div>
           ) : (
             <div className="flex items-center justify-center bg-gradient-to-br from-brand-soft to-paper sm:w-72 sm:shrink-0 p-10 sm:p-0">
@@ -162,7 +162,7 @@ export default function BlogPage() {
               className="group flex flex-col rounded-xl border border-rule bg-surface p-5 shadow-card hover:border-brand hover:-translate-y-0.5 transition">
               {article.ogImage ? (
                 <img src={article.ogImage} alt={article.title}
-                  className="w-full h-36 object-cover rounded-lg mb-3 border border-rule" />
+                  className="w-full h-36 object-contain rounded-lg mb-3 border border-rule bg-paper" />
               ) : (
                 <span className="text-3xl mb-3">{article.emoji}</span>
               )}
