@@ -51,7 +51,7 @@ export default async function BlogPostPage({
   // Dynamically import the MDX file
   let MDXContent: React.ComponentType;
   try {
-    const mod = await import(`@/content/blog/${slug}.mdx`);
+    const mod = await import(`../../../content/blog/${slug}.mdx`);
     MDXContent = mod.default;
   } catch {
     notFound();
