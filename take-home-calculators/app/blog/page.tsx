@@ -54,6 +54,7 @@ const TSX_ARTICLES = [
     readTime: "4 min read",
     category: "Guide",
     emoji: "💰",
+    ogImage: undefined as string | undefined,
   },
 ];
 
@@ -70,6 +71,7 @@ export default function BlogPage() {
     readTime: post.frontmatter.readTime || "5 min read",
     category: post.frontmatter.category || "Guide",
     emoji: categoryEmoji(post.frontmatter.category),
+    ogImage: post.frontmatter.ogImage,
   }));
 
   // Merge MDX posts + TSX articles, sorted by date descending
@@ -121,10 +123,17 @@ export default function BlogPage() {
       {featured && (
         <Link href={featured.href}
           className="group mb-10 flex flex-col overflow-hidden rounded-2xl border border-rule bg-surface shadow-card hover:border-brand hover:-translate-y-0.5 transition sm:flex-row">
-          {/* Visual placeholder — replace with actual og image when available */}
-          <div className="flex items-center justify-center bg-gradient-to-br from-brand-soft to-paper sm:w-72 sm:shrink-0 p-10 sm:p-0">
-            <span className="text-7xl">{featured.emoji}</span>
-          </div>
+          {/* Featured image or emoji fallback */}
+          {featured.ogImage ? (
+            <div className="sm:w-72 sm:shrink-0 overflow-hidden">
+              <img src={featured.ogImage} alt={featured.title}
+                className="h-48 w-full object-cover sm:h-full" />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center bg-gradient-to-br from-brand-soft to-paper sm:w-72 sm:shrink-0 p-10 sm:p-0">
+              <span className="text-7xl">{featured.emoji}</span>
+            </div>
+          )}
           <div className="flex flex-col justify-center p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="rounded-full bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand">
@@ -151,7 +160,12 @@ export default function BlogPage() {
           {rest.map(article => (
             <Link key={article.href} href={article.href}
               className="group flex flex-col rounded-xl border border-rule bg-surface p-5 shadow-card hover:border-brand hover:-translate-y-0.5 transition">
-              <span className="text-3xl mb-3">{article.emoji}</span>
+              {article.ogImage ? (
+                <img src={article.ogImage} alt={article.title}
+                  className="w-full h-36 object-cover rounded-lg mb-3 border border-rule" />
+              ) : (
+                <span className="text-3xl mb-3">{article.emoji}</span>
+              )}
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium text-brand">
                   {article.category}
