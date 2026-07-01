@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 const TOOLS = [
+  { href: "/tools/age-calculator", icon: "🎂", title: "Age Calculator", desc: "Exact age in years, months, days, hours — plus zodiac & next birthday." },
   { href: "/tools/discount-calculator", icon: "🏷️", title: "Discount Calculator", desc: "Calculate sale price after % or flat discount." },
   { href: "/tools/percentage-calculator", icon: "📊", title: "Percentage Calculator", desc: "% increase, decrease, of number, difference." },
   { href: "/tools/average-calculator", icon: "➗", title: "Average Calculator", desc: "Mean, median, mode for any set of numbers." },
