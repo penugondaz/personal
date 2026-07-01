@@ -1,6 +1,5 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
-import Image from "next/image";
 
 // This file is required for Next.js MDX support.
 // It defines how MDX elements are rendered — so tables, images,
