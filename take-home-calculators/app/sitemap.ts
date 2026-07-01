@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllBlogSlugs } from "@/lib/blog-loader";
 import { absoluteUrl } from "@/lib/paths";
 import { SALARY_LPA_VALUES, salarySlug } from "@/lib/salary-data";
 import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
@@ -19,7 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/cookie-policy", priority: 0.4 },
     { route: "/salary", priority: 0.9 },
     { route: "/blog", priority: 0.6 },
-    { route: "/blog/lpa-full-form", priority: 0.8 },
     // Salary tools
     { route: "/salary/inhand-to-ctc-calculator", priority: 0.8 },
     { route: "/salary/salary-structure-calculator", priority: 0.8 },
@@ -100,12 +100,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
+  // Blog routes — auto-generated from content/blog/*.mdx + TSX articles
+  const blogRoutes = [
+    // MDX articles from content/blog/
+    ...getAllBlogSlugs().map(slug => ({
+      route: `/blog/${slug}`,
+      priority: 0.8,
+    })),
+    // TSX articles (hardcoded)
+    { route: "/blog/lpa-full-form", priority: 0.8 },
+  ];
+
   const inhandRoutes = INHAND_MONTHLY_VALUES.map(monthly => ({
     route: `/salary/${inhandSlug(monthly)}`,
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...incomeTaxRoutes, ...inhandRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
+  return [...staticRoutes, ...blogRoutes, ...incomeTaxRoutes, ...inhandRoutes, ...salaryRoutes, ...taxSavingRoutes, ...salaryGrowthRoutes].map(
     ({ route, priority }) => ({
       url: absoluteUrl(route),
       lastModified: new Date(),
