@@ -1,44 +1,179 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl } from "@/lib/paths";
+import { breadcrumbSchema, buildJsonLd } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Salary & Tax Guides — India",
+  title: "Blog — Salary, Tax & Finance Articles | SalaryTools India",
   description:
-    "Plain-English guides to salary structure, income tax, and payroll terms used in Indian job offers and payslips.",
+    "Articles, guides, how-tos and listicles on Indian salary, income tax, EPF, investments, and personal finance. Practical, accurate, updated for the latest rules.",
   alternates: { canonical: absoluteUrl("/blog") },
+  openGraph: {
+    title: "Blog — Salary, Tax & Finance Articles | SalaryTools India",
+    description: "Articles, guides, how-tos and listicles on Indian salary, income tax, EPF, investments, and personal finance.",
+    url: absoluteUrl("/blog"),
+  },
 };
 
-const guides = [
+const jsonLd = buildJsonLd(
+  breadcrumbSchema([
+    { name: "Home", href: "/" },
+    { name: "Blog", href: "/blog" },
+  ]),
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "SalaryTools India Blog",
+    "description": "Articles on Indian salary, income tax, EPF, investments and personal finance",
+    "url": absoluteUrl("/blog"),
+    "publisher": {
+      "@type": "Organization",
+      "name": "SalaryTools India",
+      "url": "https://salarytools.in",
+    },
+  }
+);
+
+// All articles — add new ones here
+const ARTICLES = [
   {
     href: "/blog/lpa-full-form",
-    title: "LPA Full Form",
-    description: "What LPA means, and how it differs from your in-hand salary.",
+    title: "LPA Full Form — What Does LPA Mean in Salary?",
+    description: "LPA stands for Lakh Per Annum. Learn what it means, how it differs from in-hand salary, and see LPA to monthly salary conversions for popular packages.",
+    date: "2026-07-01",
+    readTime: "4 min read",
+    category: "Guide",
+    emoji: "💰",
   },
 ];
 
-export default function GuidesIndexPage() {
-  return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-3xl text-ink">Salary & Tax Guides</h1>
-      <p className="mt-3 text-ink-soft">
-        Plain-English explanations of the terms you&apos;ll run into on offer letters, payslips,
-        and tax forms in India.
-      </p>
+const CATEGORIES = ["All", "Guide", "How-to", "Listicle", "News"];
 
-      <ul className="mt-8 space-y-3">
-        {guides.map((guide) => (
-          <li key={guide.href}>
-            <Link
-              href={guide.href}
-              className="block rounded-lg border border-rule bg-surface px-5 py-4 hover:border-brand"
-            >
-              <span className="font-medium text-brand">{guide.title}</span>
-              <p className="mt-1 text-sm text-ink-soft">{guide.description}</p>
-            </Link>
-          </li>
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+    day: "numeric", month: "long", year: "numeric",
+  });
+}
+
+export default function BlogPage() {
+  const featured = ARTICLES[0];
+  const rest = ARTICLES.slice(1);
+
+  return (
+    <main className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      {/* Breadcrumb */}
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <span aria-current="page">Blog</span>
+      </nav>
+
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="font-display text-4xl font-semibold text-ink sm:text-5xl">Blog</h1>
+        <p className="mt-3 max-w-xl text-lg text-ink-soft">
+          Articles, guides, and how-tos on Indian salary, income tax, EPF, and personal finance —
+          written for salaried professionals.
+        </p>
+      </div>
+
+      {/* Category filter — static display, future JS enhancement */}
+      <div className="mb-8 flex flex-wrap gap-2">
+        {CATEGORIES.map((cat, i) => (
+          <span key={cat}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium border transition ${
+              i === 0
+                ? "bg-brand text-white border-brand"
+                : "border-rule text-ink-soft hover:border-brand hover:text-brand cursor-pointer"
+            }`}>
+            {cat}
+          </span>
         ))}
-      </ul>
+      </div>
+
+      {/* Featured article */}
+      {featured && (
+        <Link href={featured.href}
+          className="group mb-10 flex flex-col overflow-hidden rounded-2xl border border-rule bg-surface shadow-card hover:border-brand hover:-translate-y-0.5 transition sm:flex-row">
+          {/* Visual placeholder — replace with actual og image when available */}
+          <div className="flex items-center justify-center bg-gradient-to-br from-brand-soft to-paper sm:w-72 sm:shrink-0 p-10 sm:p-0">
+            <span className="text-7xl">{featured.emoji}</span>
+          </div>
+          <div className="flex flex-col justify-center p-6 sm:p-8">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="rounded-full bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand">
+                {featured.category}
+              </span>
+              <span className="text-xs text-ink-soft">{formatDate(featured.date)}</span>
+              <span className="text-xs text-ink-soft">·</span>
+              <span className="text-xs text-ink-soft">{featured.readTime}</span>
+            </div>
+            <h2 className="font-display text-2xl font-semibold text-ink group-hover:text-brand transition">
+              {featured.title}
+            </h2>
+            <p className="mt-2 text-ink-soft leading-relaxed">{featured.description}</p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand">
+              Read article <span aria-hidden>→</span>
+            </span>
+          </div>
+        </Link>
+      )}
+
+      {/* Article grid */}
+      {rest.length > 0 && (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {rest.map(article => (
+            <Link key={article.href} href={article.href}
+              className="group flex flex-col rounded-xl border border-rule bg-surface p-5 shadow-card hover:border-brand hover:-translate-y-0.5 transition">
+              <span className="text-3xl mb-3">{article.emoji}</span>
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-medium text-brand">
+                  {article.category}
+                </span>
+                <span className="text-xs text-ink-soft">{article.readTime}</span>
+              </div>
+              <h2 className="font-display text-lg font-semibold text-ink group-hover:text-brand transition">
+                {article.title}
+              </h2>
+              <p className="mt-2 text-sm text-ink-soft line-clamp-3">{article.description}</p>
+              <span className="mt-4 text-sm font-medium text-brand">Read →</span>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Empty state for future articles */}
+      {ARTICLES.length === 1 && (
+        <div className="mt-4 rounded-xl border border-dashed border-rule p-8 text-center text-ink-soft">
+          <p className="text-lg">More articles coming soon.</p>
+          <p className="mt-1 text-sm">We&apos;re working on guides for income tax, EPF withdrawal, HRA exemption, and more.</p>
+        </div>
+      )}
+
+      {/* Topics */}
+      <section className="mt-14">
+        <h2 className="font-display text-2xl text-ink mb-4">Browse by Topic</h2>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: "Salary & CTC", icon: "💰", href: "/salary" },
+            { label: "Income Tax", icon: "🧾", href: "/calculator/income-tax-calculator" },
+            { label: "EPF & PF", icon: "🏦", href: "/calculator/epf-calculator" },
+            { label: "Tax Saving", icon: "💡", href: "/tax-saving" },
+            { label: "Investments", icon: "📈", href: "/calculator/sip-calculator" },
+            { label: "Retirement", icon: "🏖️", href: "/calculator/fire-calculator" },
+            { label: "Loans & EMI", icon: "🏠", href: "/calculator/emi-calculator" },
+            { label: "All Calculators", icon: "🔢", href: "/calculator" },
+          ].map(topic => (
+            <Link key={topic.label} href={topic.href}
+              className="flex items-center gap-3 rounded-xl border border-rule bg-surface px-4 py-3 hover:border-brand hover:-translate-y-0.5 transition shadow-card">
+              <span className="text-xl">{topic.icon}</span>
+              <span className="text-sm font-medium text-ink">{topic.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
