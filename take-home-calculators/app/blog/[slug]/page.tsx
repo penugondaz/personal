@@ -112,12 +112,6 @@ export default async function BlogPostPage({
         <span aria-current="page">{fm.title}</span>
       </nav>
 
-      {/* OG Image */}
-      {fm.ogImage && (
-        <img src={fm.ogImage} alt={fm.title}
-          className="w-full rounded-2xl border border-rule mb-8 object-cover" />
-      )}
-
       {/* Article meta */}
       <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-ink-soft">
         {fm.category && (
@@ -138,6 +132,12 @@ export default async function BlogPostPage({
         <p className="mt-4 text-lg text-ink-soft leading-relaxed">
           {fm.description}
         </p>
+      )}
+
+      {/* OG Image — below title & description */}
+      {fm.ogImage && (
+        <img src={fm.ogImage} alt={fm.title}
+          className="mt-8 w-full rounded-2xl border border-rule object-contain bg-paper" />
       )}
 
       {/* MDX content */}
