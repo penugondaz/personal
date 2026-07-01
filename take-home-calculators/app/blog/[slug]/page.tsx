@@ -154,7 +154,9 @@ export default async function BlogPostPage({
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <p className="font-semibold text-ink">{fm.author || "SalaryTools India"}</p>
-              <a href="https://x.com/penugondaz" target="_blank" rel="noopener noreferrer"
+              <a
+                href={fm.author === "Venkatesh Babu Gorantla" ? "https://x.com/smartvenkat95" : "https://x.com/penugondaz"}
+                target="_blank" rel="noopener noreferrer"
                 className="text-ink-soft hover:text-ink transition"
                 aria-label="X (Twitter)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
