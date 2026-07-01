@@ -130,8 +130,18 @@ export default async function BlogPostPage({
         {fm.author && <><span>·</span><span>By {fm.author}</span></>}
       </div>
 
+      {/* Title & description from frontmatter */}
+      <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
+        {fm.title}
+      </h1>
+      {fm.description && (
+        <p className="mt-4 text-lg text-ink-soft leading-relaxed">
+          {fm.description}
+        </p>
+      )}
+
       {/* MDX content */}
-      <article className="prose-article">
+      <article className="mt-8 prose-article">
         <MDXContent />
       </article>
 
