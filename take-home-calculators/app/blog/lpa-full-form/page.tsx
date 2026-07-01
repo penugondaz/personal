@@ -3,16 +3,27 @@ import Link from "next/link";
 import { salarySlug } from "@/lib/salary-data";
 import { formatINR } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
+import { breadcrumbSchema, faqSchema, buildJsonLd } from "@/lib/schema";
 
-const title = "LPA Full Form — What Does LPA Mean in Salary? (Lakh Per Annum)";
-const description =
+const TITLE = "LPA Full Form — What Does LPA Mean in Salary? (Lakh Per Annum)";
+const DESCRIPTION =
   "LPA full form is Lakh Per Annum — salary expressed in lakhs (₹1,00,000) per year. Learn what LPA means, how it differs from in-hand salary, and see LPA to monthly salary conversions.";
+const URL = "/blog/lpa-full-form";
+const PUBLISHED = "2026-07-01";
+const MODIFIED = "2026-07-01";
 
 export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: absoluteUrl("/blog/lpa-full-form") },
-  openGraph: { title, description, url: absoluteUrl("/blog/lpa-full-form") },
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: absoluteUrl(URL) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: absoluteUrl(URL),
+    type: "article",
+    publishedTime: PUBLISHED,
+    authors: ["Praveen Penugonda"],
+  },
 };
 
 const EXAMPLE_LPAS = [3, 4, 5, 6, 7, 8, 10, 12, 15, 20];
@@ -46,34 +57,63 @@ const faqs = [
 ];
 
 export default function LpaFullFormPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
+  const jsonLd = buildJsonLd(
+    breadcrumbSchema([
+      { name: "Home", href: "/" },
+      { name: "Blog", href: "/blog" },
+      { name: "LPA Full Form", href: URL },
+    ]),
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": TITLE,
+      "description": DESCRIPTION,
+      "url": absoluteUrl(URL),
+      "datePublished": PUBLISHED,
+      "dateModified": MODIFIED,
+      "author": {
+        "@type": "Person",
+        "name": "Praveen Penugonda",
       },
-    })),
-  };
+      "publisher": {
+        "@type": "Organization",
+        "name": "SalaryTools India",
+        "url": "https://salarytools.in",
+        "logo": {
+          "@type": "ImageObject",
+          "url": absoluteUrl("/icon-192x192.png"),
+        },
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": absoluteUrl(URL),
+      },
+    },
+    faqSchema(faqs),
+  );
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
+      {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-brand">
-          Home
-        </Link>
+        <Link href="/" className="hover:text-brand">Home</Link>
         <span className="mx-1.5">/</span>
-        <Link href="/blog" className="hover:text-brand">
-          Guides
-        </Link>
+        <Link href="/blog" className="hover:text-brand">Blog</Link>
         <span className="mx-1.5">/</span>
         <span aria-current="page">LPA Full Form</span>
       </nav>
+
+      {/* Article meta */}
+      <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-ink-soft">
+        <span className="rounded-full bg-brand-soft px-3 py-0.5 font-semibold text-brand">Guide</span>
+        <span>1 July 2026</span>
+        <span>·</span>
+        <span>4 min read</span>
+        <span>·</span>
+        <span>By Praveen Penugonda</span>
+      </div>
 
       <h1 className="font-display text-3xl text-ink sm:text-4xl">
         LPA Full Form — What Does LPA Mean in Salary?
@@ -122,7 +162,7 @@ export default function LpaFullFormPage() {
       <section className="mt-10">
         <h2 className="font-display text-2xl text-ink">LPA to Monthly Salary — Quick Reference</h2>
         <p className="mt-3 text-ink-soft">
-          These are gross monthly figures (LPA ÷ 12), before any deductions. Tap a row to see the
+          These are gross monthly figures (LPA ÷ 12), before any deductions. Click a row to see the
           full in-hand breakdown for that CTC.
         </p>
         <div className="mt-4 overflow-hidden rounded-lg border border-rule">
@@ -137,7 +177,7 @@ export default function LpaFullFormPage() {
             </thead>
             <tbody>
               {EXAMPLE_LPAS.map((lpa) => (
-                <tr key={lpa} className="border-b border-rule last:border-0">
+                <tr key={lpa} className="border-b border-rule last:border-0 hover:bg-paper">
                   <td className="px-4 py-2.5">
                     <Link
                       href={`/salary/${salarySlug(lpa)}`}
@@ -168,15 +208,23 @@ export default function LpaFullFormPage() {
         </div>
       </section>
 
-      <section className="mt-12 rounded-lg border border-rule bg-surface px-6 py-6 text-center">
-        <p className="text-ink-soft">Want your exact in-hand salary from any CTC?</p>
+      <section className="mt-12 rounded-xl border border-brand/20 bg-brand-soft px-6 py-6 text-center">
+        <p className="font-medium text-ink">Want your exact in-hand salary from any CTC?</p>
+        <p className="mt-1 text-sm text-ink-soft">Our calculator accounts for PF, professional tax, and income tax.</p>
         <Link
           href="/salary"
-          className="mt-3 inline-block rounded-md bg-brand px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-dark"
+          className="mt-4 inline-block rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition"
         >
-          Calculate your in-hand salary
+          Calculate your in-hand salary →
         </Link>
       </section>
+
+      {/* Back to blog */}
+      <div className="mt-10 pt-6 border-t border-rule">
+        <Link href="/blog" className="text-sm font-medium text-brand hover:underline">
+          ← Back to Blog
+        </Link>
+      </div>
     </main>
   );
 }
