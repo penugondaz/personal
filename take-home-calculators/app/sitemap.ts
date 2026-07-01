@@ -18,8 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/terms-of-use", priority: 0.4 },
     { route: "/cookie-policy", priority: 0.4 },
     { route: "/salary", priority: 0.9 },
-    { route: "/guides", priority: 0.6 },
-    { route: "/guides/lpa-full-form", priority: 0.8 },
+    { route: "/blog", priority: 0.6 },
+    { route: "/blog/lpa-full-form", priority: 0.8 },
     // Salary tools
     { route: "/salary/inhand-to-ctc-calculator", priority: 0.8 },
     { route: "/salary/salary-structure-calculator", priority: 0.8 },
