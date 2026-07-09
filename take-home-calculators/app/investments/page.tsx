@@ -45,6 +45,18 @@ const CALCULATORS = [
     title: "Goal Planning Calculator",
     desc: "How much to invest monthly to hit a specific financial goal by a target date.",
   },
+  {
+    href: "/calculator/elss-calculator",
+    icon: "🧾",
+    title: "ELSS Calculator",
+    desc: "Tax-saving mutual fund returns and 80C savings — just a 3-year lock-in.",
+  },
+  {
+    href: "/calculator/real-returns-calculator",
+    icon: "📉",
+    title: "Inflation-Adjusted Returns",
+    desc: "What your investment returns are really worth after inflation.",
+  },
 ];
 
 export default function InvestmentsLandingPage() {
