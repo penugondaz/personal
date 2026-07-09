@@ -22,6 +22,7 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
   const [gender, setGender] = useState<Gender>("male");
   const [pfMode, setPfMode] = useState<PfWageCeilingMode>("uncapped_actual_basic");
   const [basicPercent, setBasicPercent] = useState(40);
+  const [employerNps, setEmployerNps] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [view, setView] = useState<ViewMode>("summary");
 
@@ -36,8 +37,9 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
         gender,
         pfWageCeilingMode: pfMode,
         basicPercentOfCtc: basicPercent / 100,
+        employerNpsPercentOfBasic: employerNps ? 0.1 : 0,
       }),
-    [annualCtc, regime, ptState, gender, pfMode, basicPercent]
+    [annualCtc, regime, ptState, gender, pfMode, basicPercent, employerNps]
   );
 
   const regimeComparison = useMemo(() => compareRegimes(result.grossSalaryAnnual), [result.grossSalaryAnnual]);
@@ -145,6 +147,23 @@ export default function SalaryInputCalculator({ initialAnnualCtc = 1_000_000 }: 
               but your actual offer letter or payslip may show a different Basic %. Check your CTC
               breakup and adjust the slider above for an accurate result.
             </p>
+
+            <label className="mt-4 flex items-start gap-2.5 border-t border-rule pt-3.5">
+              <input
+                type="checkbox"
+                checked={employerNps}
+                onChange={(e) => setEmployerNps(e.target.checked)}
+                className="mt-0.5 h-4 w-4 accent-brand"
+              />
+              <span className="text-sm text-ink">
+                My employer contributes to NPS (10% of basic)
+                <span className="mt-0.5 block text-xs text-ink-soft leading-relaxed">
+                  Most CTC structures don&apos;t include this — leave unchecked unless your offer
+                  letter shows a separate &quot;NPS&quot; or &quot;80CCD(2)&quot; line. When
+                  enabled, it&apos;s tax-free under Section 80CCD(2) in both regimes.
+                </span>
+              </span>
+            </label>
           </div>
         )}
       </div>
@@ -224,6 +243,13 @@ function SummaryView({ result }: { result: ReturnType<typeof calculateSalaryBrea
         <LineRow label="Income tax (TDS)" value={result.incomeTaxMonthly} deduction />
       </section>
 
+      {result.employerNpsAnnual > 0 && (
+        <p className="mt-4 rounded-lg bg-brand-soft px-3 py-2 text-xs text-brand">
+          Employer also contributes {formatINR(result.employerNpsMonthly)}/month to NPS — part of
+          your CTC, not paid to you, and tax-free under Section 80CCD(2).
+        </p>
+      )}
+
       <AssumptionsDisclosure assumptions={result.breakupAssumptions} />
     </>
   );
@@ -251,6 +277,16 @@ function BreakupView({ result }: { result: ReturnType<typeof calculateSalaryBrea
       monthly: result.gratuityMonthly,
       note: "Only payable after 5+ years of service",
     },
+    ...(result.employerNpsAnnual > 0
+      ? [
+          {
+            label: "Employer NPS contribution",
+            annual: result.employerNpsAnnual,
+            monthly: result.employerNpsMonthly,
+            note: "Part of CTC, not paid to you monthly — tax-free under Section 80CCD(2)",
+          },
+        ]
+      : []),
   ];
 
   return (
