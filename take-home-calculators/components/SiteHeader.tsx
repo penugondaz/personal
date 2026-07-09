@@ -1,103 +1,126 @@
-import Link from "next/link";
-import { PRIMARY_NAV_LINKS } from "@/lib/navigation";
-
-function LogoMark({ size = 40 }: { size?: number }) {
-  const s = size / 40; // scale factor
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 40 40"
-      aria-hidden="true"
-      className="shrink-0"
-    >
-      <rect width="40" height="40" rx="10" fill="#2f6f4f" />
-      {/* ₹ stem + horizontal bars */}
-      <line x1="12" y1="12" x2="28" y2="12" stroke="white" strokeWidth="3" strokeLinecap="round" />
-      <line x1="12" y1="19" x2="28" y2="19" stroke="white" strokeWidth="3" strokeLinecap="round" />
-      <line x1="16" y1="12" x2="16" y2="32" stroke="white" strokeWidth="3" strokeLinecap="round" />
-      {/* Bar chart — ascending bars rising from base */}
-      <rect x="21" y="27" width="4" height="5" rx="1" fill="white" opacity="0.55" />
-      <rect x="27" y="23" width="4" height="9" rx="1" fill="white" opacity="0.8" />
-      {/* Growth arrow above tallest bar */}
-      <polyline points="29,19 29,14 32,17" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
-    </svg>
-  );
+export interface NavLink {
+  href: string;
+  label: string;
 }
 
-function LogoWordmark() {
-  return (
-    <Link href="/" className="flex items-center gap-3" aria-label="SalaryTools — Home">
-      <LogoMark size={38} />
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-xl font-bold tracking-tight text-ink">
-          Salary<span className="text-brand">Tools</span>
-        </span>
-        <span className="text-[10px] font-medium tracking-widest text-ink-soft uppercase hidden sm:block">
-          India
-        </span>
-      </span>
-    </Link>
-  );
+export interface NavSection {
+  title: string;
+  href?: string;
+  links: NavLink[];
 }
 
-export default function SiteHeader({
-  onMenuToggle,
-  menuOpen,
-}: {
-  onMenuToggle?: () => void;
-  menuOpen?: boolean;
-}) {
-  return (
-    <header className="sticky top-0 z-30 border-b border-rule bg-surface/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <LogoWordmark />
+export const NAV_SECTIONS: NavSection[] = [
+  {
+    title: "Tracker",
+    href: "/layoffs",
+    links: [
+      { href: "/layoffs", label: "Layoffs Tracker 🔴" },
+      { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator" },
+    ],
+  },
+  {
+    title: "Salary Calculators",
+    href: "/salary",
+    links: [
+      { href: "/salary", label: "In-Hand Salary (All CTC Slabs)" },
+      { href: "/salary/10-lpa-in-hand", label: "10 LPA In-Hand" },
+      { href: "/salary/12-lpa-in-hand", label: "12 LPA In-Hand" },
+      { href: "/salary/inhand-to-ctc-calculator", label: "In-Hand to CTC Calculator" },
+      { href: "/salary/salary-structure-calculator", label: "Salary Structure Calculator" },
+      { href: "/salary-growth", label: "Salary Growth Projection" },
+    ],
+  },
+  {
+    title: "Retirement & Savings",
+    href: "/retirement",
+    links: [
+      { href: "/calculator/epf-calculator", label: "EPF & VPF Calculator" },
+      { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
+      { href: "/calculator/ppf-calculator", label: "PPF Calculator" },
+      { href: "/calculator/nps-calculator", label: "NPS Calculator" },
+      { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
+      { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
+      { href: "/calculator/ssy-calculator", label: "SSY Calculator" },
+      { href: "/calculator/scss-calculator", label: "SCSS Calculator" },
+      { href: "/calculator/fire-calculator", label: "FIRE Calculator 🔥" },
+    ],
+  },
+  {
+    title: "Tax & Pay Components",
+    href: "/tax-saving",
+    links: [
+      { href: "/tax-saving", label: "Tax Saving Guide" },
+      { href: "/calculator/income-tax-calculator", label: "Income Tax Calculator" },
+      { href: "/calculator/old-vs-new-tax-regime", label: "Old vs New Tax Regime" },
+      { href: "/calculator/hra-calculator", label: "HRA Calculator" },
+      { href: "/calculator/advance-tax-calculator", label: "Advance Tax Calculator" },
+      { href: "/calculator/capital-gains-calculator", label: "Capital Gains Calculator" },
+      { href: "/calculator/salary-hike-calculator", label: "Salary Hike Calculator" },
+      { href: "/calculator/leave-encashment-calculator", label: "Leave Encashment Calculator" },
+      { href: "/calculator/overtime-calculator", label: "Overtime Calculator" },
+    ],
+  },
+  {
+    title: "Investments",
+    href: "/investments",
+    links: [
+      { href: "/calculator/sip-calculator", label: "SIP Calculator" },
+      { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP Calculator" },
+      { href: "/calculator/lumpsum-calculator", label: "Lumpsum Calculator" },
+      { href: "/calculator/mutual-fund-calculator", label: "Mutual Fund Calculator" },
+      { href: "/calculator/swp-calculator", label: "SWP Calculator" },
+      { href: "/calculator/swp-inflation-calculator", label: "SWP with Inflation" },
+      { href: "/calculator/goal-planning-calculator", label: "Goal Planning Calculator" },
+      { href: "/calculator/xirr-calculator", label: "XIRR Calculator" },
+      { href: "/calculator/lic-xirr-calculator", label: "LIC XIRR Calculator" },
+      { href: "/calculator/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
+      { href: "/calculator/elss-calculator", label: "ELSS Calculator" },
+      { href: "/calculator/real-returns-calculator", label: "Inflation-Adjusted Returns" },
+    ],
+  },
+  {
+    title: "Loans & Deposits",
+    href: "/loans-deposits",
+    links: [
+      { href: "/calculator/emi-calculator", label: "EMI Calculator" },
+      { href: "/calculator/fd-calculator", label: "FD Calculator" },
+      { href: "/calculator/rd-calculator", label: "RD Calculator" },
+      { href: "/calculator/compound-interest-calculator", label: "Compound Interest Calculator" },
+      { href: "/calculator/simple-interest-calculator", label: "Simple Interest Calculator" },
+      { href: "/calculator/home-loan-eligibility-calculator", label: "Home Loan Eligibility" },
+      { href: "/calculator/car-loan-emi-calculator", label: "Car Loan EMI Calculator" },
+    ],
+  },
+  {
+    title: "Free Tools",
+    href: "/tools",
+    links: [
+      { href: "/tools", label: "All Tools" },
+      { href: "/tools/rent-receipt-generator", label: "Rent Receipt Generator" },
+      { href: "/tools/payslip-generator", label: "Payslip Generator" },
+      { href: "/tools/discount-calculator", label: "Discount Calculator" },
+      { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
+      { href: "/tools/average-calculator", label: "Average Calculator" },
+      { href: "/tools/number-converter", label: "Number to Words Converter" },
+      { href: "/tools/character-counter", label: "Character Counter" },
+      { href: "/tools/word-counter", label: "Word Counter" },
+      { href: "/tools/text-case-converter", label: "Text Case Converter" },
+    ],
+  },
+  {
+    title: "Guides",
+    href: "/blog",
+    links: [
+      { href: "/blog", label: "Blog" },
+      { href: "/blog/lpa-full-form", label: "LPA Full Form" },
+    ],
+  },
+];
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-          {PRIMARY_NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-full px-4 py-2 text-sm font-medium text-ink-soft transition hover:bg-brand-soft hover:text-brand"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/salary"
-            className="ml-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white shadow-card transition hover:opacity-90"
-          >
-            Calculate Now
-          </Link>
-        </nav>
-
-        {/* Mobile menu trigger */}
-        <button
-          type="button"
-          onClick={onMenuToggle}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-rule text-ink md:hidden"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          <MenuIcon open={!!menuOpen} />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function MenuIcon({ open }: { open: boolean }) {
-  if (open) {
-    return (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-        <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <path d="M1 4H17M1 9H17M1 14H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
+export const PRIMARY_NAV_LINKS: NavLink[] = [
+  { href: "/salary", label: "Salary" },
+  { href: "/tax-saving", label: "Tax Saving" },
+  { href: "/salary-growth", label: "Salary Growth" },
+  { href: "/calculator/emi-calculator", label: "Loans" },
+  { href: "/tools", label: "Tools" },
+];
