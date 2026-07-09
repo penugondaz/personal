@@ -57,6 +57,10 @@ export default function SipCalculatorPage() {
           Home
         </Link>
         <span className="mx-1.5">/</span>
+        <Link href="/investments" className="hover:text-brand">
+          Investments
+        </Link>
+        <span className="mx-1.5">/</span>
         <span aria-current="page">SIP Calculator</span>
       </nav>
 
