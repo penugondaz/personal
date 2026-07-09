@@ -12,6 +12,7 @@ export interface NavSection {
 export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Tracker",
+    href: "/layoffs",
     links: [
       { href: "/layoffs", label: "Layoffs Tracker 🔴" },
       { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator" },
@@ -19,6 +20,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Salary Calculators",
+    href: "/salary",
     links: [
       { href: "/salary", label: "In-Hand Salary (All CTC Slabs)" },
       { href: "/salary/10-lpa-in-hand", label: "10 LPA In-Hand" },
@@ -45,6 +47,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Tax & Pay Components",
+    href: "/tax-saving",
     links: [
       { href: "/tax-saving", label: "Tax Saving Guide" },
       { href: "/calculator/income-tax-calculator", label: "Income Tax Calculator" },
@@ -90,6 +93,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Free Tools",
+    href: "/tools",
     links: [
       { href: "/tools", label: "All Tools" },
       { href: "/tools/rent-receipt-generator", label: "Rent Receipt Generator" },
@@ -105,6 +109,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Guides",
+    href: "/blog",
     links: [
       { href: "/blog", label: "Blog" },
       { href: "/blog/lpa-full-form", label: "LPA Full Form" },
