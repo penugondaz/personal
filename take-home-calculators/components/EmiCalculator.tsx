@@ -5,11 +5,11 @@ import { calculateEmi, yearlyAmortizationSummary, LOAN_TYPE_DEFAULTS, type LoanT
 import { formatINR } from "@/lib/format";
 import CalculatorActions from "./CalculatorActions";
 
-export default function EmiCalculator() {
-  const [loanType, setLoanType] = useState<LoanType>("home");
-  const [principalInput, setPrincipalInput] = useState("3000000");
-  const [rateInput, setRateInput] = useState(String(LOAN_TYPE_DEFAULTS.home.defaultRate));
-  const [tenureYears, setTenureYears] = useState(LOAN_TYPE_DEFAULTS.home.defaultTenureMonths / 12);
+export default function EmiCalculator({ initialLoanType = "home" }: { initialLoanType?: LoanType } = {}) {
+  const [loanType, setLoanType] = useState<LoanType>(initialLoanType);
+  const [principalInput, setPrincipalInput] = useState(String(LOAN_TYPE_DEFAULTS[initialLoanType].defaultPrincipal));
+  const [rateInput, setRateInput] = useState(String(LOAN_TYPE_DEFAULTS[initialLoanType].defaultRate));
+  const [tenureYears, setTenureYears] = useState(LOAN_TYPE_DEFAULTS[initialLoanType].defaultTenureMonths / 12);
   const [showSchedule, setShowSchedule] = useState(false);
 
   const principal = Math.max(0, Number(principalInput.replace(/[^0-9.]/g, "")) || 0);
@@ -27,6 +27,7 @@ export default function EmiCalculator() {
     setLoanType(type);
     setRateInput(String(LOAN_TYPE_DEFAULTS[type].defaultRate));
     setTenureYears(LOAN_TYPE_DEFAULTS[type].defaultTenureMonths / 12);
+    setPrincipalInput(String(LOAN_TYPE_DEFAULTS[type].defaultPrincipal));
   }
 
   const shareText = `My ${LOAN_TYPE_DEFAULTS[loanType].label} EMI works out to ${formatINR(result.monthlyEmi)}/month. Check yours:`;
