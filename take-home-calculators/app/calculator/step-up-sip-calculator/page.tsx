@@ -50,6 +50,8 @@ export default function StepUpSipCalculatorPage() {
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">Home</Link>
         <span className="mx-1.5">/</span>
+        <Link href="/investments" className="hover:text-brand">Investments</Link>
+        <span className="mx-1.5">/</span>
         <Link href="/calculator/sip-calculator" className="hover:text-brand">SIP Calculator</Link>
         <span className="mx-1.5">/</span>
         <span aria-current="page">Step-Up SIP</span>
