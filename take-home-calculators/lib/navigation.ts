@@ -5,6 +5,7 @@ export interface NavLink {
 
 export interface NavSection {
   title: string;
+  href?: string;
   links: NavLink[];
 }
 
@@ -29,6 +30,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Retirement & Savings",
+    href: "/retirement",
     links: [
       { href: "/calculator/epf-calculator", label: "EPF & VPF Calculator" },
       { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
@@ -55,6 +57,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Investments",
+    href: "/investments",
     links: [
       { href: "/calculator/sip-calculator", label: "SIP Calculator" },
       { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP Calculator" },
@@ -70,6 +73,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Loans & Deposits",
+    href: "/loans-deposits",
     links: [
       { href: "/calculator/emi-calculator", label: "EMI Calculator" },
       { href: "/calculator/fd-calculator", label: "FD Calculator" },
