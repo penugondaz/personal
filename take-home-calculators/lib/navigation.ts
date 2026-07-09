@@ -28,6 +28,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/salary/inhand-to-ctc-calculator", label: "In-Hand to CTC Calculator" },
       { href: "/salary/salary-structure-calculator", label: "Salary Structure Calculator" },
       { href: "/salary-growth", label: "Salary Growth Projection" },
+      { href: "/calculator/8th-pay-commission-calculator", label: "8th Pay Commission Calculator" },
     ],
   },
   {
