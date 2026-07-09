@@ -33,6 +33,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/nps-calculator", priority: 0.8 },
     { route: "/calculator/gratuity-calculator", priority: 0.8 },
     { route: "/calculator/nsc-calculator", priority: 0.8 },
+    { route: "/calculator/ssy-calculator", priority: 0.8 },
+    { route: "/calculator/scss-calculator", priority: 0.8 },
     { route: "/calculator/fire-calculator", priority: 0.9 },
     { route: "/calculator/pm-surya-ghar-calculator", priority: 0.9 },
     { route: "/calculator/income-tax-calculator", priority: 0.95 },
@@ -54,6 +56,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/goal-planning-calculator", priority: 0.8 },
     { route: "/calculator/stock-average-calculator", priority: 0.7 },
     { route: "/calculator/xirr-calculator", priority: 0.75 },
+    { route: "/calculator/elss-calculator", priority: 0.75 },
+    { route: "/calculator/real-returns-calculator", priority: 0.7 },
     { route: "/calculator/lic-xirr-calculator", priority: 0.85 },
     { route: "/calculator/cagr-xirr-calculator", priority: 0.8 },
     // Loans & Deposits
@@ -62,6 +66,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/rd-calculator", priority: 0.8 },
     { route: "/calculator/compound-interest-calculator", priority: 0.8 },
     { route: "/calculator/simple-interest-calculator", priority: 0.75 },
+    { route: "/calculator/home-loan-eligibility-calculator", priority: 0.75 },
+    { route: "/calculator/car-loan-emi-calculator", priority: 0.75 },
     // Tax Saving
     { route: "/tax-saving", priority: 0.9 },
     // Salary Growth
