@@ -214,44 +214,44 @@ export default function RentReceiptGenerator() {
           {receipts.map((r, i) => (
             <div
               key={`${r.month}-${r.year}`}
-              className="receipt-card mb-6 rounded-2xl border border-rule bg-surface p-6 shadow-card sm:p-8"
-              style={i < receipts.length - 1 ? { breakAfter: "page" } : undefined}
+              className="receipt-card mb-6 rounded-2xl border border-rule bg-surface p-6 shadow-card sm:p-8 print:mb-0 print:break-inside-avoid print:rounded-none print:border-0 print:border-b print:border-dashed print:border-ink/40 print:p-4 print:shadow-none print:last:border-b-0"
+              style={{ breakInside: "avoid", pageBreakInside: "avoid" }}
             >
-              <div className="flex items-start justify-between border-b border-dashed border-rule pb-4">
-                <h3 className="font-display text-xl text-ink">Rent Receipt</h3>
-                <span className="text-sm text-ink-soft">{r.month} {r.year}</span>
+              <div className="flex items-start justify-between border-b border-dashed border-rule pb-4 print:pb-1.5">
+                <h3 className="font-display text-xl text-ink print:text-sm print:font-semibold">Rent Receipt</h3>
+                <span className="text-sm text-ink-soft print:text-xs">{r.month} {r.year}</span>
               </div>
 
-              <p className="mt-5 text-sm leading-relaxed text-ink">
+              <p className="mt-5 text-sm leading-relaxed text-ink print:mt-1.5 print:text-[11px] print:leading-snug">
                 Received with thanks from <strong>{tenantName}</strong> a sum of{" "}
                 <strong>{formatINR(monthlyRent)}</strong> ({amountToWords(monthlyRent)} Rupees Only) towards
                 rent for the month of <strong>{r.month} {r.year}</strong>, for the premises situated at:
               </p>
-              <p className="mt-2 text-sm text-ink-soft">{propertyAddress}</p>
+              <p className="mt-2 text-sm text-ink-soft print:mt-0.5 print:text-[11px]">{propertyAddress}</p>
 
-              <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
+              <div className="mt-5 grid grid-cols-2 gap-4 text-sm print:mt-1.5 print:gap-2">
                 <div>
-                  <p className="text-xs text-ink-soft">Payment Mode</p>
-                  <p className="mt-0.5 text-ink capitalize">{paymentMode.replace("_", " ")}</p>
+                  <p className="text-xs text-ink-soft print:text-[10px]">Payment Mode</p>
+                  <p className="mt-0.5 text-ink capitalize print:text-[11px]">{paymentMode.replace("_", " ")}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-ink-soft">Landlord PAN</p>
-                  <p className="mt-0.5 text-ink">{landlordPan || "Not provided"}</p>
+                  <p className="text-xs text-ink-soft print:text-[10px]">Landlord PAN</p>
+                  <p className="mt-0.5 text-ink print:text-[11px]">{landlordPan || "Not provided"}</p>
                 </div>
               </div>
 
-              <div className="mt-8 flex items-end justify-between border-t border-dashed border-rule pt-6">
+              <div className="mt-8 flex items-end justify-between border-t border-dashed border-rule pt-6 print:mt-2 print:pt-1.5">
                 <div>
-                  <p className="text-xs text-ink-soft">Date: ___________________</p>
+                  <p className="text-xs text-ink-soft print:text-[10px]">Date: ___________________</p>
                 </div>
                 <div className="text-center">
                   {stampRequired && (
-                    <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded border border-dashed border-rule text-[10px] text-ink-soft">
+                    <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded border border-dashed border-rule text-[10px] text-ink-soft print:mb-1 print:h-8 print:w-8 print:text-[7px]">
                       Revenue<br />Stamp
                     </div>
                   )}
-                  <p className="border-t border-ink pt-1 text-xs text-ink">{landlordName}</p>
-                  <p className="text-[10px] text-ink-soft">Signature of Landlord</p>
+                  <p className="border-t border-ink pt-1 text-xs text-ink print:text-[10px]">{landlordName}</p>
+                  <p className="text-[10px] text-ink-soft print:text-[8px]">Signature of Landlord</p>
                 </div>
               </div>
             </div>
