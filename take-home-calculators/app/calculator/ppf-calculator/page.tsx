@@ -32,7 +32,7 @@ export default function Page() {
   const jsonLd = buildJsonLd(
     breadcrumbSchema([
       { name: "Home", href: "/" },
-      { name: "Calculators", href: "/calculator" },
+      { name: "Retirement", href: "/retirement" },
       { name: "PPF Calculator", href: URL },
     ]),
     calculatorSchema({ name: "PPF Calculator India", description: DESCRIPTION, url: URL }),
@@ -45,6 +45,8 @@ export default function Page() {
 
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">Home</Link>
+        <span className="mx-1.5">/</span>
+        <Link href="/retirement" className="hover:text-brand">Retirement</Link>
         <span className="mx-1.5">/</span>
         <span aria-current="page">PPF Calculator</span>
       </nav>
