@@ -200,6 +200,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══════════════════════════════════════════════════════════════════
+          TEMPORARY — 8th Pay Commission banner
+          This block is time-bound content tied to a live news cycle
+          (8th CPC negotiations). Once the topic is no longer trending,
+          or the fitment factor is officially finalised and this stops
+          being a relevant "estimate" tool, delete EVERYTHING between
+          this comment and the matching "END TEMPORARY" comment below.
+          That's the only change needed on this page to remove it —
+          nothing else on the homepage references this block.
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-5xl px-6 py-6">
+        <div className="overflow-hidden rounded-2xl border border-brand/25 bg-surface shadow-card">
+          <div className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:gap-6">
+            <div className="flex flex-1 items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-2xl">🏛️</div>
+              <div>
+                <p className="flex flex-wrap items-center gap-2 font-semibold text-ink">
+                  8th Pay Commission Salary Calculator
+                  <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
+                    🔥 Trending
+                  </span>
+                </p>
+                <p className="text-sm text-ink-soft">
+                  Estimate your revised basic, HRA & gross pay — adjustable fitment factor as negotiations continue. Not yet finalised.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 sm:shrink-0">
+              <Link href="/calculator/8th-pay-commission-calculator"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
+                Estimate My New Salary →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* ══════════════════════════════════════ END TEMPORARY — 8th Pay Commission banner ══════════════════════════════════════ */}
+
       {/* ── Layoff Risk Banner ────────────────────────────────────────────── */}
       <section className="mx-auto max-w-5xl px-6 py-6">
         <div className="overflow-hidden rounded-2xl border border-deduction/25 bg-surface shadow-card">
