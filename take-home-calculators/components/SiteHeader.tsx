@@ -99,7 +99,7 @@ export default function SiteHeader({
           <LogoWordmark />
 
           {/* Desktop nav */}
-          <nav ref={navRef} className="hidden flex-nowrap items-center gap-0.5 overflow-x-auto lg:flex" aria-label="Primary">
+          <nav ref={navRef} className="hidden flex-nowrap items-center gap-0.5 lg:flex" aria-label="Primary">
             {dropdownSections.map((section) => (
               <NavDropdown
                 key={section.title}
