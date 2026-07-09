@@ -29,6 +29,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/salary/salary-structure-calculator", label: "Salary Structure Calculator" },
       { href: "/salary-growth", label: "Salary Growth Projection" },
       { href: "/calculator/8th-pay-commission-calculator", label: "8th Pay Commission Calculator" },
+      { href: "/calculator/offer-comparison-tool", label: "Offer Comparison Tool" },
     ],
   },
   {
