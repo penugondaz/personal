@@ -12,6 +12,15 @@ export interface SalaryBreakupInput {
   basicPercentOfCtc?: number;
   hraPercentOfBasic?: number;
   employerContributionsIncludedInCtc?: boolean;
+  /**
+   * Employer NPS contribution as a % of basic salary. 0 (default) means the
+   * employer doesn't offer this — most CTC structures don't. When set, it's
+   * carved out of CTC the same way employer PF is (not paid to you monthly).
+   * Under Section 80CCD(2), contributions up to 10% of basic are excluded
+   * from taxable salary in BOTH tax regimes; only the amount above that
+   * 10% cap (if the employer contributes more) is added back as taxable.
+   */
+  employerNpsPercentOfBasic?: number;
 }
 
 export interface SalaryBreakupResult {
@@ -25,6 +34,9 @@ export interface SalaryBreakupResult {
   employerPfMonthly: number;
   gratuityAnnual: number;
   gratuityMonthly: number;
+  employerNpsAnnual: number;
+  employerNpsMonthly: number;
+  employerNpsTaxableExcessAnnual: number;
   specialAllowanceAnnual: number;
   specialAllowanceMonthly: number;
   grossSalaryAnnual: number;
@@ -43,6 +55,9 @@ export interface SalaryBreakupResult {
 const DEFAULT_BASIC_PERCENT = 0.4;
 const DEFAULT_HRA_PERCENT_OF_BASIC = 0.5;
 const GRATUITY_RATE_OF_BASIC = 0.0481;
+// Section 80CCD(2): employer NPS contribution is deductible up to this % of
+// basic salary for private-sector employees (both tax regimes).
+const SECTION_80CCD2_CAP_PERCENT_OF_BASIC = 0.1;
 
 export function calculateSalaryBreakup(input: SalaryBreakupInput): SalaryBreakupResult {
   const {
@@ -54,11 +69,15 @@ export function calculateSalaryBreakup(input: SalaryBreakupInput): SalaryBreakup
     oldRegimeDeductions = 0,
     basicPercentOfCtc = DEFAULT_BASIC_PERCENT,
     hraPercentOfBasic = DEFAULT_HRA_PERCENT_OF_BASIC,
+    employerNpsPercentOfBasic = 0,
   } = input;
 
   const basicAnnual = annualCtc * basicPercentOfCtc;
   const hraAnnual = basicAnnual * hraPercentOfBasic;
   const gratuityAnnual = basicAnnual * GRATUITY_RATE_OF_BASIC;
+  const employerNpsAnnual = basicAnnual * Math.max(0, employerNpsPercentOfBasic);
+  const employerNpsDeductibleCap = basicAnnual * SECTION_80CCD2_CAP_PERCENT_OF_BASIC;
+  const employerNpsTaxableExcessAnnual = Math.max(0, employerNpsAnnual - employerNpsDeductibleCap);
 
   const basicMonthly = basicAnnual / 12;
   const pfBreakup = calculatePfBreakup(basicMonthly, pfWageCeilingMode);
@@ -67,10 +86,12 @@ export function calculateSalaryBreakup(input: SalaryBreakupInput): SalaryBreakup
 
   const specialAllowanceAnnual = Math.max(
     0,
-    annualCtc - basicAnnual - hraAnnual - employerPfAnnual - gratuityAnnual
+    annualCtc - basicAnnual - hraAnnual - employerPfAnnual - gratuityAnnual - employerNpsAnnual
   );
 
-  const grossSalaryAnnual = basicAnnual + hraAnnual + specialAllowanceAnnual;
+  // Only the portion of employer NPS above the 80CCD(2) cap counts as
+  // taxable salary — the rest is excluded, same tax treatment as employer PF.
+  const grossSalaryAnnual = basicAnnual + hraAnnual + specialAllowanceAnnual + employerNpsTaxableExcessAnnual;
   const grossSalaryMonthly = grossSalaryAnnual / 12;
 
   const incomeTax = calculateIncomeTax(grossSalaryAnnual, regime, oldRegimeDeductions);
@@ -93,6 +114,9 @@ export function calculateSalaryBreakup(input: SalaryBreakupInput): SalaryBreakup
     employerPfMonthly: employerPfAnnual / 12,
     gratuityAnnual,
     gratuityMonthly: gratuityAnnual / 12,
+    employerNpsAnnual,
+    employerNpsMonthly: employerNpsAnnual / 12,
+    employerNpsTaxableExcessAnnual,
     specialAllowanceAnnual,
     specialAllowanceMonthly: specialAllowanceAnnual / 12,
     grossSalaryAnnual,
@@ -114,6 +138,13 @@ export function calculateSalaryBreakup(input: SalaryBreakupInput): SalaryBreakup
         : "Employee PF calculated on full actual basic salary (uncapped) — the common practice at most private employers.",
       "Special allowance is treated as a balancing figure absorbing the remainder of CTC.",
       "Actual in-hand salary will vary by employer's specific CTC structure, bonus/variable pay components, and any additional benefits not modeled here.",
+      ...(employerNpsAnnual > 0
+        ? [
+            `Employer NPS contribution of ${Math.round(
+              employerNpsPercentOfBasic * 100
+            )}% of basic is included. Up to 10% of basic is tax-free under Section 80CCD(2) in both regimes; any amount above that is added back as taxable salary.`,
+          ]
+        : []),
     ],
   };
 }
