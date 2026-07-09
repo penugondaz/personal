@@ -92,6 +92,8 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Free Tools",
     links: [
       { href: "/tools", label: "All Tools" },
+      { href: "/tools/rent-receipt-generator", label: "Rent Receipt Generator" },
+      { href: "/tools/payslip-generator", label: "Payslip Generator" },
       { href: "/tools/discount-calculator", label: "Discount Calculator" },
       { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
       { href: "/tools/average-calculator", label: "Average Calculator" },
