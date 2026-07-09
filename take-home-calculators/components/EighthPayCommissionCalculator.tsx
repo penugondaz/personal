@@ -8,6 +8,30 @@ const HRA_RATES: Record<"x" | "y" | "z", { label: string; percent: number }> = {
   z: { label: "Z — Other areas", percent: 10 },
 };
 
+// 7th CPC Pay Matrix — entry (Cell 1) Basic Pay per Level, with the old
+// Grade Pay it replaced shown for anyone who still thinks in those terms.
+// Source: CCS (Revised Pay) Rules, 2016.
+const PAY_LEVELS: { level: string; gradePay: string; entryBasic: number }[] = [
+  { level: "Level 1", gradePay: "GP 1800", entryBasic: 18000 },
+  { level: "Level 2", gradePay: "GP 1900", entryBasic: 19900 },
+  { level: "Level 3", gradePay: "GP 2000", entryBasic: 21700 },
+  { level: "Level 4", gradePay: "GP 2400", entryBasic: 25500 },
+  { level: "Level 5", gradePay: "GP 2800", entryBasic: 29200 },
+  { level: "Level 6", gradePay: "GP 4200", entryBasic: 35400 },
+  { level: "Level 7", gradePay: "GP 4600", entryBasic: 44900 },
+  { level: "Level 8", gradePay: "GP 4800", entryBasic: 47600 },
+  { level: "Level 9", gradePay: "GP 5400", entryBasic: 53100 },
+  { level: "Level 10", gradePay: "GP 5400 (JG)", entryBasic: 56100 },
+  { level: "Level 11", gradePay: "GP 6600", entryBasic: 67700 },
+  { level: "Level 12", gradePay: "GP 7600", entryBasic: 78800 },
+  { level: "Level 13", gradePay: "GP 8700", entryBasic: 123100 },
+  { level: "Level 14", gradePay: "GP 8900", entryBasic: 144200 },
+  { level: "Level 15", gradePay: "GP 10000", entryBasic: 182200 },
+  { level: "Level 16", gradePay: "—", entryBasic: 205400 },
+  { level: "Level 17", gradePay: "—", entryBasic: 225000 },
+  { level: "Level 18", gradePay: "—", entryBasic: 250000 },
+];
+
 function calc(currentBasic: number, fitmentFactor: number, currentDaPercent: number, hraPercent: number) {
   const oldDa = currentBasic * (currentDaPercent / 100);
   const oldHra = currentBasic * (hraPercent / 100);
@@ -49,7 +73,32 @@ export default function EighthPayCommissionCalculator() {
       </div>
 
       <div className="mt-6 rounded-2xl border border-rule bg-surface p-5 shadow-card">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <label className="mb-1 block">
+          <span className="mb-1 block text-xs text-ink-soft">
+            Don&apos;t know your exact Basic Pay? Pick your Pay Level
+          </span>
+          <select
+            defaultValue=""
+            onChange={(e) => {
+              const match = PAY_LEVELS.find((p) => p.level === e.target.value);
+              if (match) setBasicInput(String(match.entryBasic));
+            }}
+            className="w-full rounded-lg border border-rule bg-paper px-2 py-2.5 text-sm text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/15"
+          >
+            <option value="" disabled>Select a Pay Level…</option>
+            {PAY_LEVELS.map((p) => (
+              <option key={p.level} value={p.level}>
+                {p.level} ({p.gradePay}) — entry pay {formatINR(p.entryBasic)}
+              </option>
+            ))}
+          </select>
+          <span className="mt-1 block text-[11px] text-ink-soft">
+            This fills in the entry (Cell 1) Basic Pay for your Level — edit the field below if your actual Basic
+            Pay is higher due to annual increments.
+          </span>
+        </label>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-xs text-ink-soft">Current Basic Pay (7th CPC, ₹/month)</span>
             <div className="flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-2.5 py-2.5 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/15">
@@ -99,6 +148,11 @@ export default function EighthPayCommissionCalculator() {
             <span>2.57x (= 7th CPC)</span>
             <span>3.83x (union demand)</span>
           </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-ink-soft">
+            This number is multiplied against your current Basic Pay to estimate your revised Basic Pay — e.g.
+            at 2.57x, a ₹44,900 basic becomes about ₹1,15,393. It hasn&apos;t been decided yet; move the slider
+            to see different scenarios.
+          </p>
         </div>
 
         <label className="mt-4 block">
