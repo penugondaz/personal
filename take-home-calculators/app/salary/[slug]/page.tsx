@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SalaryInputCalculator from "@/components/SalaryInputCalculator";
 import InhandToCtcCalculator from "@/components/InhandToCtcCalculator";
+import SalarySummaryStats from "@/components/SalarySummaryStats";
+import SalaryBreakupChart from "@/components/SalaryBreakupChart";
 import { SALARY_LPA_VALUES, salarySlug, parseSalarySlug, lpaToAnnualCtc } from "@/lib/salary-data";
 import { INHAND_MONTHLY_VALUES, inhandSlug, parseInhandSlug } from "@/lib/inhand-to-ctc-data";
 import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
@@ -291,6 +293,15 @@ function SalaryLpaContent({ lpa, slug }: { lpa: number; slug: string }) {
         })}
       </div>
 
+      <SalarySummaryStats
+        stats={[
+          { label: "In-Hand / Month", value: formatINR(result.inHandMonthly), icon: "💰" },
+          { label: "Annual CTC", value: formatINRCompact(annualCtc), icon: "📦" },
+          { label: "Income Tax / Year", value: formatINR(result.incomeTax.totalTaxPayable), icon: "🧾" },
+          { label: "PF / Month (Employee)", value: formatINR(result.employeePfMonthly), icon: "🏦" },
+        ]}
+      />
+
       <div className="mt-10">
         <SalaryInputCalculator initialAnnualCtc={annualCtc} />
       </div>
@@ -305,7 +316,29 @@ function SalaryLpaContent({ lpa, slug }: { lpa: number; slug: string }) {
           you never receive as cash, and one-time-on-exit benefits like gratuity. Here&apos;s the
           typical breakdown:
         </p>
-        <ol className="mt-4 list-decimal space-y-2 pl-5 text-ink-soft">
+
+        <div className="mt-6 rounded-xl border border-rule bg-surface p-5 sm:p-6">
+          <SalaryBreakupChart
+            centerLabel="In-Hand"
+            centerValue={`${Math.round((result.inHandMonthly / result.monthlyCtc) * 100)}%`}
+            segments={[
+              { label: "In-hand pay", monthly: result.inHandMonthly, color: "var(--brand)" },
+              { label: "Your PF (locked in)", monthly: result.employeePfMonthly, color: "#6b9c82" },
+              {
+                label: "Income tax & PT",
+                monthly: result.incomeTaxMonthly + result.professionalTaxMonthly,
+                color: "var(--deduction)",
+              },
+              {
+                label: "Employer PF & gratuity",
+                monthly: result.employerPfMonthly + result.gratuityMonthly,
+                color: "var(--ink-soft)",
+              },
+            ]}
+          />
+        </div>
+
+        <ol className="mt-6 list-decimal space-y-2 pl-5 text-ink-soft">
           <li>
             <strong className="text-ink">Basic salary</strong> is set at roughly 40% of CTC —{" "}
             {formatINR(result.basicAnnual)} per year, or {formatINR(result.basicMonthly)}/month.
