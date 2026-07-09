@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/income-tax-calculator", priority: 0.95 },
     // TEMPORARY — remove this line when deleting the 8th Pay Commission calculator (see app/page.tsx for removal instructions)
     { route: "/calculator/8th-pay-commission-calculator", priority: 0.9 },
+    { route: "/calculator/offer-comparison-tool", priority: 0.85 },
     // Tax & Pay
     { route: "/calculator/hra-calculator", priority: 0.8 },
     { route: "/calculator/salary-hike-calculator", priority: 0.75 },
