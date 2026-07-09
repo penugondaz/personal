@@ -45,7 +45,8 @@ const HEADER_LABELS: Record<string, string> = {
   "Salary Calculators": "Salary",
   "Tax & Pay Components": "Tax Saving",
   "Retirement & Savings": "Retirement",
-  "Loans & Deposits": "Loans & Deposits",
+  "Loans & Deposits": "Loans",
+  "Free Tools": "Tools",
 };
 
 const DROPDOWN_SECTION_TITLES = [
@@ -98,7 +99,7 @@ export default function SiteHeader({
           <LogoWordmark />
 
           {/* Desktop nav */}
-          <nav ref={navRef} className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          <nav ref={navRef} className="hidden flex-nowrap items-center gap-0.5 overflow-x-auto lg:flex" aria-label="Primary">
             {dropdownSections.map((section) => (
               <NavDropdown
                 key={section.title}
@@ -113,19 +114,19 @@ export default function SiteHeader({
             {trackerSection && (
               <Link
                 href={trackerSection.href ?? "/layoffs"}
-                className="ml-1 flex items-center gap-1.5 rounded-full border border-rule px-3.5 py-2 text-sm font-medium text-ink-soft transition hover:border-deduction/40 hover:bg-deduction/5 hover:text-deduction"
+                className="ml-1 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-rule px-3.5 py-2 text-sm font-medium text-ink-soft transition hover:border-deduction/40 hover:bg-deduction/5 hover:text-deduction"
               >
-                <span className="relative flex h-2 w-2">
+                <span className="relative flex h-2 w-2 shrink-0">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-deduction/60" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-deduction" />
                 </span>
-                Layoffs Tracker
+                Layoffs
               </Link>
             )}
 
             <Link
               href="/salary"
-              className="ml-2 flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-card transition hover:-translate-y-0.5 hover:opacity-95 hover:shadow-card-lg"
+              className="ml-2 flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-card transition hover:-translate-y-0.5 hover:opacity-95 hover:shadow-card-lg"
             >
               Calculate Now
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
@@ -171,7 +172,7 @@ function NavDropdown({
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={`flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition ${
+        className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition ${
           isOpen ? "bg-brand-soft text-brand" : "text-ink-soft hover:bg-brand-soft hover:text-brand"
         }`}
       >
