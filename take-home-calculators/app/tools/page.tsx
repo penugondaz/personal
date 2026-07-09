@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 
 const TOOLS = [
   { href: "/tools/age-calculator", icon: "🎂", title: "Age Calculator", desc: "Exact age in years, months, days, hours — plus zodiac & next birthday." },
+  { href: "/tools/rent-receipt-generator", icon: "🧾", title: "Rent Receipt Generator", desc: "Generate HRA rent receipts — one, or all 12 months at once." },
+  { href: "/tools/payslip-generator", icon: "📄", title: "Payslip Generator", desc: "Auto-fill a payslip from your CTC, then edit any line to match." },
   { href: "/tools/discount-calculator", icon: "🏷️", title: "Discount Calculator", desc: "Calculate sale price after % or flat discount." },
   { href: "/tools/percentage-calculator", icon: "📊", title: "Percentage Calculator", desc: "% increase, decrease, of number, difference." },
   { href: "/tools/average-calculator", icon: "➗", title: "Average Calculator", desc: "Mean, median, mode for any set of numbers." },
