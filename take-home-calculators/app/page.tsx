@@ -78,7 +78,7 @@ const CATEGORIES = [
     label: "Retirement",
     color: "brand",
     description: "EPF, PPF, NPS, gratuity calculator",
-    href: "/calculator/epf-calculator",
+    href: "/retirement",
     tools: [
       { href: "/calculator/epf-calculator", label: "EPF & VPF" },
       { href: "/calculator/ppf-calculator", label: "PPF" },
@@ -93,7 +93,7 @@ const CATEGORIES = [
     label: "Investments",
     color: "brand",
     description: "SIP, lumpsum, SWP, goal planning",
-    href: "/calculator/sip-calculator",
+    href: "/investments",
     tools: [
       { href: "/calculator/sip-calculator", label: "SIP Calculator" },
       { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP" },
@@ -108,7 +108,7 @@ const CATEGORIES = [
     label: "Loans & Deposits",
     color: "brand",
     description: "EMI, FD, RD, compound interest",
-    href: "/calculator/emi-calculator",
+    href: "/loans-deposits",
     tools: [
       { href: "/calculator/emi-calculator", label: "EMI Calculator" },
       { href: "/calculator/fd-calculator", label: "Fixed Deposit" },
