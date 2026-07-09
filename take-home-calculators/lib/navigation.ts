@@ -38,6 +38,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/nps-calculator", label: "NPS Calculator" },
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
       { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
+      { href: "/calculator/ssy-calculator", label: "SSY Calculator" },
+      { href: "/calculator/scss-calculator", label: "SCSS Calculator" },
       { href: "/calculator/fire-calculator", label: "FIRE Calculator 🔥" },
     ],
   },
@@ -69,6 +71,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/xirr-calculator", label: "XIRR Calculator" },
       { href: "/calculator/lic-xirr-calculator", label: "LIC XIRR Calculator" },
       { href: "/calculator/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
+      { href: "/calculator/elss-calculator", label: "ELSS Calculator" },
+      { href: "/calculator/real-returns-calculator", label: "Inflation-Adjusted Returns" },
     ],
   },
   {
@@ -80,6 +84,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/rd-calculator", label: "RD Calculator" },
       { href: "/calculator/compound-interest-calculator", label: "Compound Interest Calculator" },
       { href: "/calculator/simple-interest-calculator", label: "Simple Interest Calculator" },
+      { href: "/calculator/home-loan-eligibility-calculator", label: "Home Loan Eligibility" },
+      { href: "/calculator/car-loan-emi-calculator", label: "Car Loan EMI Calculator" },
     ],
   },
   {
