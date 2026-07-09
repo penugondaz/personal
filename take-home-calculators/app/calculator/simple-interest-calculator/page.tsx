@@ -19,6 +19,8 @@ export default function Page() {
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">Home</Link>
         <span className="mx-1.5">/</span>
+        <Link href="/loans-deposits" className="hover:text-brand">Loans & Deposits</Link>
+        <span className="mx-1.5">/</span>
         <span aria-current="page">Simple Interest Calculator</span>
       </nav>
 
