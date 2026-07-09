@@ -57,6 +57,10 @@ export default function NpsCalculatorPage() {
           Home
         </Link>
         <span className="mx-1.5">/</span>
+        <Link href="/retirement" className="hover:text-brand">
+          Retirement
+        </Link>
+        <span className="mx-1.5">/</span>
         <span aria-current="page">NPS Calculator</span>
       </nav>
 
