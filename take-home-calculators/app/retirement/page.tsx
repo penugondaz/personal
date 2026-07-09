@@ -45,6 +45,18 @@ const CALCULATORS = [
     title: "NSC Calculator",
     desc: "National Savings Certificate maturity value and interest earned.",
   },
+  {
+    href: "/calculator/ssy-calculator",
+    icon: "👧",
+    title: "Sukanya Samriddhi Yojana",
+    desc: "SSY maturity value for your girl child's savings, fully tax-free under 80C.",
+  },
+  {
+    href: "/calculator/scss-calculator",
+    icon: "🧓",
+    title: "SCSS Calculator",
+    desc: "Senior Citizen Savings Scheme quarterly interest payout and total returns.",
+  },
 ];
 
 export default function RetirementLandingPage() {
