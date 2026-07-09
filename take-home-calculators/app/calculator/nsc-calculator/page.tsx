@@ -55,6 +55,8 @@ export default function NscCalculatorPage() {
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">Home</Link>
         <span className="mx-1.5">/</span>
+        <Link href="/retirement" className="hover:text-brand">Retirement</Link>
+        <span className="mx-1.5">/</span>
         <span aria-current="page">NSC Calculator</span>
       </nav>
 
