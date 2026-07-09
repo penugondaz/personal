@@ -77,6 +77,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/layoff-risk-calculator", priority: 0.95 },
     // Free Tools
     { route: "/tools", priority: 0.85 },
+    { route: "/tools/rent-receipt-generator", priority: 0.8 },
+    { route: "/tools/payslip-generator", priority: 0.8 },
     { route: "/tools/age-calculator", priority: 0.85 },
     { route: "/tools/discount-calculator", priority: 0.75 },
     { route: "/tools/percentage-calculator", priority: 0.75 },
