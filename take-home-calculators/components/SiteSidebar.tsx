@@ -47,7 +47,13 @@ function SidebarContent({
       {NAV_SECTIONS.map((section, i) => (
         <div key={section.title} className={i > 0 ? "mt-6" : ""}>
           <p className="font-display text-xs uppercase tracking-wide text-ink-soft">
-            {section.title}
+            {section.href ? (
+              <Link href={section.href} className="hover:text-brand">
+                {section.title}
+              </Link>
+            ) : (
+              section.title
+            )}
           </p>
           <ul className="mt-2 space-y-1.5 border-r-2 border-brand-soft pr-3">
             {section.links.map((link) => {
