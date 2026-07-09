@@ -45,6 +45,18 @@ const CALCULATORS = [
     title: "Simple Interest Calculator",
     desc: "Simple interest on principal, rate, and time period.",
   },
+  {
+    href: "/calculator/home-loan-eligibility-calculator",
+    icon: "🏡",
+    title: "Home Loan Eligibility",
+    desc: "How much home loan you can qualify for, based on income and existing EMIs.",
+  },
+  {
+    href: "/calculator/car-loan-emi-calculator",
+    icon: "🚗",
+    title: "Car Loan EMI Calculator",
+    desc: "Monthly installment and interest for financing a car.",
+  },
 ];
 
 export default function LoansDepositsLandingPage() {
