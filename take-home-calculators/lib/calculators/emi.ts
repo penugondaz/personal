@@ -98,10 +98,10 @@ export function yearlyAmortizationSummary(
   }));
 }
 
-export const LOAN_TYPE_DEFAULTS: Record<LoanType, { label: string; defaultRate: number; defaultTenureMonths: number }> = {
-  home: { label: "Home Loan", defaultRate: 8.5, defaultTenureMonths: 240 },
-  personal: { label: "Personal Loan", defaultRate: 12, defaultTenureMonths: 36 },
-  car: { label: "Car Loan", defaultRate: 9, defaultTenureMonths: 60 },
-  education: { label: "Education Loan", defaultRate: 10, defaultTenureMonths: 84 },
-  business: { label: "Business Loan", defaultRate: 13, defaultTenureMonths: 60 },
+export const LOAN_TYPE_DEFAULTS: Record<LoanType, { label: string; defaultRate: number; defaultTenureMonths: number; defaultPrincipal: number }> = {
+  home: { label: "Home Loan", defaultRate: 8.5, defaultTenureMonths: 240, defaultPrincipal: 3_000_000 },
+  personal: { label: "Personal Loan", defaultRate: 12, defaultTenureMonths: 36, defaultPrincipal: 500_000 },
+  car: { label: "Car Loan", defaultRate: 9, defaultTenureMonths: 60, defaultPrincipal: 800_000 },
+  education: { label: "Education Loan", defaultRate: 10, defaultTenureMonths: 84, defaultPrincipal: 1_500_000 },
+  business: { label: "Business Loan", defaultRate: 13, defaultTenureMonths: 60, defaultPrincipal: 1_000_000 },
 };
