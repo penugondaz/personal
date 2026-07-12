@@ -581,6 +581,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Real Estate Calculators ──────────────────────────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 py-8">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-display text-xl font-semibold text-ink">Real Estate Calculators</h2>
+          <Link href="/real-estate"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:underline underline-offset-2">
+            All calculators <ArrowIcon className="text-brand" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            { href: "/real-estate/home-affordability-calculator", emoji: "🏠", label: "Home Affordability" },
+            { href: "/real-estate/rent-vs-buy-calculator", emoji: "⚖️", label: "Rent vs Buy" },
+            { href: "/real-estate/rental-yield-calculator", emoji: "📊", label: "Rental Yield" },
+            { href: "/real-estate/stamp-duty-calculator", emoji: "📋", label: "Stamp Duty" },
+            { href: "/real-estate/registration-charges-calculator", emoji: "📝", label: "Registration Charges" },
+            { href: "/real-estate/property-appreciation-calculator", emoji: "📈", label: "Property Appreciation" },
+          ].map(item => (
+            <Link key={item.href} href={item.href}
+              className="group flex flex-col items-center rounded-xl border border-rule bg-surface p-4 text-center shadow-card hover:border-brand hover:-translate-y-0.5 transition">
+              <span className="text-2xl mb-2">{item.emoji}</span>
+              <span className="text-xs font-medium text-ink group-hover:text-brand transition leading-tight">{item.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ── From the Blog ─────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-5xl px-6 py-8">
         <div className="flex items-center justify-between mb-5">
