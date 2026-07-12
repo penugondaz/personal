@@ -5,14 +5,12 @@ export interface NavLink {
 
 export interface NavSection {
   title: string;
-  href?: string;
   links: NavLink[];
 }
 
 export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Tracker",
-    href: "/layoffs",
     links: [
       { href: "/layoffs", label: "Layoffs Tracker 🔴" },
       { href: "/calculator/layoff-risk-calculator", label: "Layoff Risk Calculator" },
@@ -20,7 +18,6 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Salary Calculators",
-    href: "/salary",
     links: [
       { href: "/salary", label: "In-Hand Salary (All CTC Slabs)" },
       { href: "/salary/10-lpa-in-hand", label: "10 LPA In-Hand" },
@@ -28,13 +25,10 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/salary/inhand-to-ctc-calculator", label: "In-Hand to CTC Calculator" },
       { href: "/salary/salary-structure-calculator", label: "Salary Structure Calculator" },
       { href: "/salary-growth", label: "Salary Growth Projection" },
-      { href: "/calculator/8th-pay-commission-calculator", label: "8th Pay Commission Calculator" },
-      { href: "/calculator/offer-comparison-tool", label: "Offer Comparison Tool" },
     ],
   },
   {
     title: "Retirement & Savings",
-    href: "/retirement",
     links: [
       { href: "/calculator/epf-calculator", label: "EPF & VPF Calculator" },
       { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
@@ -42,14 +36,11 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/nps-calculator", label: "NPS Calculator" },
       { href: "/calculator/gratuity-calculator", label: "Gratuity Calculator" },
       { href: "/calculator/nsc-calculator", label: "NSC Calculator" },
-      { href: "/calculator/ssy-calculator", label: "SSY Calculator" },
-      { href: "/calculator/scss-calculator", label: "SCSS Calculator" },
       { href: "/calculator/fire-calculator", label: "FIRE Calculator 🔥" },
     ],
   },
   {
     title: "Tax & Pay Components",
-    href: "/tax-saving",
     links: [
       { href: "/tax-saving", label: "Tax Saving Guide" },
       { href: "/calculator/income-tax-calculator", label: "Income Tax Calculator" },
@@ -64,7 +55,6 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Investments",
-    href: "/investments",
     links: [
       { href: "/calculator/sip-calculator", label: "SIP Calculator" },
       { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP Calculator" },
@@ -76,30 +66,22 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/calculator/xirr-calculator", label: "XIRR Calculator" },
       { href: "/calculator/lic-xirr-calculator", label: "LIC XIRR Calculator" },
       { href: "/calculator/cagr-xirr-calculator", label: "CAGR & XIRR Calculator" },
-      { href: "/calculator/elss-calculator", label: "ELSS Calculator" },
-      { href: "/calculator/real-returns-calculator", label: "Inflation-Adjusted Returns" },
     ],
   },
   {
     title: "Loans & Deposits",
-    href: "/loans-deposits",
     links: [
       { href: "/calculator/emi-calculator", label: "EMI Calculator" },
       { href: "/calculator/fd-calculator", label: "FD Calculator" },
       { href: "/calculator/rd-calculator", label: "RD Calculator" },
       { href: "/calculator/compound-interest-calculator", label: "Compound Interest Calculator" },
       { href: "/calculator/simple-interest-calculator", label: "Simple Interest Calculator" },
-      { href: "/calculator/home-loan-eligibility-calculator", label: "Home Loan Eligibility" },
-      { href: "/calculator/car-loan-emi-calculator", label: "Car Loan EMI Calculator" },
     ],
   },
   {
     title: "Free Tools",
-    href: "/tools",
     links: [
       { href: "/tools", label: "All Tools" },
-      { href: "/tools/rent-receipt-generator", label: "Rent Receipt Generator" },
-      { href: "/tools/payslip-generator", label: "Payslip Generator" },
       { href: "/tools/discount-calculator", label: "Discount Calculator" },
       { href: "/tools/percentage-calculator", label: "Percentage Calculator" },
       { href: "/tools/average-calculator", label: "Average Calculator" },
@@ -111,7 +93,6 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Guides",
-    href: "/blog",
     links: [
       { href: "/blog", label: "Blog" },
       { href: "/blog/lpa-full-form", label: "LPA Full Form" },
