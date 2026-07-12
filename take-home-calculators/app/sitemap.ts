@@ -12,6 +12,13 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { route: string; priority: number }[] = [
     { route: "/", priority: 1 },
+    { route: "/real-estate", priority: 0.9 },
+    { route: "/real-estate/home-affordability-calculator", priority: 0.85 },
+    { route: "/real-estate/rent-vs-buy-calculator", priority: 0.85 },
+    { route: "/real-estate/rental-yield-calculator", priority: 0.8 },
+    { route: "/real-estate/stamp-duty-calculator", priority: 0.85 },
+    { route: "/real-estate/registration-charges-calculator", priority: 0.8 },
+    { route: "/real-estate/property-appreciation-calculator", priority: 0.8 },
     { route: "/about", priority: 0.6 },
     { route: "/contact", priority: 0.6 },
     { route: "/privacy-policy", priority: 0.4 },
@@ -20,9 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/cookie-policy", priority: 0.4 },
     { route: "/salary", priority: 0.9 },
     { route: "/blog", priority: 0.6 },
-    { route: "/retirement", priority: 0.85 },
-    { route: "/investments", priority: 0.85 },
-    { route: "/loans-deposits", priority: 0.85 },
     // Salary tools
     { route: "/salary/inhand-to-ctc-calculator", priority: 0.8 },
     { route: "/salary/salary-structure-calculator", priority: 0.8 },
@@ -33,14 +37,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/nps-calculator", priority: 0.8 },
     { route: "/calculator/gratuity-calculator", priority: 0.8 },
     { route: "/calculator/nsc-calculator", priority: 0.8 },
-    { route: "/calculator/ssy-calculator", priority: 0.8 },
-    { route: "/calculator/scss-calculator", priority: 0.8 },
     { route: "/calculator/fire-calculator", priority: 0.9 },
     { route: "/calculator/pm-surya-ghar-calculator", priority: 0.9 },
     { route: "/calculator/income-tax-calculator", priority: 0.95 },
-    // TEMPORARY — remove this line when deleting the 8th Pay Commission calculator (see app/page.tsx for removal instructions)
-    { route: "/calculator/8th-pay-commission-calculator", priority: 0.9 },
-    { route: "/calculator/offer-comparison-tool", priority: 0.85 },
     // Tax & Pay
     { route: "/calculator/hra-calculator", priority: 0.8 },
     { route: "/calculator/salary-hike-calculator", priority: 0.75 },
@@ -59,8 +58,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/goal-planning-calculator", priority: 0.8 },
     { route: "/calculator/stock-average-calculator", priority: 0.7 },
     { route: "/calculator/xirr-calculator", priority: 0.75 },
-    { route: "/calculator/elss-calculator", priority: 0.75 },
-    { route: "/calculator/real-returns-calculator", priority: 0.7 },
     { route: "/calculator/lic-xirr-calculator", priority: 0.85 },
     { route: "/calculator/cagr-xirr-calculator", priority: 0.8 },
     // Loans & Deposits
@@ -69,8 +66,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/rd-calculator", priority: 0.8 },
     { route: "/calculator/compound-interest-calculator", priority: 0.8 },
     { route: "/calculator/simple-interest-calculator", priority: 0.75 },
-    { route: "/calculator/home-loan-eligibility-calculator", priority: 0.75 },
-    { route: "/calculator/car-loan-emi-calculator", priority: 0.75 },
     // Tax Saving
     { route: "/tax-saving", priority: 0.9 },
     // Salary Growth
@@ -80,8 +75,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "/calculator/layoff-risk-calculator", priority: 0.95 },
     // Free Tools
     { route: "/tools", priority: 0.85 },
-    { route: "/tools/rent-receipt-generator", priority: 0.8 },
-    { route: "/tools/payslip-generator", priority: 0.8 },
     { route: "/tools/age-calculator", priority: 0.85 },
     { route: "/tools/discount-calculator", priority: 0.75 },
     { route: "/tools/percentage-calculator", priority: 0.75 },
