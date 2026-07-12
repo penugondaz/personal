@@ -46,8 +46,8 @@ export default function SiteFooter() {
           {NAV_SECTIONS.map((section) => (
             <div key={section.title}>
               <p className="font-display text-sm font-semibold text-white/90">
-                {section.href ? (
-                  <Link href={section.href} className="hover:text-white">
+                {section.href != null ? (
+                  <Link href={section.href as string} className="hover:text-white">
                     {section.title}
                   </Link>
                 ) : (
