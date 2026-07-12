@@ -5,6 +5,7 @@ export interface NavLink {
 
 export interface NavSection {
   title: string;
+  href?: string;
   links: NavLink[];
 }
 
