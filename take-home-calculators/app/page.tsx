@@ -30,7 +30,9 @@ const SALARY_SNAPSHOTS = [5, 8, 10, 12, 15, 20, 25, 30].map(lpa => {
 });
 
 const TAX_SNAPSHOTS = [6, 8, 10, 12, 15, 20, 25, 30].map(lpa => {
-  const gross = Math.round(lpa * 100_000 * 0.85);
+  // Use actual gross from salary breakup — not a flat 85% shortcut
+  const breakup = calculateSalaryBreakup({ annualCtc: lpa * 100_000, regime: "new" });
+  const gross = breakup.grossMonthly * 12;
   const tax = calculateIncomeTax(gross, "new");
   return { lpa, tax: tax.totalTaxPayable, effective: gross > 0 ? (tax.totalTaxPayable / gross) * 100 : 0, taxFree: tax.totalTaxPayable === 0 };
 });
