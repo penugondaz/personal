@@ -27,7 +27,6 @@ interface SurrenderInputs {
   futurePremium: string;
   futurePremiumYears: string;
   maturityValue: string;
-  yearsRemaining: string;
   altRate: string;
 }
 
@@ -270,12 +269,14 @@ function computeSurrender(inputs: SurrenderInputs) {
   const futPremium  = parseAmt(inputs.futurePremium);
   const futYears    = parseInt(inputs.futurePremiumYears) || 0;
   const maturity    = parseAmt(inputs.maturityValue);
-  const yrsLeft     = parseInt(inputs.yearsRemaining) || 0;
+  const yrsLeft     = futYears; // maturity coincides with end of premium term
   const altRate     = (parseFloat(inputs.altRate) || 12) / 100;
 
   if (!surrender || !maturity || !yrsLeft) return null;
 
   const continueValue = maturity;
+
+  // Alternative: surrender today, invest surrender value + saved future premiums
   let altValue = surrender * Math.pow(1 + altRate, yrsLeft);
   for (let i = 0; i < Math.min(futYears, yrsLeft); i++) {
     altValue += futPremium * Math.pow(1 + altRate, yrsLeft - i);
@@ -283,17 +284,25 @@ function computeSurrender(inputs: SurrenderInputs) {
   const diff   = altValue - continueValue;
   const better = diff > 0 ? "surrender" : "continue";
 
+  // Continue XIRR = lifetime XIRR from inception (all premiums paid + future + maturity)
+  // This is the true annualised return of the policy if held to maturity
+  // yearsAlreadyPaid derived from totalPremiumPaid / futurePremium
+  const paidSoFar = parseAmt(inputs.premiumPaid);
+  const yearsPaid = futPremium > 0 ? Math.round(paidSoFar / futPremium) : 0;
+  const totalYears = yearsPaid + futYears;
   const now = new Date();
-  const futFlows: CashFlow[] = [{ date: now, amount: -surrender }];
-  for (let i = 0; i < futYears && i < yrsLeft; i++) {
-    const d = new Date(now);
-    d.setFullYear(d.getFullYear() + i + 1);
-    futFlows.push({ date: d, amount: -futPremium });
+  const startDate = new Date(now);
+  startDate.setFullYear(startDate.getFullYear() - yearsPaid);
+  const lifetimeFlows: CashFlow[] = [];
+  for (let i = 0; i < totalYears; i++) {
+    const d = new Date(startDate);
+    d.setFullYear(d.getFullYear() + i);
+    lifetimeFlows.push({ date: d, amount: -futPremium });
   }
-  const matDate = new Date(now);
-  matDate.setFullYear(matDate.getFullYear() + yrsLeft);
-  futFlows.push({ date: matDate, amount: maturity });
-  const continueXirr = calculateXIRR(futFlows);
+  const matDate = new Date(startDate);
+  matDate.setFullYear(matDate.getFullYear() + totalYears);
+  lifetimeFlows.push({ date: matDate, amount: maturity });
+  const continueXirr = calculateXIRR(lifetimeFlows);
 
   return { continueValue, altValue, diff, better, continueXirr, altRate };
 }
@@ -466,7 +475,7 @@ export default function LicXirrCalculator() {
   const [surr, setSurr] = useState<SurrenderInputs>({
     premiumPaid: "600000", surrenderValue: "450000",
     futurePremium: "50000", futurePremiumYears: "5",
-    maturityValue: "1500000", yearsRemaining: "5", altRate: "12",
+    maturityValue: "1500000", altRate: "12",
   });
   const setS = (k: keyof SurrenderInputs) => (v: string) => setSurr(p => ({ ...p, [k]: v }));
 
@@ -649,14 +658,11 @@ export default function LicXirrCalculator() {
               <Field label="Future Annual Premium (₹)">
                 <Input prefix="₹" value={surr.futurePremium} onChange={setS("futurePremium")} inputMode="numeric" />
               </Field>
-              <Field label="Years of Future Premiums Remaining">
+              <Field label="Years to Maturity / Premiums Remaining" hint="Policy matures at end of premium term">
                 <Input value={surr.futurePremiumYears} onChange={setS("futurePremiumYears")} inputMode="numeric" />
               </Field>
               <Field label="Expected Maturity Value (₹)">
                 <Input prefix="₹" value={surr.maturityValue} onChange={setS("maturityValue")} inputMode="numeric" />
-              </Field>
-              <Field label="Years to Maturity">
-                <Input value={surr.yearsRemaining} onChange={setS("yearsRemaining")} inputMode="numeric" />
               </Field>
               <Field label="Alternative Investment Return (%)"
                 hint="Expected return from MF, PPF, FD etc.">
@@ -688,7 +694,7 @@ export default function LicXirrCalculator() {
                 </div>
                 <div className="grid grid-cols-2 divide-x divide-rule border-t border-rule sm:grid-cols-3">
                   <div className="px-5 py-4">
-                    <p className="text-xs text-ink-soft">Continue LIC</p>
+                    <p className="text-xs text-ink-soft">Continue LIC (lifetime XIRR)</p>
                     <p className="tabular font-display text-xl font-bold text-ink mt-1">
                       {formatINRCompact(surrResult.continueValue)}
                     </p>
