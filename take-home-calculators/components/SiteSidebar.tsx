@@ -44,10 +44,10 @@ export default function SiteSidebar({
   if (variant === "desktop") {
     return (
       <aside
-        className="hidden w-[216px] shrink-0 border-l border-rule lg:block"
+        className="hidden w-[210px] shrink-0 border-l border-rule bg-paper/60 lg:block"
         aria-label="Calculator index"
       >
-        <div className="sticky top-[59px] h-[calc(100vh-59px)] overflow-y-auto px-3 py-6">
+        <div className="px-3 py-6">
           <SidebarContent pathname={pathname} onNavigate={onNavigate} />
         </div>
       </aside>
