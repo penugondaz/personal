@@ -44,32 +44,42 @@ export default function HomePage() {
       ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-rule bg-surface">
 
-        {/* Background: layered SVG — rupee watermark + dot grid + gradient wash */}
+        {/* Background layers */}
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
 
-          {/* Soft gradient wash — top-left brand, bottom-right warm */}
+          {/* Base: very light green-tinted white */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f0f7f3] via-white to-[#fafbff]" />
+
+          {/* Dot grid — brand green dots, crisp */}
           <div className="absolute inset-0"
             style={{
-              background:
-                "radial-gradient(ellipse 80% 60% at 10% 0%, rgba(47,111,79,0.07) 0%, transparent 70%)," +
-                "radial-gradient(ellipse 60% 50% at 90% 100%, rgba(255,122,69,0.05) 0%, transparent 70%)",
+              backgroundImage: "radial-gradient(circle, rgba(47,111,79,0.12) 1.5px, transparent 1.5px)",
+              backgroundSize: "32px 32px",
             }} />
 
-          {/* Fine dot grid */}
-          <div className="absolute inset-0 opacity-[0.35]"
+          {/* Top-left glow */}
+          <div className="absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(47,111,79,0.08) 0%, transparent 65%)" }} />
+
+          {/* Bottom-right glow */}
+          <div className="absolute -bottom-20 -right-20 h-[400px] w-[400px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(232,245,238,0.8) 0%, transparent 65%)" }} />
+
+          {/* Large ₹ — right side, decorative */}
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 select-none sm:right-10"
             style={{
-              backgroundImage: "radial-gradient(circle, #c8d8ce 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
-            }} />
+              fontSize: "clamp(180px, 22vw, 300px)",
+              fontFamily: "Georgia, serif",
+              fontWeight: 700,
+              color: "rgba(47,111,79,0.055)",
+              lineHeight: 1,
+              letterSpacing: "-0.05em",
+            }}>
+            ₹
+          </div>
 
-          {/* Large ₹ watermark — top right, very faint */}
-          <svg className="absolute -right-8 -top-8 h-[340px] w-[340px] text-brand opacity-[0.04]"
-            viewBox="0 0 200 200" fill="currentColor" aria-hidden="true">
-            <text x="10" y="175" fontSize="190" fontFamily="serif" fontWeight="700">₹</text>
-          </svg>
-
-          {/* Subtle horizontal rule accent at bottom */}
-          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand/20 to-transparent" />
+          {/* Bottom fade to white so table section below blends in */}
+          <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-b from-transparent to-white" />
         </div>
 
         <div className="relative mx-auto max-w-4xl px-6 pt-12 pb-12 sm:pt-20 sm:pb-18 text-center">
