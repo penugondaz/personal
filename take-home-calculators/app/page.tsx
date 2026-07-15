@@ -45,7 +45,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-[#0d2b1a]">
 
         {/* ── Background ── */}
         <div className="absolute inset-0" aria-hidden="true">
@@ -80,13 +80,15 @@ export default function HomePage() {
             aria-hidden="true"
           >₹</div>
 
-          {/* Bottom fade to page background */}
-          <div className="absolute bottom-0 inset-x-0 h-24"
-            style={{ background: "linear-gradient(to bottom, transparent, #f7f8fa)" }} />
+          {/* Angled cut — clean transition to light section below */}
+          <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 48"
+            preserveAspectRatio="none" fill="#f7f8fa" aria-hidden="true">
+            <path d="M0 48 L0 24 Q360 0 720 20 Q1080 40 1440 8 L1440 48 Z" />
+          </svg>
         </div>
 
         {/* ── Content ── */}
-        <div className={`${W} relative pt-14 pb-20 sm:pt-20 sm:pb-28`}>
+        <div className={`${W} relative pt-14 pb-24 sm:pt-20 sm:pb-32`}>
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_380px]">
 
             {/* Left */}
