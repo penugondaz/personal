@@ -42,16 +42,45 @@ export default function HomePage() {
       {/* ─────────────────────────────────────────────────────────
           HERO — full-width, answer-first design
       ───────────────────────────────────────────────────────── */}
-      <section className="bg-surface border-b border-rule">
-        <div className="mx-auto max-w-4xl px-6 pt-16 pb-14 sm:pt-24 sm:pb-20 text-center">
+      <section className="relative overflow-hidden border-b border-rule bg-surface">
+
+        {/* Background: layered SVG — rupee watermark + dot grid + gradient wash */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+
+          {/* Soft gradient wash — top-left brand, bottom-right warm */}
+          <div className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 60% at 10% 0%, rgba(47,111,79,0.07) 0%, transparent 70%)," +
+                "radial-gradient(ellipse 60% 50% at 90% 100%, rgba(255,122,69,0.05) 0%, transparent 70%)",
+            }} />
+
+          {/* Fine dot grid */}
+          <div className="absolute inset-0 opacity-[0.35]"
+            style={{
+              backgroundImage: "radial-gradient(circle, #c8d8ce 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+            }} />
+
+          {/* Large ₹ watermark — top right, very faint */}
+          <svg className="absolute -right-8 -top-8 h-[340px] w-[340px] text-brand opacity-[0.04]"
+            viewBox="0 0 200 200" fill="currentColor" aria-hidden="true">
+            <text x="10" y="175" fontSize="190" fontFamily="serif" fontWeight="700">₹</text>
+          </svg>
+
+          {/* Subtle horizontal rule accent at bottom */}
+          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand/20 to-transparent" />
+        </div>
+
+        <div className="relative mx-auto max-w-4xl px-6 pt-12 pb-12 sm:pt-20 sm:pb-18 text-center">
 
           {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-rule bg-paper px-4 py-1.5 text-xs text-ink-soft mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-rule bg-white/80 backdrop-blur-sm px-4 py-1.5 text-xs text-ink-soft mb-8 shadow-card">
             <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
             Updated for FY {FY.fy} · New tax regime
           </div>
 
-          {/* Headline — large, confident, question format */}
+          {/* Headline */}
           <h1 className="font-display font-semibold text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: "clamp(2.25rem, 5vw, 3.75rem)" }}>
             How much of your salary
@@ -64,7 +93,7 @@ export default function HomePage() {
             Find out why — instantly, free, no account needed.
           </p>
 
-          {/* Two primary actions — clear hierarchy */}
+          {/* CTAs */}
           <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/salary"
               className="group inline-flex w-full items-center justify-center gap-2.5 rounded-2xl bg-brand px-8 py-4 text-sm font-semibold text-white shadow-card-lg transition hover:bg-brand-dark sm:w-auto">
@@ -74,12 +103,12 @@ export default function HomePage() {
               </svg>
             </Link>
             <Link href="/calculator/income-tax-calculator"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-rule bg-paper px-8 py-4 text-sm font-medium text-ink transition hover:border-brand hover:text-brand sm:w-auto">
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-rule bg-white/80 backdrop-blur-sm px-8 py-4 text-sm font-medium text-ink transition hover:border-brand hover:text-brand sm:w-auto">
               Calculate income tax
             </Link>
           </div>
 
-          {/* Social proof / trust */}
+          {/* Trust */}
           <p className="mt-8 text-xs text-ink-soft">
             No signup · No data stored · Runs in your browser · 30+ free calculators
           </p>
@@ -174,7 +203,7 @@ export default function HomePage() {
 
       {/* Section 1: Tax */}
       <section className="border-t border-rule bg-surface">
-        <div className="mx-auto max-w-4xl px-6 py-14 grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="mx-auto max-w-4xl px-6 py-10 sm:py-14 grid gap-8 lg:gap-10 lg:grid-cols-2 lg:items-center">
 
           {/* Visual: tax breakdown */}
           <div className="rounded-2xl border border-rule bg-paper p-6 shadow-card order-2 lg:order-1">
@@ -200,7 +229,7 @@ export default function HomePage() {
           {/* Copy */}
           <div className="order-1 lg:order-2">
             <span className="text-xs font-semibold uppercase tracking-widest text-brand">Income tax</span>
-            <h2 className="mt-3 font-display text-2xl font-semibold text-ink leading-snug sm:text-3xl">
+            <h2 className="mt-3 font-display text-xl font-semibold text-ink leading-snug sm:text-2xl lg:text-3xl">
               New regime is better for most people now
             </h2>
             <p className="mt-4 text-sm text-ink-soft leading-relaxed">
@@ -231,12 +260,12 @@ export default function HomePage() {
 
       {/* Section 2: Invest */}
       <section className="border-t border-rule bg-paper">
-        <div className="mx-auto max-w-4xl px-6 py-14 grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="mx-auto max-w-4xl px-6 py-10 sm:py-14 grid gap-8 lg:gap-10 lg:grid-cols-2 lg:items-center">
 
           {/* Copy */}
           <div>
             <span className="text-xs font-semibold uppercase tracking-widest text-brand">Invest & grow</span>
-            <h2 className="mt-3 font-display text-2xl font-semibold text-ink leading-snug sm:text-3xl">
+            <h2 className="mt-3 font-display text-xl font-semibold text-ink leading-snug sm:text-2xl lg:text-3xl">
               ₹10,000/month SIP<br />becomes ₹2.3 crore in 20 years
             </h2>
             <p className="mt-4 text-sm text-ink-soft leading-relaxed">
@@ -273,7 +302,7 @@ export default function HomePage() {
 
       {/* Section 3: Real Estate */}
       <section className="border-t border-rule bg-surface">
-        <div className="mx-auto max-w-4xl px-6 py-14 grid gap-10 lg:grid-cols-2 lg:items-center">
+        <div className="mx-auto max-w-4xl px-6 py-10 sm:py-14 grid gap-8 lg:gap-10 lg:grid-cols-2 lg:items-center">
 
           {/* Visual: affordability */}
           <div className="rounded-2xl border border-rule bg-paper p-6 shadow-card order-2 lg:order-1">
@@ -283,7 +312,7 @@ export default function HomePage() {
 
           <div className="order-1 lg:order-2">
             <span className="text-xs font-semibold uppercase tracking-widest text-brand">Real estate</span>
-            <h2 className="mt-3 font-display text-2xl font-semibold text-ink leading-snug sm:text-3xl">
+            <h2 className="mt-3 font-display text-xl font-semibold text-ink leading-snug sm:text-2xl lg:text-3xl">
               How much home can your salary afford?
             </h2>
             <p className="mt-4 text-sm text-ink-soft leading-relaxed">
@@ -316,7 +345,7 @@ export default function HomePage() {
           TRENDING — inline, not a banner
       ───────────────────────────────────────────────────────── */}
       <section className="border-t border-b border-rule bg-amber-50/60">
-        <div className="mx-auto max-w-4xl px-6 py-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto max-w-4xl px-6 py-4 sm:py-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-orange-100 px-2.5 py-0.5 text-[11px] font-bold text-orange-600 uppercase tracking-wide">Trending</span>
             <p className="text-sm font-medium text-ink">8th Pay Commission Salary Calculator — estimate your revised pay</p>
@@ -333,7 +362,7 @@ export default function HomePage() {
       ───────────────────────────────────────────────────────── */}
       {posts.length > 0 && (
         <section className="bg-paper">
-          <div className="mx-auto max-w-4xl px-6 py-12">
+          <div className="mx-auto max-w-4xl px-6 py-10 sm:py-12">
             <div className="flex items-baseline justify-between mb-7">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-widest text-brand">From the blog</span>
@@ -394,7 +423,7 @@ export default function HomePage() {
           TRUST + FAQ
       ───────────────────────────────────────────────────────── */}
       <section className="border-t border-rule bg-surface">
-        <div className="mx-auto max-w-4xl px-6 py-12 grid gap-10 lg:grid-cols-2">
+        <div className="mx-auto max-w-4xl px-6 py-10 sm:py-12 grid gap-8 sm:gap-10 lg:grid-cols-2">
           <div>
             <span className="text-xs font-semibold uppercase tracking-widest text-brand">Why SalaryTools</span>
             <div className="mt-5 space-y-5">
@@ -473,11 +502,11 @@ function TaxVisual() {
 
 function SipGrowthBars() {
   const data = [
-    { year: 5,  invested: 6,   value: 8.2  },
-    { year: 10, invested: 12,  value: 23.2 },
-    { year: 15, invested: 18,  value: 50.5 },
-    { year: 20, invested: 24,  value: 99.9 },
-    { year: 25, invested: 30,  value: 212  },
+    { year: 5,  invested: 6,   value: 8.2,  hide: false },
+    { year: 10, invested: 12,  value: 23.2, hide: false },
+    { year: 15, invested: 18,  value: 50.5, hide: false },
+    { year: 20, invested: 24,  value: 99.9, hide: false },
+    { year: 25, invested: 30,  value: 212,  hide: false },
   ];
   const max = 212;
   return (
