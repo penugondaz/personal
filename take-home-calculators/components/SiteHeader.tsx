@@ -47,6 +47,7 @@ const HEADER_LABELS: Record<string, string> = {
   "Retirement & Savings": "Retirement",
   "Loans & Deposits":     "Loans",
   "Free Tools":           "Tools",
+  "Auto":                 "Auto 🚗",
 };
 
 const DROPDOWN_SECTION_TITLES = [
@@ -56,6 +57,7 @@ const DROPDOWN_SECTION_TITLES = [
   "Investments",
   "Loans & Deposits",
   "Free Tools",
+  "Auto",
 ];
 
 // ─── Header ───────────────────────────────────────────────────────────────────
