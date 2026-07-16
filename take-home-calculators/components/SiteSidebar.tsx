@@ -16,6 +16,7 @@ const SECTION_META: Record<string, { icon: string; bg: string; border: string }>
   "Loans & Deposits":     { icon: "💳", bg: "bg-violet-50",   border: "border-violet-200" },
   "Real Estate":          { icon: "🏠", bg: "bg-amber-50",    border: "border-amber-200"  },
   "Free Tools":           { icon: "🛠️", bg: "bg-paper",       border: "border-rule"       },
+  "Auto":                 { icon: "🚗", bg: "bg-amber-50",    border: "border-amber-200"  },
 };
 
 const DEFAULT_META = { icon: "📋", bg: "bg-paper", border: "border-rule" };
@@ -26,6 +27,7 @@ function shortTitle(title: string): string {
     "Tax & Pay Components": "Tax & Payroll",
     "Retirement & Savings": "Retirement",
     "Free Tools":           "Tools",
+    "Auto":                 "Auto",
   };
   return map[title] ?? title;
 }
