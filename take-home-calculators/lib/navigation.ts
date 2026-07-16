@@ -80,6 +80,17 @@ export const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    title: "Auto",
+    href: "/auto",
+    links: [
+      { href: "/auto", label: "All Auto Calculators" },
+      { href: "/auto/ctc-car-benefit-calculator", label: "CTC Car Benefit Calculator" },
+      { href: "/auto/car-lease-vs-buy-calculator", label: "Car Lease vs Buy Calculator" },
+      { href: "/auto/car-perquisite-calculator", label: "Car Perquisite Calculator" },
+      { href: "/auto/fuel-reimbursement-calculator", label: "Fuel Reimbursement Tax" },
+    ],
+  },
+    {
     title: "Free Tools",
     links: [
       { href: "/tools", label: "All Tools" },
