@@ -460,6 +460,48 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
+          AUTO — car benefit calculators
+      ══════════════════════════════════════════════════════════ */}
+      <section className="border-b border-rule bg-surface">
+        <div className={`${W} py-10`}>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-brand">Auto</p>
+              <h2 className="mt-1 font-display text-xl font-semibold text-ink">Car Benefit Calculators</h2>
+            </div>
+            <Link href="/auto"
+              className="text-xs font-medium text-brand hover:underline underline-offset-2 shrink-0">
+              All calculators →
+            </Link>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { href: "/auto/ctc-car-benefit-calculator",    emoji: "🚗", label: "CTC Car Benefit",     desc: "Cash vs lease vs company car" },
+              { href: "/auto/car-lease-vs-buy-calculator",   emoji: "🔑", label: "Lease vs Buy",        desc: "Total cost comparison after tax" },
+              { href: "/auto/car-perquisite-calculator",     emoji: "🧾", label: "Perquisite Tax",      desc: "Tax on company-provided car" },
+              { href: "/auto/fuel-reimbursement-calculator", emoji: "⛽", label: "Fuel Reimbursement",  desc: "Is it taxable under new regime?" },
+            ].map(c => (
+              <Link key={c.href} href={c.href}
+                className="group flex items-start gap-3 rounded-xl border border-rule bg-paper px-4 py-3.5
+                  shadow-card transition hover:border-brand hover:-translate-y-0.5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl
+                  bg-amber-50 border border-amber-200 text-lg group-hover:bg-brand-soft
+                  group-hover:border-brand/20 transition">
+                  {c.emoji}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-ink group-hover:text-brand transition">
+                    {c.label}
+                  </p>
+                  <p className="text-xs text-ink-soft mt-0.5">{c.desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
           BLOG
       ══════════════════════════════════════════════════════════ */}
       {posts.length > 0 && (
