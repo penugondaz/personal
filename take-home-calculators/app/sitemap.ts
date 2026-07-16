@@ -12,6 +12,11 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { route: string; priority: number }[] = [
     { route: "/", priority: 1 },
+    { route: "/auto", priority: 0.9 },
+    { route: "/auto/ctc-car-benefit-calculator", priority: 0.85 },
+    { route: "/auto/car-lease-vs-buy-calculator", priority: 0.85 },
+    { route: "/auto/car-perquisite-calculator", priority: 0.8 },
+    { route: "/auto/fuel-reimbursement-calculator", priority: 0.8 },
     { route: "/real-estate", priority: 0.9 },
     { route: "/real-estate/home-affordability-calculator", priority: 0.85 },
     { route: "/real-estate/rent-vs-buy-calculator", priority: 0.85 },
