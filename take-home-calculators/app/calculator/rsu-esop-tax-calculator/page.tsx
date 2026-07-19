@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import RsuEsopTaxCalculator from "@/components/RsuEsopTaxCalculator";
-import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -117,14 +116,6 @@ export default function RsuEsopTaxCalculatorPage() {
           ))}
         </div>
       </section>
-
-      <CalculatorSources
-        sources={[
-          { label: "Income Tax Act, 1961 — Section 17(2)(vi), perquisite value of ESOP/RSU shares", url: "https://incometaxindia.gov.in" },
-          { label: "Income Tax Act, 1961 — Section 111A/112A, short-term and long-term capital gains on equity", url: "https://incometaxindia.gov.in" },
-          { label: "Finance Act 2024 — removal of indexation and revised LTCG/STCG rates on equity" },
-        ]}
-      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
