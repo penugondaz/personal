@@ -30,6 +30,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Retirement & Savings",
+    href: "/retirement",
     links: [
       { href: "/calculator/epf-calculator", label: "EPF & VPF Calculator" },
       { href: "/calculator/epf-vs-ppf", label: "EPF vs PPF" },
@@ -56,6 +57,7 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Investments",
+    href: "/investments",
     links: [
       { href: "/calculator/sip-calculator", label: "SIP Calculator" },
       { href: "/calculator/step-up-sip-calculator", label: "Step-Up SIP Calculator" },
@@ -71,12 +73,25 @@ export const NAV_SECTIONS: NavSection[] = [
   },
   {
     title: "Loans & Deposits",
+    href: "/loans-deposits",
     links: [
       { href: "/calculator/emi-calculator", label: "EMI Calculator" },
       { href: "/calculator/fd-calculator", label: "FD Calculator" },
       { href: "/calculator/rd-calculator", label: "RD Calculator" },
       { href: "/calculator/compound-interest-calculator", label: "Compound Interest Calculator" },
       { href: "/calculator/simple-interest-calculator", label: "Simple Interest Calculator" },
+    ],
+  },
+  {
+    title: "Real Estate",
+    href: "/real-estate",
+    links: [
+      { href: "/real-estate/home-affordability-calculator", label: "Home Affordability Calculator" },
+      { href: "/real-estate/rent-vs-buy-calculator", label: "Rent vs Buy Calculator" },
+      { href: "/real-estate/rental-yield-calculator", label: "Rental Yield Calculator" },
+      { href: "/real-estate/stamp-duty-calculator", label: "Stamp Duty Calculator" },
+      { href: "/real-estate/registration-charges-calculator", label: "Registration Charges Calculator" },
+      { href: "/real-estate/property-appreciation-calculator", label: "Property Appreciation Calculator" },
     ],
   },
   {
