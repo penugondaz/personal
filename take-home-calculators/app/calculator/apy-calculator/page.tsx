@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ApyCalculator from "@/components/ApyCalculator";
+import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -113,6 +114,13 @@ export default function ApyCalculatorPage() {
           ))}
         </div>
       </section>
+
+      <CalculatorSources
+        sources={[
+          { label: "PFRDA — official Atal Pension Yojana contribution chart", url: "https://npscra.nsdl.co.in" },
+          { label: "Atal Pension Yojana Scheme Details, Pension Fund Regulatory and Development Authority", url: "https://www.pfrda.org.in" },
+        ]}
+      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
