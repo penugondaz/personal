@@ -103,19 +103,6 @@ export default function NscCalculator() {
         </table>
       </div>
       <p className="mt-2 text-xs text-ink-soft">Interest from years 1–4 is deemed reinvested and qualifies for 80C deduction in the following year. Year 5 interest is taxable at your slab rate.</p>
-
-      <section className="mt-10 space-y-4">
-        {[
-          { q: "What is the current NSC interest rate?", a: `The NSC interest rate is ${NSC_RATE}% per annum for FY 2025-26, compounded annually. The government reviews this quarterly.` },
-          { q: "Is NSC interest taxable?", a: "Yes. NSC interest is taxable at your income tax slab rate. However, since interest is deemed reinvested, it qualifies for 80C deduction for years 1–4. Only the final year's interest (year 5) is directly taxable without an offsetting 80C benefit." },
-          { q: "What is the NSC lock-in period?", a: "NSC has a mandatory 5-year lock-in. Premature withdrawal is not allowed except in cases of investor death, court order, or forfeiture by a pledgee such as a bank." },
-        ].map(f => (
-          <div key={f.q} className="border-b border-rule pb-4">
-            <h3 className="font-medium text-ink">{f.q}</h3>
-            <p className="mt-1.5 text-sm text-ink-soft">{f.a}</p>
-          </div>
-        ))}
-      </section>
     </>
   );
 }
