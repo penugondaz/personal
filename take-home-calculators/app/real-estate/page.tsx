@@ -124,6 +124,10 @@ export default function RealEstateLandingPage() {
             className="rounded-full border border-brand px-5 py-2 text-sm font-medium text-brand hover:bg-brand-soft transition">
             EMI Calculator
           </Link>
+          <Link href="/calculator/home-loan-tax-benefit-calculator"
+            className="rounded-full border border-brand px-5 py-2 text-sm font-medium text-brand hover:bg-brand-soft transition">
+            Home Loan Tax Benefit
+          </Link>
         </div>
       </section>
 
