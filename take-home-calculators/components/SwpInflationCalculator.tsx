@@ -1,6 +1,5 @@
 "use client";
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { formatINR, formatINRCompact } from "@/lib/format";
 
 function calcSwpInflation(corpus: number, withdrawal: number, returnRate: number, inflation: number, years: number) {
@@ -133,27 +132,6 @@ export default function SwpInflationCalculator() {
           </tbody>
         </table>
       </div>
-
-      <section className="mt-10 space-y-4">
-        {[
-          { q: "What is SWP with inflation adjustment?", a: "A standard SWP withdraws a fixed amount monthly. With inflation adjustment, the withdrawal amount increases every month to maintain purchasing power — so if you withdraw ₹30,000 today at 6% inflation, you withdraw a little more each month. This better models real retirement needs." },
-          { q: "What return rate should I use for retirement planning?", a: "Conservative retirees use 7–8% (debt-heavy portfolio). A balanced 50/50 portfolio may target 9–10%. Equity-heavy portfolios may assume 11–12%, but with higher volatility risk. Always model conservatively." },
-        ].map(f => (
-          <div key={f.q} className="border-b border-rule pb-4">
-            <h3 className="font-medium text-ink">{f.q}</h3>
-            <p className="mt-1.5 text-sm text-ink-soft">{f.a}</p>
-          </div>
-        ))}
-      </section>
-
-      <section className="mt-8">
-        <h2 className="font-display text-xl text-ink">Related</h2>
-        <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[{href:"/calculator/swp-calculator",label:"SWP Calculator"},{href:"/calculator/sip-calculator",label:"SIP Calculator"},{href:"/calculator/goal-planning-calculator",label:"Goal Planning"}].map(l=>(
-            <li key={l.href}><Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">{l.label}</Link></li>
-          ))}
-        </ul>
-      </section>
     </>
   );
 }
