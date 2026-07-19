@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NpsTier2Calculator from "@/components/NpsTier2Calculator";
-import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -111,13 +110,6 @@ export default function NpsTier2CalculatorPage() {
           ))}
         </div>
       </section>
-
-      <CalculatorSources
-        sources={[
-          { label: "PFRDA — National Pension System Tier II account rules", url: "https://www.pfrda.org.in" },
-          { label: "Income Tax Act, 1961 — Section 80CCD, deduction available only to Central Government employees on Tier 2", url: "https://incometaxindia.gov.in" },
-        ]}
-      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
