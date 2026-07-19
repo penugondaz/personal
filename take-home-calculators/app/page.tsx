@@ -601,6 +601,8 @@ export default function HomePage() {
                   b: "Tax slabs, EPF rates, standard deduction — refreshed immediately after the Union Budget." },
                 { icon: "🇮🇳", t: "Built for Indian salaries from scratch",
                   b: "Not a US calculator adapted for India. Built around Indian salary structures — PT by state, HRA city tiers, statutory PF, professional tax, TDS." },
+                { icon: "📘", t: "Educational tool, not financial advice",
+                  b: "Every calculator here is for informational purposes only, not a substitute for professional tax, legal, or financial advice — always verify with a qualified advisor for decisions specific to you." },
               ].map(i => (
                 <div key={i.t} className="flex gap-3.5">
                   <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center
