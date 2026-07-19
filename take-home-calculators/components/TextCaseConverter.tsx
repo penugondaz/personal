@@ -76,18 +76,6 @@ export default function TextCaseConverter() {
           ))}
         </div>
       </div>
-
-      <section className="mt-10 space-y-4">
-        {[
-          {q:"What is the difference between Title Case and Headline Case?",a:"Title Case capitalizes every word. Headline Case (Chicago style) keeps short prepositions, articles, and conjunctions lowercase unless they're the first or last word. AP Style also lowercases these but with slightly different rules."},
-          {q:"When should I use camelCase vs snake_case?",a:"camelCase is standard in JavaScript, Java, and Swift. snake_case is preferred in Python, Ruby, and database column names. PascalCase is used for class names in most languages. CONSTANT_CASE is used for constants and environment variables."},
-        ].map(f => (
-          <div key={f.q} className="border-b border-rule pb-4">
-            <h3 className="font-medium text-ink">{f.q}</h3>
-            <p className="mt-1.5 text-sm text-ink-soft">{f.a}</p>
-          </div>
-        ))}
-      </section>
     </>
   );
 }
