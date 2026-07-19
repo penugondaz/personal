@@ -46,19 +46,30 @@ const HEADER_LABELS: Record<string, string> = {
   "Tax & Pay Components": "Tax Saving",
   "Retirement & Savings": "Retirement",
   "Loans & Deposits":     "Loans",
+  "Real Estate":          "Real Estate 🏠",
   "Free Tools":           "Tools",
   "Auto":                 "Auto 🚗",
 };
 
+// Shown directly as top-level pills in the desktop nav bar.
 const DROPDOWN_SECTION_TITLES = [
   "Salary Calculators",
   "Tax & Pay Components",
   "Retirement & Savings",
   "Investments",
   "Loans & Deposits",
-  "Free Tools",
+  "Real Estate",
   "Auto",
 ];
+
+// Grouped under a "More" pill on desktop so the bar doesn't overflow.
+// Still shown as regular top-level sections in the mobile drawer, where
+// vertical space isn't a constraint.
+const MORE_SECTION_TITLES = [
+  "Free Tools",
+];
+
+const ALL_MOBILE_SECTION_TITLES = [...DROPDOWN_SECTION_TITLES, ...MORE_SECTION_TITLES];
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
@@ -97,6 +108,12 @@ export default function SiteHeader({
   const dropdownSections = DROPDOWN_SECTION_TITLES
     .map(t => NAV_SECTIONS.find(s => s.title === t))
     .filter((s): s is NavSection => !!s);
+  const moreSections = MORE_SECTION_TITLES
+    .map(t => NAV_SECTIONS.find(s => s.title === t))
+    .filter((s): s is NavSection => !!s);
+  const mobileSections = ALL_MOBILE_SECTION_TITLES
+    .map(t => NAV_SECTIONS.find(s => s.title === t))
+    .filter((s): s is NavSection => !!s);
   const trackerSection = NAV_SECTIONS.find(s => s.title === "Tracker");
 
   return (
@@ -120,6 +137,15 @@ export default function SiteHeader({
                   onClose={() => setOpenTitle(null)}
                 />
               ))}
+
+              {moreSections.length > 0 && (
+                <MoreDropdown
+                  sections={moreSections}
+                  isOpen={openTitle === "More"}
+                  onToggle={() => setOpenTitle(t => t === "More" ? null : "More")}
+                  onClose={() => setOpenTitle(null)}
+                />
+              )}
 
               {trackerSection && (
                 <Link href={trackerSection.href ?? "/layoffs"}
@@ -208,7 +234,7 @@ export default function SiteHeader({
 
             {/* Nav sections — collapsible */}
             <div className="flex-1 px-4 py-4 space-y-1">
-              {dropdownSections.map(section => (
+              {mobileSections.map(section => (
                 <MobileNavSection
                   key={section.title}
                   section={section}
@@ -296,6 +322,65 @@ function NavDropdown({ section, label, isOpen, onToggle, onClose }: {
               </Link>
             </>
           )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Desktop "More" dropdown ────────────────────────────────────────────────
+// Holds sections that don't fit as their own top-level pill. Same trigger
+// styling as NavDropdown; the panel stacks each section as its own
+// mini-group instead of a single flat link list.
+
+function MoreDropdown({ sections, isOpen, onToggle, onClose }: {
+  sections: NavSection[];
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="relative">
+      <button type="button" onClick={onToggle} aria-expanded={isOpen}
+        className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3.5 py-2
+          text-sm font-medium transition ${isOpen
+            ? "bg-brand-soft text-brand"
+            : "text-ink-soft hover:bg-brand-soft hover:text-brand"}`}>
+        More
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          strokeWidth="2.5" className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          aria-hidden="true">
+          <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 top-full z-40 mt-2 w-64 rounded-2xl border border-rule
+          bg-surface p-4 shadow-card-lg">
+          {sections.map((section, i) => {
+            const label = HEADER_LABELS[section.title] ?? section.title;
+            return (
+              <div key={section.title} className={i > 0 ? "mt-3 border-t border-rule pt-3" : ""}>
+                <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-wide text-ink-soft">
+                  {section.title}
+                </p>
+                {section.links.map(link => (
+                  <Link key={link.href} href={link.href} onClick={onClose}
+                    className="block rounded-lg px-2 py-1.5 text-sm text-ink-soft transition
+                      hover:bg-paper hover:text-ink">
+                    {link.label}
+                  </Link>
+                ))}
+                {section.href && (
+                  <Link href={section.href} onClick={onClose}
+                    className="mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold text-brand
+                      transition hover:bg-brand-soft">
+                    View all {label} →
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
