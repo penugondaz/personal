@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NriIncomeTaxCalculator from "@/components/NriIncomeTaxCalculator";
+import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -116,6 +117,15 @@ export default function NriIncomeTaxCalculatorPage() {
           ))}
         </div>
       </section>
+
+      <CalculatorSources
+        sources={[
+          { label: "Income Tax Act, 1961 — Section 5, scope of total income for a non-resident", url: "https://incometaxindia.gov.in" },
+          { label: "Income Tax Act, 1961 — Section 87A rebate, applicable to resident individuals only", url: "https://incometaxindia.gov.in" },
+          { label: "Income Tax Act, 1961 — Section 195, TDS on payments to non-residents", url: "https://incometaxindia.gov.in" },
+          { label: "RBI FEMA guidelines — NRE/FCNR/NRO account interest tax treatment", url: "https://www.rbi.org.in" },
+        ]}
+      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
