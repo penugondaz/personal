@@ -210,6 +210,26 @@ export default function TaxSavingIndexPage() {
               Freelancer Tax (44ADA)
             </Link>
           </li>
+          <li>
+            <Link href="/calculator/new-regime-break-even-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              New Regime Break-Even
+            </Link>
+          </li>
+          <li>
+            <Link href="/calculator/home-loan-tax-benefit-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              Home Loan Tax Benefit
+            </Link>
+          </li>
+          <li>
+            <Link href="/calculator/rsu-esop-tax-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              RSU/ESOP Tax Calculator
+            </Link>
+          </li>
+          <li>
+            <Link href="/calculator/nri-income-tax-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              NRI Income Tax Calculator
+            </Link>
+          </li>
         </ul>
       </section>
 
