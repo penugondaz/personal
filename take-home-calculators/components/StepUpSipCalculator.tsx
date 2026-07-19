@@ -1,6 +1,5 @@
 "use client";
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { formatINR, formatINRCompact } from "@/lib/format";
 
 function calculateStepUpSip(monthly: number, rate: number, years: number, stepUp: number) {
@@ -125,27 +124,6 @@ export default function StepUpSipCalculator() {
           </tbody>
         </table>
       </div>
-
-      <section className="mt-10 space-y-4">
-        {[
-          { q: "What is a step-up SIP?", a: "A step-up (or top-up) SIP automatically increases your monthly investment by a fixed percentage every year. Starting at ₹10,000/month with a 10% annual step-up means you invest ₹11,000 in year 2, ₹12,100 in year 3 — matching typical salary growth." },
-          { q: "Why is step-up SIP better than flat SIP?", a: "Because inflation erodes purchasing power, a fixed SIP amount represents declining real investment over time. A step-up keeps your investment constant in real terms, and the compounding on incremental amounts significantly boosts the final corpus." },
-        ].map(f => (
-          <div key={f.q} className="border-b border-rule pb-4">
-            <h3 className="font-medium text-ink">{f.q}</h3>
-            <p className="mt-1.5 text-sm text-ink-soft">{f.a}</p>
-          </div>
-        ))}
-      </section>
-
-      <section className="mt-8">
-        <h2 className="font-display text-xl text-ink">Related</h2>
-        <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[{href:"/calculator/sip-calculator",label:"SIP Calculator"},{href:"/calculator/swp-inflation-calculator",label:"SWP with Inflation"},{href:"/calculator/goal-planning-calculator",label:"Goal Planning"}].map(l=>(
-            <li key={l.href}><Link href={l.href} className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">{l.label}</Link></li>
-          ))}
-        </ul>
-      </section>
     </>
   );
 }
