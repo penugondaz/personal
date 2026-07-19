@@ -6,19 +6,61 @@ import { TAX_SAVING_LPA_VALUES, taxSavingSlug } from "@/lib/tax-saving-data";
 import { calculateTaxSaving } from "@/lib/calculators/tax-saving";
 import { formatINR } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
+import { breadcrumbSchema, webPageSchema, faqSchema, buildJsonLd } from "@/lib/schema";
+import LandingHubLinks from "@/components/LandingHubLinks";
+import LandingFaq from "@/components/LandingFaq";
+
+const URL = "/tax-saving";
+const TITLE = "Tax Saving Guide by Salary — How to Reduce Income Tax in India (FY 2025-26)";
+const DESCRIPTION =
+  "Find your CTC and see exactly how much tax you pay and how much you can legally save using 80C, NPS, HRA, health insurance, and home loan deductions in FY 2025-26.";
 
 export const metadata: Metadata = {
-  title: "Tax Saving Guide by Salary — How to Reduce Income Tax in India (FY 2025-26)",
-  description:
-    "Find your CTC and see exactly how much tax you pay and how much you can legally save using 80C, NPS, HRA, health insurance, and home loan deductions in FY 2025-26.",
-  alternates: { canonical: absoluteUrl("/tax-saving") },
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: absoluteUrl(URL) },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: absoluteUrl(URL) },
 };
 
 const FEATURED_LPAS = [5, 6, 7, 8, 10, 12, 15, 20, 25, 30, 40, 50];
 
+const FAQS = [
+  {
+    question: "Old regime or new regime — which saves more tax?",
+    answer:
+      "The new regime has lower slab rates but no deductions. The old regime has higher rates but allows 80C, HRA, home loan interest, and more. As a rough guide, if your total deductions exceed roughly ₹3.5-4 lakh/year (varies by income level), the old regime usually wins. Below that, the new regime is typically better. Use the Old vs New Tax Regime calculator with your exact numbers to be sure.",
+  },
+  {
+    question: "What is the maximum I can save under Section 80C?",
+    answer:
+      "Section 80C caps total deductions at ₹1.5 lakh per financial year, covering PPF, ELSS, EPF, life insurance premiums, NSC, SSY, and home loan principal repayment combined — not ₹1.5 lakh per instrument. Beyond 80C, NPS offers an additional ₹50,000 deduction under Section 80CCD(1B), independent of the 80C limit.",
+  },
+  {
+    question: "Is the new tax regime compulsory now?",
+    answer:
+      "The new regime is the default since FY 2023-24, meaning it applies automatically unless you specifically opt for the old regime while filing your return (or inform your employer at the start of the year for TDS purposes). Salaried employees can switch between regimes every year when filing their ITR.",
+  },
+  {
+    question: "Does HRA exemption work under the new tax regime?",
+    answer:
+      "No. HRA exemption, along with most other deductions like 80C and home loan interest, is not available under the new tax regime. If you pay significant rent and claim HRA, the old regime is often more beneficial — the Income Tax Calculator lets you compare both directly.",
+  },
+];
+
 export default function TaxSavingIndexPage() {
+  const jsonLd = buildJsonLd(
+    breadcrumbSchema([
+      { name: "Home", href: "/" },
+      { name: "Tax Saving", href: URL },
+    ]),
+    webPageSchema({ name: TITLE, description: DESCRIPTION, url: URL }),
+    faqSchema(FAQS)
+  );
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 sm:py-14">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-brand">Home</Link>
         <span className="mx-1.5">/</span>
@@ -96,6 +138,26 @@ export default function TaxSavingIndexPage() {
         </ul>
       </section>
 
+      {/* Use-case callout */}
+      <section className="mt-12 rounded-xl border border-brand/20 bg-brand-soft p-6">
+        <h2 className="font-display text-xl text-ink">Not sure which regime to pick?</h2>
+        <p className="mt-2 text-sm text-ink-soft">
+          If you have significant 80C investments, pay rent, or have a home loan, the old regime
+          often wins. If you claim few deductions, the new regime's lower rates usually come out
+          ahead. Compare both directly with your exact numbers.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href="/calculator/old-vs-new-tax-regime"
+            className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white hover:opacity-90 transition">
+            Compare Regimes →
+          </Link>
+          <Link href="/calculator/income-tax-calculator"
+            className="rounded-full border border-brand px-5 py-2 text-sm font-medium text-brand hover:bg-brand-soft transition">
+            Income Tax Calculator
+          </Link>
+        </div>
+      </section>
+
       {/* Educational content */}
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">How Tax Saving Works in India</h2>
@@ -129,12 +191,30 @@ export default function TaxSavingIndexPage() {
             </Link>
           </li>
           <li>
+            <Link href="/calculator/hra-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              HRA Calculator
+            </Link>
+          </li>
+          <li>
             <Link href="/calculator/ppf-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
               PPF Calculator
             </Link>
           </li>
+          <li>
+            <Link href="/calculator/elss-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              ELSS Calculator
+            </Link>
+          </li>
+          <li>
+            <Link href="/calculator/freelancer-tax-calculator" className="block rounded-md border border-rule bg-surface px-4 py-3 text-center text-sm font-medium text-brand hover:border-brand">
+              Freelancer Tax (44ADA)
+            </Link>
+          </li>
         </ul>
       </section>
+
+      <LandingFaq faqs={FAQS} />
+      <LandingHubLinks currentHref={URL} />
     </main>
   );
 }
