@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HomeLoanTaxBenefitCalculator from "@/components/HomeLoanTaxBenefitCalculator";
-import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -116,15 +115,6 @@ export default function HomeLoanTaxBenefitCalculatorPage() {
           ))}
         </div>
       </section>
-
-      <CalculatorSources
-        sources={[
-          { label: "Income Tax Act, 1961 — Section 24(b), interest on borrowed capital for house property", url: "https://incometaxindia.gov.in" },
-          { label: "Income Tax Act, 1961 — Section 80EEA, additional interest deduction for affordable housing", url: "https://incometaxindia.gov.in" },
-          { label: "Income Tax Act, 1961 — Section 80C, deduction for principal repayment", url: "https://incometaxindia.gov.in" },
-          { label: "Tax slabs and standard deduction as per Finance Act, FY 2025-26" },
-        ]}
-      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
