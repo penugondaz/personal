@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NewRegimeBreakEvenCalculator from "@/components/NewRegimeBreakEvenCalculator";
-import CalculatorSources from "@/components/CalculatorSources";
 import { absoluteUrl } from "@/lib/paths";
 import { breadcrumbSchema, faqSchema, calculatorSchema, buildJsonLd } from "@/lib/schema";
 
@@ -110,13 +109,6 @@ export default function NewRegimeBreakEvenCalculatorPage() {
           ))}
         </div>
       </section>
-
-      <CalculatorSources
-        sources={[
-          { label: "Income Tax Act, 1961 — Section 115BAC, new tax regime slabs and conditions", url: "https://incometaxindia.gov.in" },
-          { label: "Finance Act (Union Budget) FY 2025-26 — revised new regime slabs and rebate limits", url: "https://incometaxindia.gov.in" },
-        ]}
-      />
 
       <section className="mt-12">
         <h2 className="font-display text-2xl text-ink">Related Calculators</h2>
