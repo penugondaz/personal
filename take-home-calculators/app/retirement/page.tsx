@@ -76,6 +76,18 @@ const CALCULATORS = [
     desc: "Senior Citizen Savings Scheme quarterly interest payout and total returns.",
   },
   {
+    href: "/calculator/apy-calculator",
+    icon: "🏛️",
+    title: "APY Calculator",
+    desc: "Atal Pension Yojana monthly contribution for a guaranteed pension from age 60.",
+  },
+  {
+    href: "/calculator/nps-tier2-calculator",
+    icon: "🔓",
+    title: "NPS Tier 2 Calculator",
+    desc: "Flexible, no-lock-in NPS investment account — project growth without retirement restrictions.",
+  },
+  {
     href: "/calculator/fire-calculator",
     icon: "🔥",
     title: "FIRE Calculator",
