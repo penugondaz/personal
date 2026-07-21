@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { calculateSalaryBreakup } from "@/lib/calculators/salary-breakup";
 import { calculateIncomeTax, getCurrentFY } from "@/lib/calculators/income-tax";
+import HeroLiveCalculator from "@/components/HeroLiveCalculator";
 import { getAllBlogPosts, formatBlogDate } from "@/lib/blog-loader";
 import { salarySlug } from "@/lib/salary-data";
 import { formatINR } from "@/lib/format";
@@ -137,54 +138,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Right: salary card */}
-            <div className="rounded-2xl border border-white/10 bg-white/[0.07] backdrop-blur-md p-5
-              shadow-2xl ring-1 ring-white/5">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
-                    Example — 10 LPA CTC
-                  </p>
-                  <p className="mt-1 font-display text-3xl font-bold text-white">
-                    {formatINR(SALARY_SAMPLES[2].inHand)}
-                  </p>
-                  <p className="text-xs text-[#7dd9a8] mt-0.5 font-medium">in-hand / month · new regime</p>
-                </div>
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl
-                  bg-white/10 text-2xl">
-                  💰
-                </div>
-              </div>
-
-              <div className="space-y-0 divide-y divide-white/10">
-                {[
-                  { label: "Monthly CTC",     value: formatINR(Math.round(10_00_000 / 12)), color: "text-white" },
-                  { label: "TDS (income tax)", value: "Zero ✓",                             color: "text-[#7dd9a8]" },
-                  { label: "Employee PF",      value: `− ${formatINR(SALARY_SAMPLES[2].tds > 0 ? 3200 : 3200)}`, color: "text-red-400" },
-                  { label: "Professional tax", value: "− ₹200",                             color: "text-red-400" },
-                ].map(row => (
-                  <div key={row.label}
-                    className="flex items-center justify-between py-2.5">
-                    <span className="text-xs text-white/50">{row.label}</span>
-                    <span className={`tabular text-sm font-medium ${row.color}`}>{row.value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 flex items-center justify-between rounded-xl px-4 py-3"
-                style={{ background: "rgba(47,111,79,0.35)", border: "1px solid rgba(125,217,168,0.2)" }}>
-                <span className="text-sm font-semibold text-white">In-hand salary</span>
-                <span className="tabular text-base font-bold text-[#7dd9a8]">
-                  {formatINR(SALARY_SAMPLES[2].inHand)}
-                </span>
-              </div>
-
-              <Link href="/salary/10-lpa-in-hand"
-                className="mt-3 flex items-center justify-center gap-1 py-2 text-xs
-                  text-white/40 transition hover:text-white/70">
-                Calculate for your CTC →
-              </Link>
-            </div>
+            {/* Right: live calculator card */}
+            <HeroLiveCalculator />
           </div>
         </div>
       </section>
