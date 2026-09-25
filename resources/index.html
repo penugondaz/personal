@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CV Interview Prep & Learning Guide — Sekhar Maddala</title>
+<style>
+:root{
+  --bg:#ffffff; --text:#1c2430; --muted:#5b6472; --accent:#1F3864; --accent2:#2E5C8A;
+  --card:#f4f6fa; --border:#dfe4ec;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#12161d; --text:#e7ebf2; --muted:#9aa5b4; --accent:#7fa4d9; --accent2:#5c86c2; --card:#1a212c; --border:#2a3341; }
+}
+:root[data-theme="dark"]{ --bg:#12161d; --text:#e7ebf2; --muted:#9aa5b4; --accent:#7fa4d9; --accent2:#5c86c2; --card:#1a212c; --border:#2a3341; }
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{background:var(--bg); color:var(--text); margin:0; font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.55;}
+.wrap{max-width:880px; margin:0 auto; padding:32px 20px 80px;}
+header{border-bottom:3px solid var(--accent); padding-bottom:16px; margin-bottom:24px;}
+h1{color:var(--accent); font-size:1.7rem; margin:0 0 6px;}
+.sub{color:var(--muted); font-size:0.95rem;}
+nav.toc{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:28px;}
+nav.toc a{color:var(--accent2); text-decoration:none; font-size:0.92rem;}
+nav.toc ul{margin:6px 0 0; padding-left:18px; columns:2;}
+@media (max-width:600px){ nav.toc ul{columns:1;} }
+h2{color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:6px; margin-top:40px; font-size:1.25rem;}
+h3{color:var(--accent2); margin-top:22px; font-size:1.05rem;}
+p{margin:8px 0;}
+.term{background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin:10px 0;}
+.term b{color:var(--accent);}
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:0.92rem;}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top;}
+th{background:var(--card); color:var(--accent);}
+a{color:var(--accent2);}
+ul{padding-left:20px;}
+li{margin:5px 0;}
+.q{margin:10px 0 14px; padding-left:14px; border-left:3px solid var(--border);}
+.q b{display:block; color:var(--text);}
+.cover{color:var(--muted); font-size:0.9rem; margin-top:2px;}
+.flag{background:var(--card); border-left:4px solid var(--accent); padding:10px 14px; margin:14px 0; border-radius:0 8px 8px 0;}
+.check{list-style:none; padding-left:0;}
+.check li:before{content:"☐ "; color:var(--accent);}
+footer{margin-top:50px; color:var(--muted); font-size:0.85rem; text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>CV Interview Prep &amp; Learning Guide</h1>
+<div class="sub">For Sekhar Maddala — Technical Documentation &amp; Knowledge Management roles</div>
+</header>
+
+<nav class="toc">
+<a href="#terms">Jump to a section</a>
+<ul>
+<li><a href="#terms">1. Terms you must be able to define</a></li>
+<li><a href="#skills">2. Skills to learn, with resources</a></li>
+<li><a href="#questions">3. Interview questions by CV section</a></li>
+<li><a href="#gaps">4. Honest gaps — prepare these answers</a></li>
+<li><a href="#checklist">5. Two-week prep checklist</a></li>
+</ul>
+</nav>
+
+<section id="terms">
+<h2>1. Terms you must be able to define on the spot</h2>
+<p>If an interviewer reads your CV, these are the words most likely to get a direct "what does that mean?" follow-up.</p>
+
+<div class="term"><b>Docs-as-code</b> — writing and managing documentation the way developers manage code: plain-text files (usually Markdown), stored in Git, reviewed via pull requests, and published through an automated build/CI pipeline.</div>
+<div class="term"><b>DITA (Darwin Information Typing Architecture)</b> — an XML standard for structured authoring, built around small reusable "topics" instead of long documents.</div>
+<div class="term"><b>DITA topic types</b> — <i>Concept</i> (explains an idea), <i>Task</i> (step-by-step instructions), <i>Reference</i> (tables, specs, parameters).</div>
+<div class="term"><b>DITA map</b> — the file that assembles individual topics into a structured, ordered output (like a table of contents that also controls what gets published).</div>
+<div class="term"><b>Single-sourcing / content reuse</b> — writing content once and publishing it across multiple outputs (PDF, web, print) or multiple products without duplicating it.</div>
+<div class="term"><b>Structured authoring</b> — enforcing a defined content model/format (like DITA) rather than free-form writing, so content is consistent and machine-processable.</div>
+<div class="term"><b>SOP (Standard Operating Procedure)</b> — a documented, repeatable process that standardizes how a task is performed.</div>
+<div class="term"><b>Content/documentation governance</b> — the rules, ownership, and review processes that keep documentation accurate, consistent, and up to date over time.</div>
+<div class="term"><b>Style guide compliance</b> — writing to a defined voice/tone/formatting standard (e.g., the Google Developer Documentation Style Guide) rather than personal preference.</div>
+<div class="term"><b>Content lifecycle</b> — the stages content moves through: creation → review → publish → maintenance → retirement.</div>
+</section>
+
+<section id="skills">
+<h2>2. Skills to learn, with resources</h2>
+<p>Realistic timeline: 2–3 focused weeks of evenings covers everything below at "can discuss confidently" level.</p>
+<table>
+<tr><th>Skill</th><th>Why it's on your CV</th><th>What to actually learn</th><th>Free resource</th></tr>
+<tr><td>Markdown</td><td>Core of docs-as-code</td><td>Headers, links, lists, code blocks</td><td>markdownguide.org (Basic Syntax page)</td></tr>
+<tr><td>Git &amp; version control</td><td>Docs-as-code workflow</td><td>clone, branch, commit, push, pull request</td><td>git-scm.com/book — chapters 1–3; GitHub's "Hello World" tutorial</td></tr>
+<tr><td>Docs-as-code pipeline concept</td><td>You claim this on your CV</td><td>How a merge triggers an automated doc rebuild/publish; static site generators (e.g., MkDocs, Docusaurus)</td><td>Write the Docs — "docs as code" guide (writethedocs.org)</td></tr>
+<tr><td>DITA/XML fundamentals</td><td>Listed as a skill</td><td>Topic types, DITA maps, reuse via conref, basic XML tags</td><td>DITA Open Toolkit docs ("Introduction to DITA"); Scriptorium blog (scriptorium.com)</td></tr>
+<tr><td>XML authoring tools</td><td>Context for DITA</td><td>Know what Oxygen XML Editor is and does (name recognition is enough)</td><td>oxygenxml.com product overview page</td></tr>
+<tr><td>Google Developer Documentation Style Guide</td><td>Directly named on your CV</td><td>Voice, tone, formatting conventions</td><td>developers.google.com/style</td></tr>
+<tr><td>Documentation quality frameworks</td><td>You built a scoring system</td><td>Common QA dimensions: accuracy, clarity, completeness, findability</td><td>Write the Docs talks on "measuring documentation quality" (YouTube, conference archive)</td></tr>
+<tr><td>SOP structure</td><td>You authored SOPs</td><td>Purpose, scope, step sequence, roles, revision history</td><td>ISO 9001 SOP template overviews (search "ISO 9001 SOP template")</td></tr>
+<tr><td>Knowledge Management fundamentals</td><td>Core positioning of your CV</td><td>KM lifecycle: capture → organize → share → reuse; governance basics</td><td>CIDM (infomanagementcenter.com) articles; KMWorld.com articles</td></tr>
+<tr><td>Peer review / editorial process</td><td>You're a peer reviewer</td><td>What a structured content review checklist looks like</td><td>Write the Docs "review" resources page</td></tr>
+</table>
+</section>
+
+<section id="questions">
+<h2>3. Interview questions by CV section</h2>
+<p>Each line is a likely question with a short cue on what your answer should hit — write your own real answer underneath each one before an interview.</p>
+
+<h3>Career background &amp; transition</h3>
+<div class="q"><b>You have a Biotechnology degree — what took you into content/technical writing?</b><span class="cover">Cover: the genuine reason, and one transferable skill (precision, structured thinking) from your science background.</span></div>
+<div class="q"><b>You moved from SEO content writing into technical documentation — what carried over?</b><span class="cover">Cover: audience-first thinking, clarity, structuring content for scanning/search.</span></div>
+<div class="q"><b>Walk me through your career progression.</b><span class="cover">Cover: what actually changed in scope/ownership at each step — be specific, not just chronological.</span></div>
+
+<h3>Core role at Google (via Cognizant)</h3>
+<div class="q"><b>Describe the end-to-end documentation lifecycle for an SV hardware/imagery topic.</b><span class="cover">Cover: SME input → drafting → review → publish → maintenance, in your own words.</span></div>
+<div class="q"><b>How do you decide web help article vs. user guide vs. product spec sheet?</b><span class="cover">Cover: audience and use-case differences for each format.</span></div>
+<div class="q"><b>What do you do differently for content that will be translated?</b><span class="cover">Cover: concise sentences, avoiding idioms, consistent terminology.</span></div>
+<div class="q"><b>Tell me about a bottleneck or content gap you found and fixed.</b><span class="cover">Cover: a real, specific example with a before/after.</span></div>
+<div class="q"><b>What does the Google style guide require beyond a generic style guide?</b><span class="cover">Cover: specific voice/tone/formatting rules you actually apply.</span></div>
+
+<h3>Documentation quality &amp; governance</h3>
+<div class="q"><b>Walk me through your documentation quality-scoring framework.</b><span class="cover">Cover: what you measured, how scores were calculated, who used them.</span></div>
+<div class="q"><b>What changed after you introduced scoring?</b><span class="cover">Cover: a concrete behavior or output change, even if not numeric.</span></div>
+<div class="q"><b>What SOPs did you write, and what problem existed before them?</b><span class="cover">Cover: the "before" state and what the SOP standardized.</span></div>
+<div class="q"><b>How do you handle disagreement during content review?</b><span class="cover">Cover: a real example of resolving a review disagreement professionally.</span></div>
+
+<h3>Team coordination &amp; training</h3>
+<div class="q"><b>How did you decide task allocation across the KM team?</b><span class="cover">Cover: criteria you used — skill fit, workload, deadlines.</span></div>
+<div class="q"><b>What does onboarding a new writer look like from your side?</b><span class="cover">Cover: concrete steps — tools, style guide walkthrough, shadowing, first assignment.</span></div>
+<div class="q"><b>What's your actual scope of authority — is this a formal lead role?</b><span class="cover">Cover: be precise and honest — task coordination is real, but say plainly if you don't have formal reports.</span></div>
+
+<h3>The 4.45/5 client feedback score</h3>
+<div class="q"><b>What does that score measure, and who gives it?</b><span class="cover">Cover: source and scope of the feedback — be specific and accurate.</span></div>
+<div class="q"><b>What feedback pulled the score down, and what changed?</b><span class="cover">Cover: one real example of acting on feedback, if you have one.</span></div>
+
+<h3>Tools &amp; technical skills</h3>
+<div class="q"><b>Which CMS have you used day-to-day? Likes/dislikes?</b><span class="cover">Cover: real, specific experience with Google's CMS.</span></div>
+<div class="q"><b>What's your actual hands-on comfort with Git and Markdown?</b><span class="cover">Cover: be honest about current level — see Section 2 to close gaps before interviews.</span></div>
+<div class="q"><b>Have you worked hands-on in DITA/XML, or is it conceptual knowledge?</b><span class="cover">Cover: be honest — "conceptual understanding, no production experience yet" is a fine answer if true.</span></div>
+
+<h3>Earlier SEO/content roles</h3>
+<div class="q"><b>How did writing for traffic/conversions shape how you write now?</b><span class="cover">Cover: audience-first writing, scannability, clarity under attention constraints.</span></div>
+<div class="q"><b>You moderated user-generated content — what judgment calls did that involve?</b><span class="cover">Cover: real examples of compliance/quality decisions you made.</span></div>
+
+<h3>Behavioral / scenario</h3>
+<div class="q"><b>A stakeholder wants faster publishing than your quality process allows. What do you do?</b><span class="cover">Cover: how you'd balance speed and quality — a real or realistic approach.</span></div>
+<div class="q"><b>You inherit a messy, ownerless documentation set. Where do you start?</b><span class="cover">Cover: audit → prioritize → assign ownership → establish a maintenance cadence.</span></div>
+<div class="q"><b>How would you introduce a quality-scoring system to a team that's never had one?</b><span class="cover">Cover: buy-in first, pilot small, iterate based on team feedback.</span></div>
+</section>
+
+<section id="gaps">
+<h2>4. Honest gaps — prepare these answers deliberately</h2>
+<div class="flag"><b>DITA/XML hands-on experience.</b> You have conceptual knowledge, not production experience. Don't oversell it — say plainly: "I understand structured authoring principles and DITA's topic model; I haven't worked in a live DITA environment yet, but I've prepared for it." This is a normal, credible answer.</div>
+<div class="flag"><b>"Technical Documentation Lead" vs. formal title "Technical Writer."</b> If asked whether you have people-management responsibility, answer honestly: task coordination and training, not formal direct reports. Don't let this rattle you — it's a common and respected scope of responsibility even without the "manager" label.</div>
+<div class="flag"><b>No AI-assisted documentation, RAG, or enterprise search experience.</b> If asked, it's fine to say this is an area you're aware of and interested in but haven't worked on directly yet — don't claim it.</div>
+</section>
+
+<section id="checklist">
+<h2>5. Two-week prep checklist</h2>
+<ul class="check">
+<li>Read Markdown Guide basic syntax page (30 min)</li>
+<li>Complete GitHub's "Hello World" Git tutorial (30 min)</li>
+<li>Read Write the Docs' docs-as-code overview (30 min)</li>
+<li>Read DITA Open Toolkit's "Introduction to DITA" (45 min)</li>
+<li>Skim one Scriptorium blog post on single-sourcing/content reuse</li>
+<li>Read the Google Developer Documentation Style Guide overview page</li>
+<li>Write your own 2–3 sentence answer for every question in Section 3</li>
+<li>Rehearse honest answers for the three gaps in Section 4 out loud</li>
+<li>Reread your CV once, out loud, and make sure you can defend every single line</li>
+</ul>
+</section>
+
+<footer>Prepared as a personal study guide — not for distribution.</footer>
+</div>
+</body>
+</html>
